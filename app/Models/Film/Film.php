@@ -7,6 +7,7 @@ use App\Models\Genre\Genre;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Film extends Model implements TranslatableContract
 {
@@ -29,13 +30,13 @@ class Film extends Model implements TranslatableContract
         'overview'
     ];
 
-    public function genres()
+    public function genres(): ?BelongsToMany
     {
         return $this->belongsToMany(Genre::class)
             ->with('translations');
     }
 
-    public function countries()
+    public function countries(): ?BelongsToMany
     {
         return $this->belongsToMany(
             Country::class,
