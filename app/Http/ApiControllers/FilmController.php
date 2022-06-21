@@ -40,7 +40,7 @@ class FilmController extends Controller
         return response()->success($film);
     }
 
-    public function store(Film $request)
+    public function store($request)
     {
         $film = Film::create($request->all());
 
