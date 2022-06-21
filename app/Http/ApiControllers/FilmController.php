@@ -4,7 +4,6 @@ namespace App\Http\ApiControllers;
 
 use App\Http\Resources\FilmResource;
 use App\Models\Film\Film;
-use App\Models\Genre\Genre;
 use Illuminate\Support\Facades\Request;
 
 class FilmController extends Controller
@@ -36,12 +35,12 @@ class FilmController extends Controller
         );
     }
 
-    public function show(Genre $film)
+    public function show(Film $film)
     {
         return response()->success($film);
     }
 
-    public function store(Genre $request)
+    public function store(Film $request)
     {
         $film = Film::create($request->all());
 
