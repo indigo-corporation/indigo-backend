@@ -17,9 +17,9 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 
-    'allowed_origins' => ['indigo-front.herokuapp.com'],
+    'allowed_origins' => ['https://indigo-front.herokuapp.com/'],
 
     'allowed_origins_patterns' => [],
 
