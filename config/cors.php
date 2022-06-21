@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 
-    'allowed_origins' => ['https://indigo-front.herokuapp.com/'],
+    'allowed_origins' => ['https://indigo-front.herokuapp.com'],
 
     'allowed_origins_patterns' => [],
 
