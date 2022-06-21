@@ -36,6 +36,10 @@ class AppServiceProvider extends ServiceProvider
             ], $status);
         });
 
+        Response::macro('success_paginated', function ($data = null, $status = 200) {
+            return Response::json($data, $status);
+        });
+
         Response::macro('error', function ($error = ['code' => 666, 'message' => 'some very bad error..'], $status = 400) {
             return Response::json([
                 'state'  => false,
