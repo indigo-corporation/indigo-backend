@@ -30,7 +30,7 @@ class Country
      *      title="code",
      *      description="code",
      *      format="string",
-     *      example=AD
+     *      example="AD"
      * )
      *
      * @var string

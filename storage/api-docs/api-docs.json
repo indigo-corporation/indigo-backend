@@ -1,0 +1,375 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Indigo API",
+        "contact": {
+            "email": "support@example.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://indigo-films.herokuapp.com/api/",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/films": {
+            "get": {
+                "tags": [
+                    "Films"
+                ],
+                "summary": "Get films",
+                "operationId": "filmsGet",
+                "responses": {
+                    "200": {
+                        "description": "Films list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FilmsResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Country": {
+                "title": "Country",
+                "description": "Country model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 101
+                    },
+                    "code": {
+                        "title": "code",
+                        "description": "code",
+                        "type": "string",
+                        "format": "string",
+                        "example": "AD"
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "Name",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Andorra"
+                    },
+                    "title": {
+                        "title": "title",
+                        "description": "Title",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Андорра"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Country"
+                }
+            },
+            "DefaultError": {
+                "title": "DefaultError",
+                "description": "DefaultError model",
+                "properties": {
+                    "code": {
+                        "title": "code",
+                        "description": "Error code",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 100
+                    },
+                    "message": {
+                        "title": "message",
+                        "description": "Error message",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Some error message"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "DefaultError"
+                }
+            },
+            "Film": {
+                "title": "Film",
+                "description": "Film model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 3453
+                    },
+                    "original_title": {
+                        "title": "original_title",
+                        "description": "Original title",
+                        "type": "string",
+                        "format": "string",
+                        "example": "The Shawshank Redemption"
+                    },
+                    "original_language": {
+                        "title": "original_language",
+                        "description": "Original language",
+                        "type": "string",
+                        "format": "string",
+                        "example": "en"
+                    },
+                    "poster_url": {
+                        "title": "poster_url",
+                        "description": "Poster url",
+                        "type": "string",
+                        "format": "string",
+                        "example": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg"
+                    },
+                    "runtime": {
+                        "title": "runtime",
+                        "description": "Runtime",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": "128"
+                    },
+                    "release_date": {
+                        "title": "release_date",
+                        "description": "Release date",
+                        "format": "date",
+                        "example": "2022-06-25"
+                    },
+                    "year": {
+                        "title": "year",
+                        "description": "Year",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": "1994"
+                    },
+                    "imdb_id": {
+                        "title": "imdb_id",
+                        "description": "imdb ID",
+                        "type": "string",
+                        "format": "string",
+                        "example": "tt0167260"
+                    },
+                    "imdb_rating": {
+                        "title": "imdb_rating",
+                        "description": "imdb rating",
+                        "type": "string",
+                        "format": "string",
+                        "example": "9.0"
+                    },
+                    "title": {
+                        "title": "title",
+                        "description": "Title",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Властелин колец: Возвращение Короля"
+                    },
+                    "overview": {
+                        "title": "overview",
+                        "description": "Overview",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Последняя часть трилогии о Кольце Всевластия и о героях, взявших на себя бремя спасения Средиземья. Повелитель сил Тьмы Саурон направляет свои бесчисленные рати под стены Минас-Тирита, крепости Последней Надежды. Он предвкушает близкую победу, но именно это и мешает ему заметить две крохотные фигурки — хоббитов, приближающихся к Роковой Горе, где им предстоит уничтожить Кольцо Всевластия. Улыбнется ли им счастье?"
+                    },
+                    "genres": {
+                        "title": "genres",
+                        "description": "Genres",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Genre"
+                        }
+                    },
+                    "countries": {
+                        "title": "countries",
+                        "description": "Countries",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Country"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Film"
+                }
+            },
+            "Genre": {
+                "title": "Genre",
+                "description": "Genre model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 6
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "Name",
+                        "type": "string",
+                        "format": "string",
+                        "example": "animation"
+                    },
+                    "slug": {
+                        "title": "slug",
+                        "description": "Slug",
+                        "type": "string",
+                        "format": "string",
+                        "example": "animation"
+                    },
+                    "title": {
+                        "title": "title",
+                        "description": "Title",
+                        "type": "string",
+                        "format": "string",
+                        "example": "анимация"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Genre"
+                }
+            },
+            "Pagination": {
+                "title": "Pagination",
+                "description": "Pagination model",
+                "properties": {
+                    "total": {
+                        "title": "total",
+                        "description": "Total",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 391
+                    },
+                    "count": {
+                        "title": "count",
+                        "description": "Count",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 20
+                    },
+                    "per_page": {
+                        "title": "per_page",
+                        "description": "Per page",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 20
+                    },
+                    "current_page": {
+                        "title": "current_page",
+                        "description": "Current page",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 2
+                    },
+                    "total_pages": {
+                        "title": "total_pages",
+                        "description": "Total pages",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 20
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Pagination"
+                }
+            },
+            "DefaultErrorResource": {
+                "title": "DefaultErrorResource",
+                "description": "Default Error Resource",
+                "properties": {
+                    "state": {
+                        "title": "State",
+                        "description": "State",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/DefaultError"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "DefaultErrorResource"
+                }
+            },
+            "FilmResource": {
+                "title": "FilmResource",
+                "description": "Film resource",
+                "properties": {
+                    "state": {
+                        "title": "State",
+                        "description": "State",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Film"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "FilmResource"
+                }
+            },
+            "FilmsResource": {
+                "title": "FilmsResource",
+                "description": "Films resource",
+                "properties": {
+                    "state": {
+                        "title": "State",
+                        "description": "State",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "title": "Data",
+                        "description": "Data",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Film"
+                        }
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/Pagination"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "FilmsResource"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Authentification"
+        },
+        {
+            "name": "Films",
+            "description": "Films"
+        }
+    ]
+}

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Request;
 class FilmController extends Controller
 {
 
-/*
+/**
 * @OA\Get (
 *     path="/films",
 *     operationId="filmsGet",
@@ -27,7 +27,7 @@ class FilmController extends Controller
 *     )
 * )
 *
-*/
+**/
     public function index()
     {
         return response()->success_paginated(

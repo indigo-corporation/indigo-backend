@@ -17,12 +17,10 @@ use Illuminate\Routing\Controller as BaseController;
  *   )
  * )
  *
- *
  * @OA\Server(
- *      url="http://indigo.loc/api",
+ *      url="https://indigo-films.herokuapp.com/api/",
  *      description="API Server"
  * )
-
  *
  * @OA\Tag(
  *     name="Auth",
