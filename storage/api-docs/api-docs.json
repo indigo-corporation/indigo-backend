@@ -14,6 +14,196 @@
         }
     ],
     "paths": {
+        "/auth/regiser": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Regiser",
+                "operationId": "regiser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Access token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccessTokenResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Access token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccessTokenResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Access token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultSuccessResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get user",
+                "operationId": "me",
+                "responses": {
+                    "200": {
+                        "description": "Access token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/auth/refresh": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "RefreshToken",
+                "operationId": "refreshToken",
+                "responses": {
+                    "200": {
+                        "description": "Access token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccessTokenResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/films": {
             "get": {
                 "tags": [
@@ -48,6 +238,23 @@
     },
     "components": {
         "schemas": {
+            "AccessToken": {
+                "title": "AccessToken",
+                "description": "AccessToken",
+                "properties": {
+                    "access_token": {
+                        "title": "access_token",
+                        "description": "Access_token",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2|sbMBmoXZf9tDVk5fOSLRWbDdozAfnjPQ4g6HOSSE"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "AccessToken"
+                }
+            },
             "Country": {
                 "title": "Country",
                 "description": "Country model",
@@ -295,6 +502,111 @@
                     "name": "Pagination"
                 }
             },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "Name",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Pedro"
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "Email",
+                        "type": "string",
+                        "format": "string",
+                        "example": "abc@gmail.com"
+                    },
+                    "password": {
+                        "title": "password",
+                        "description": "Password",
+                        "type": "string",
+                        "format": "password",
+                        "example": "ADs_4688^"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "User"
+                }
+            },
+            "LoginRequest": {
+                "title": "Register request",
+                "description": "Register request body data",
+                "required": [
+                    "*"
+                ],
+                "properties": {
+                    "email": {
+                        "title": "email",
+                        "description": "Email",
+                        "type": "string",
+                        "format": "string",
+                        "example": "abc@gmail.com"
+                    },
+                    "password": {
+                        "title": "password",
+                        "description": "Password",
+                        "type": "string",
+                        "format": "password",
+                        "example": "ADs_4688^"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterRequest": {
+                "title": "Register request",
+                "description": "Register request body data",
+                "required": [
+                    "*"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "Name",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Pedro"
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "Email",
+                        "type": "string",
+                        "format": "string",
+                        "example": "abc@gmail.com"
+                    },
+                    "password": {
+                        "title": "password",
+                        "description": "Password",
+                        "type": "string",
+                        "format": "password",
+                        "example": "ADs_4688^"
+                    }
+                },
+                "type": "object"
+            },
+            "AccessTokenResource": {
+                "title": "AccessTokenResource",
+                "description": "Access token resource",
+                "properties": {
+                    "state": {
+                        "title": "State",
+                        "description": "State",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/AccessToken"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "AccessTokenResource"
+                }
+            },
             "DefaultErrorResource": {
                 "title": "DefaultErrorResource",
                 "description": "Default Error Resource",
@@ -312,6 +624,28 @@
                 "type": "object",
                 "xml": {
                     "name": "DefaultErrorResource"
+                }
+            },
+            "DefaultSuccessResource": {
+                "title": "DefaultSuccessResource",
+                "description": "Default Success Resource",
+                "properties": {
+                    "state": {
+                        "title": "State",
+                        "description": "State",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "title": "Data",
+                        "description": "Data",
+                        "type": "object",
+                        "example": null
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "DefaultSuccessResource"
                 }
             },
             "FilmResource": {
@@ -359,6 +693,33 @@
                 "xml": {
                     "name": "FilmsResource"
                 }
+            },
+            "UserResource": {
+                "title": "UserResource",
+                "description": "User resource",
+                "properties": {
+                    "state": {
+                        "title": "State",
+                        "description": "State",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "UserResource"
+                }
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer 2|sbMBmoXZf9tDVk5fOSLRWbDdozAfnjPQ4g6HOSSE)",
+                "name": "Authorization",
+                "in": "header"
             }
         }
     },

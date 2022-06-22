@@ -11,6 +11,29 @@ use function response;
 class AuthController extends Controller
 {
 
+    /**
+     * @OA\Post (
+     *     path="/auth/regiser",
+     *     operationId="regiser",
+     *     tags={"Auth"},
+     *     summary="Regiser",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/RegisterRequest")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Access token",
+     *         @OA\JsonContent(ref="#/components/schemas/AccessTokenResource")
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
+     *     )
+     * )
+     *
+     **/
     public function register(Request $request)
     {
         $attr = $request->validate([
@@ -32,6 +55,29 @@ class AuthController extends Controller
         );
     }
 
+    /**
+     * @OA\Post (
+     *     path="/auth/login",
+     *     operationId="login",
+     *     tags={"Auth"},
+     *     summary="Login",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/LoginRequest")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Access token",
+     *         @OA\JsonContent(ref="#/components/schemas/AccessTokenResource")
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
+     *     )
+     * )
+     *
+     **/
     public function login(Request $request)
     {
         $attr = $request->validate([
@@ -51,6 +97,26 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Post (
+     *     path="/auth/logout",
+     *     operationId="logout",
+     *     tags={"Auth"},
+     *     summary="Logout",
+     *     security={ {"sanctum": {} }},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Access token",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultSuccessResource")
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
+     *     )
+     * )
+     *
+     **/
     public function logout()
     {
         auth()->user()->tokens()->delete();
@@ -58,11 +124,51 @@ class AuthController extends Controller
         return response()->success();
     }
 
+    /**
+     * @OA\Get (
+     *     path="/auth/me",
+     *     operationId="me",
+     *     tags={"Auth"},
+     *     summary="Get user",
+     *     security={ {"sanctum": {} }},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Access token",
+     *         @OA\JsonContent(ref="#/components/schemas/UserResource")
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
+     *     )
+     * )
+     *
+     **/
     public function me(Request $request)
     {
         return response()->success($request->user());
     }
 
+    /**
+     * @OA\Get (
+     *     path="/auth/refresh",
+     *     operationId="refreshToken",
+     *     tags={"Auth"},
+     *     summary="RefreshToken",
+     *     security={ {"sanctum": {} }},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Access token",
+     *         @OA\JsonContent(ref="#/components/schemas/AccessTokenResource")
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
+     *     )
+     * )
+     *
+     **/
     public function refresh(Request $request)
     {
         $request->user()->tokens()->delete();
