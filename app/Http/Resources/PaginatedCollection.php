@@ -6,7 +6,10 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class PaginatedCollection extends ResourceCollection
 {
-    protected $resourceClass;
+    public function __construct($resource, protected $resourceName)
+    {
+        parent::__construct($resource);
+    }
 
     /**
      * Transform the resource collection into an array.
@@ -18,7 +21,7 @@ class PaginatedCollection extends ResourceCollection
     {
         return [
             'state' => true,
-            'data' => $this->resourceClass::collection($this->collection),
+            'data' => $this->resourceName::collection($this->collection),
             'pagination' => [
                 'total' => $this->total(),
                 'count' => $this->count(),

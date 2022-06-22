@@ -2,7 +2,8 @@
 
 namespace App\Http\ApiControllers;
 
-use App\Http\Resources\FilmCollection;
+use App\Http\Resources\FilmResource;
+use App\Http\Resources\PaginatedCollection;
 use App\Models\Film\Film;
 use Illuminate\Support\Facades\Request;
 
@@ -31,7 +32,7 @@ class FilmController extends Controller
     public function index()
     {
         return response()->success_paginated(
-            new FilmCollection(Film::paginate(20))
+            new PaginatedCollection(Film::paginate(20), FilmResource::class)
         );
     }
 
