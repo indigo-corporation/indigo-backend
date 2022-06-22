@@ -419,6 +419,27 @@
                     "name": "Film"
                 }
             },
+            "FilmsPaginated": {
+                "title": "FilmsPaginated",
+                "description": "FilmsPaginated",
+                "properties": {
+                    "items": {
+                        "title": "Items",
+                        "description": "Items",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Film"
+                        }
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/Pagination"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "FilmsPaginated"
+                }
+            },
             "Genre": {
                 "title": "Genre",
                 "description": "Genre model",
@@ -678,15 +699,7 @@
                         "example": true
                     },
                     "data": {
-                        "title": "Data",
-                        "description": "Data",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Film"
-                        }
-                    },
-                    "pagination": {
-                        "$ref": "#/components/schemas/Pagination"
+                        "$ref": "#/components/schemas/FilmsPaginated"
                     }
                 },
                 "type": "object",

@@ -21,13 +21,15 @@ class PaginatedCollection extends ResourceCollection
     {
         return [
             'state' => true,
-            'data' => $this->resourceName::collection($this->collection),
-            'pagination' => [
-                'total' => $this->total(),
-                'count' => $this->count(),
-                'per_page' => $this->perPage(),
-                'current_page' => $this->currentPage(),
-                'total_pages' => $this->lastPage()
+            'data' => [
+                'items' => $this->resourceName::collection($this->collection),
+                'pagination' => [
+                    'total' => $this->total(),
+                    'count' => $this->count(),
+                    'per_page' => $this->perPage(),
+                    'current_page' => $this->currentPage(),
+                    'total_pages' => $this->lastPage()
+                ]
             ]
         ];
     }

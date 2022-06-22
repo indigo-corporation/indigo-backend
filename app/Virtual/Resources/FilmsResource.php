@@ -32,17 +32,7 @@ class FilmsResource
      *     description="Data"
      * )
      *
-     * @var \App\Virtual\Models\Film[]
+     * @var \App\Virtual\Models\FilmsPaginated
      */
     private $data;
-
-    /**
-     * @OA\Property(
-     *     title="Pagination",
-     *     description="Pagination"
-     * )
-     *
-     * @var \App\Virtual\Models\Pagination
-     */
-    private $pagination;
 }
