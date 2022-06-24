@@ -21,11 +21,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/auth/logout', [\App\Http\ApiControllers\AuthController::class, 'logout']);
     Route::get('/auth/refresh', [\App\Http\ApiControllers\AuthController::class, 'refresh']);
 });
-
-Route::prefix('films')->group(function () {
-    Route::get('/', [\App\Http\ApiControllers\FilmController::class, 'index']);
-    Route::get('/{id}', [\App\Http\ApiControllers\FilmController::class, 'show']);
-    Route::post('/', [\App\Http\ApiControllers\FilmController::class, 'store']);
-    Route::put('/{id}', [\App\Http\ApiControllers\FilmController::class, 'update']);
-    Route::delete('/{di}', [\App\Http\ApiControllers\FilmController::class, 'destroy']);
-});
+Route::resource('films', \App\Http\ApiControllers\FilmController::class);

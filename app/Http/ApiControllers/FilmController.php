@@ -36,17 +36,8 @@ class FilmController extends Controller
         );
     }
 
-    public function show($filmId)
+    public function show(Film $film)
     {
-        $film = Film::find($filmId);
-
-        if (!$film) {
-            return response()->error([
-                'code' => 404,
-                'message' => 'Not found'
-            ], 404);
-        }
-
         return response()->success(new FilmResource($film));
     }
 
