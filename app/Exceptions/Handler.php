@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\AuthenticationException;
 
 use Throwable;
 
@@ -14,11 +15,13 @@ class Handler extends ExceptionHandler
     // TODO: other errors
     protected $errCodes = [
         'Illuminate\Validation\ValidationException' => 111,
+        'Illuminate\Auth\AuthenticationException' => 123,
         'default' => 100
     ];
 
     protected $errStatuses = [
         'Illuminate\Validation\ValidationException' => 422,
+        'Illuminate\Auth\AuthenticationException' => 401,
         'default' => self::DEFAULT_STATUS
     ];
 
