@@ -3,6 +3,7 @@
 namespace App\Http\ApiControllers;
 
 use App\Http\Resources\FilmResource;
+use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\Film\Film;
 use Illuminate\Support\Facades\Request;
@@ -32,10 +33,29 @@ class FilmController extends Controller
     public function index()
     {
         return response()->success_paginated(
-            new PaginatedCollection(Film::paginate(20), FilmResource::class)
+            new PaginatedCollection(Film::paginate(20), FilmShortResource::class)
         );
     }
 
+    /**
+     * @OA\Get (
+     *     path="/films/{id}",
+     *     operationId="filmGet",
+     *     tags={"Films"},
+     *     summary="Get film",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Film",
+     *         @OA\JsonContent(ref="#/components/schemas/FilmResource")
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
+     *     )
+     * )
+     *
+     **/
     public function show(Film $film)
     {
         return response()->success(new FilmResource($film));

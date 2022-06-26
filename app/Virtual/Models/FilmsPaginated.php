@@ -19,7 +19,7 @@ class FilmsPaginated
      *     description="Items"
      * )
      *
-     * @var \App\Virtual\Models\Film[]
+     * @var \App\Virtual\Models\FilmShort[]
      */
     private $items;
 

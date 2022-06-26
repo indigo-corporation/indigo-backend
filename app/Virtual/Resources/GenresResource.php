@@ -2,23 +2,24 @@
 
 namespace App\Virtual\Resources;
 
+use App\Virtual\Models\Pagination;
 
 /**
  * @OA\Schema(
- *     title="DefaultErrorResource",
- *     description="Default Error Resource",
+ *     title="GenresResource",
+ *     description="Genres resource",
  *     @OA\Xml(
- *         name="DefaultErrorResource"
+ *         name="GenresResource"
  *     )
  * )
  */
-class DefaultErrorResource
+class GenresResource
 {
     /**
      * @OA\Property(
      *     title="State",
      *     description="State",
-     *     example=false
+     *     example=true
      * )
      *
      * @var boolean
@@ -31,7 +32,7 @@ class DefaultErrorResource
      *     description="Data"
      * )
      *
-     * @var \App\Virtual\Models\DefaultError
+     * @var \App\Virtual\Models\Genre[]
      */
     private $data;
 }

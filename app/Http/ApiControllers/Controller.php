@@ -31,6 +31,11 @@ use Illuminate\Routing\Controller as BaseController;
  *     name="Films",
  *     description="Films"
  * )
+ *
+ * @OA\Tag(
+ *     name="Genres",
+ *     description="Genres"
+ * )
  * */
 class Controller extends BaseController
 {

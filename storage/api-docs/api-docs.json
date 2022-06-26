@@ -234,6 +234,99 @@
                     }
                 }
             }
+        },
+        "/films/{id}": {
+            "get": {
+                "tags": [
+                    "Films"
+                ],
+                "summary": "Get film",
+                "operationId": "filmGet",
+                "responses": {
+                    "200": {
+                        "description": "Film",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FilmResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genres": {
+            "get": {
+                "tags": [
+                    "Genres"
+                ],
+                "summary": "Get genres",
+                "operationId": "genresGet",
+                "responses": {
+                    "200": {
+                        "description": "Genres list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenresResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genres/{id}": {
+            "get": {
+                "tags": [
+                    "Genres"
+                ],
+                "summary": "Get genre",
+                "operationId": "genreGet",
+                "responses": {
+                    "200": {
+                        "description": "Genre",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenreResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -419,6 +512,51 @@
                     "name": "Film"
                 }
             },
+            "FilmShort": {
+                "title": "FilmShort",
+                "description": "Film short model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 3453
+                    },
+                    "poster_url": {
+                        "title": "poster_url",
+                        "description": "Poster url",
+                        "type": "string",
+                        "format": "string",
+                        "example": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg"
+                    },
+                    "year": {
+                        "title": "year",
+                        "description": "Year",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": "1994"
+                    },
+                    "imdb_rating": {
+                        "title": "imdb_rating",
+                        "description": "imdb rating",
+                        "type": "string",
+                        "format": "string",
+                        "example": "9.0"
+                    },
+                    "title": {
+                        "title": "title",
+                        "description": "Title",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Властелин колец: Возвращение Короля"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "FilmShort"
+                }
+            },
             "FilmsPaginated": {
                 "title": "FilmsPaginated",
                 "description": "FilmsPaginated",
@@ -428,7 +566,7 @@
                         "description": "Items",
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/Film"
+                            "$ref": "#/components/schemas/FilmShort"
                         }
                     },
                     "pagination": {
@@ -636,7 +774,7 @@
                         "title": "State",
                         "description": "State",
                         "type": "boolean",
-                        "example": true
+                        "example": false
                     },
                     "data": {
                         "$ref": "#/components/schemas/DefaultError"
@@ -707,6 +845,49 @@
                     "name": "FilmsResource"
                 }
             },
+            "GenreResource": {
+                "title": "GenreResource",
+                "description": "Genre resource",
+                "properties": {
+                    "state": {
+                        "title": "State",
+                        "description": "State",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Genre"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "GenreResource"
+                }
+            },
+            "GenresResource": {
+                "title": "GenresResource",
+                "description": "Genres resource",
+                "properties": {
+                    "state": {
+                        "title": "State",
+                        "description": "State",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "title": "Data",
+                        "description": "Data",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Genre"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "GenresResource"
+                }
+            },
             "UserResource": {
                 "title": "UserResource",
                 "description": "User resource",
@@ -744,6 +925,10 @@
         {
             "name": "Films",
             "description": "Films"
+        },
+        {
+            "name": "Genres",
+            "description": "Genres"
         }
     ]
 }
