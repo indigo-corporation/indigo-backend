@@ -75,7 +75,8 @@ class Handler extends ExceptionHandler
         return parent::render($request, $e);
     }
 
-    private function renderApiError($request,Throwable $e) {
+    private function renderApiError($request, Throwable $e)
+    {
         $errClass = get_class($e);
         $code = $this->errCodes[$errClass] ?? $this->errCodes['default'];
         $status = $this->errStatuses[$errClass] ?? $this->errStatuses['default'];

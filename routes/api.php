@@ -22,3 +22,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/auth/refresh', [\App\Http\ApiControllers\AuthController::class, 'refresh']);
 });
 Route::resource('films', \App\Http\ApiControllers\FilmController::class);
+Route::resource('genres', \App\Http\ApiControllers\GenreController::class);

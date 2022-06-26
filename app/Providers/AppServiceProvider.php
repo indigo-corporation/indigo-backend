@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
 
         Response::macro('success', function ($data = null, $status = 200) {
             return Response::json([
-                'state'  => true,
+                'state' => true,
                 'data' => $data,
             ], $status);
         });
@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
 
         Response::macro('error', function ($error = ['code' => 666, 'message' => 'some very bad error..'], $status = 400) {
             return Response::json([
-                'state'  => false,
+                'state' => false,
                 'data' => [
                     'code' => $error['code'],
                     'message' => $error['message'],

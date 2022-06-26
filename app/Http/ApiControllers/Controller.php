@@ -32,7 +32,6 @@ use Illuminate\Routing\Controller as BaseController;
  *     description="Films"
  * )
  * */
-
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
