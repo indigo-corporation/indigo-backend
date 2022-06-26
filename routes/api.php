@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\ApiControllers\AuthController;
+use App\Http\ApiControllers\FilmController;
+use App\Http\ApiControllers\GenreController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,13 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/auth/register', [\App\Http\ApiControllers\AuthController::class, 'register']);
-Route::post('/auth/login', [\App\Http\ApiControllers\AuthController::class, 'login']);
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/auth/me', [\App\Http\ApiControllers\AuthController::class, 'me']);
-    Route::post('/auth/logout', [\App\Http\ApiControllers\AuthController::class, 'logout']);
-    Route::get('/auth/refresh', [\App\Http\ApiControllers\AuthController::class, 'refresh']);
+    Route::get('/auth/me', [AuthController::class, 'me']);
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/refresh', [AuthController::class, 'refresh']);
 });
-Route::resource('films', \App\Http\ApiControllers\FilmController::class);
-Route::resource('genres', \App\Http\ApiControllers\GenreController::class);
+Route::resource('films', FilmController::class);
+Route::resource('genres', GenreController::class);
