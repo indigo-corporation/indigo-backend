@@ -6,7 +6,7 @@ use App\Http\Resources\FilmResource;
 use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\Film\Film;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
