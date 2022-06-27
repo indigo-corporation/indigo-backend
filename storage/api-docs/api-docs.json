@@ -550,6 +550,14 @@
                         "type": "string",
                         "format": "string",
                         "example": "Властелин колец: Возвращение Короля"
+                    },
+                    "genres": {
+                        "title": "genres",
+                        "description": "Genres",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Genre"
+                        }
                     }
                 },
                 "type": "object",
