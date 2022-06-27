@@ -266,6 +266,37 @@
                 }
             }
         },
+        "/films/search": {
+            "get": {
+                "tags": [
+                    "Films"
+                ],
+                "summary": "Search films",
+                "operationId": "filmsSearch",
+                "responses": {
+                    "200": {
+                        "description": "Films list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FilmsResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/genres": {
             "get": {
                 "tags": [
