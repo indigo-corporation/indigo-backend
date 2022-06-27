@@ -101,9 +101,9 @@ class FilmController extends Controller
      * )
      *
      **/
-    public function search()
+    public function search(Request $request)
     {
-        $films = Film::whereTranslationIlike('title', '%' . request()->get('find') . '%');
+        $films = Film::whereTranslationIlike('title', '%' . $request->find . '%');
 
         return response()->success_paginated(
             new PaginatedCollection($films->paginate(20), FilmShortResource::class)
