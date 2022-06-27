@@ -81,4 +81,35 @@ class FilmController extends Controller
 
         return response()->success(null, 204);
     }
+
+    /**
+     * @OA\Get (
+     *     path="/films/search",
+     *     operationId="filmsSearch",
+     *     tags={"Films"},
+     *     summary="Search films",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Films list",
+     *         @OA\JsonContent(ref="#/components/schemas/FilmsResource")
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
+     *     )
+     * )
+     *
+     **/
+    public function search(Request $request)
+    {
+        dd(
+            $request->all()
+        );
+        $films = Film::where('title', 'ilike', '%'. $request->input('find') .'%');
+
+        return response()->success_paginated(
+            new PaginatedCollection($films->paginate(20), FilmShortResource::class)
+        );
+    }
 }
