@@ -72,4 +72,14 @@ class FilmShort
      * @var string
      */
     public $title;
+
+    /**
+     * @OA\Property(
+     *      title="genres",
+     *      description="Genres",
+     * )
+     *
+     * @var Genre[]
+     */
+    public $genres;
 }

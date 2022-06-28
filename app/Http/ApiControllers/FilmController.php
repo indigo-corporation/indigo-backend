@@ -6,7 +6,7 @@ use App\Http\Resources\FilmResource;
 use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\Film\Film;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
@@ -80,5 +80,33 @@ class FilmController extends Controller
         $film->delete();
 
         return response()->success(null, 204);
+    }
+
+    /**
+     * @OA\Get (
+     *     path="/films/search",
+     *     operationId="filmsSearch",
+     *     tags={"Films"},
+     *     summary="Search films",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Films list",
+     *         @OA\JsonContent(ref="#/components/schemas/FilmsResource")
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
+     *     )
+     * )
+     *
+     **/
+    public function search(Request $request)
+    {
+        $films = Film::whereTranslationIlike('title', '%' . $request->find . '%');
+
+        return response()->success_paginated(
+            new PaginatedCollection($films->paginate(20), FilmShortResource::class)
+        );
     }
 }

@@ -19,7 +19,8 @@ class FilmShortResource extends JsonResource
             'poster_url' => $this->poster_url,
             'year' => $this->year,
             'imdb_rating' => $this->imdb_rating,
-            'title' => $this->title
+            'title' => $this->title,
+            'genres' => GenreResource::collection($this->genres)
         ];
     }
 }

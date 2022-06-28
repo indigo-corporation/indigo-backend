@@ -20,9 +20,18 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/auth/me', [AuthController::class, 'me']);
-    Route::post('/auth/logout', [AuthController::class, 'logout']);
-    Route::get('/auth/refresh', [AuthController::class, 'refresh']);
+    Route::prefix('auth')->group(function () {
+        Route::get('me', [\App\Http\ApiControllers\AuthController::class, 'me']);
+        Route::post('logout', [\App\Http\ApiControllers\AuthController::class, 'logout']);
+        Route::post('refresh', [\App\Http\ApiControllers\AuthController::class, 'refresh']);
+    });
+
+
 });
-Route::resource('films', FilmController::class);
-Route::resource('genres', GenreController::class);
+
+Route::prefix('films')->group(function () {
+    Route::get('/search', [\App\Http\ApiControllers\FilmController::class, 'search']);
+});
+Route::resource('films', \App\Http\ApiControllers\FilmController::class);
+
+Route::resource('genres', \App\Http\ApiControllers\GenreController::class);
