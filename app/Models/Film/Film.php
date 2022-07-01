@@ -55,6 +55,6 @@ class Film extends Model implements TranslatableContract
 
     public function comments (): HasMany
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->where('type', '=', Comment::COMMENT_TYPE_FILM);
     }
 }

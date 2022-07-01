@@ -2,6 +2,7 @@
 
 namespace App\Http\ApiControllers;
 
+use App\Http\Resources\CommentResource;
 use App\Http\Resources\FilmResource;
 use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
@@ -107,6 +108,13 @@ class FilmController extends Controller
 
         return response()->success_paginated(
             new PaginatedCollection($films->paginate(20), FilmShortResource::class)
+        );
+    }
+
+    public function getComments(Film $film)
+    {
+        return response()->success_paginated(
+            new PaginatedCollection($film->comments()->paginate(20), CommentResource::class)
         );
     }
 }

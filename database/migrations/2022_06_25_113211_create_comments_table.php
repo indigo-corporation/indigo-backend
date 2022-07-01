@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('film_id')->unsigned();
             $table->text('body');
-            $table->string('comment_type');
+            $table->string('type');
             $table->integer('parent_comment_id')->unsigned()->nullable();
 
             $table->timestamps();

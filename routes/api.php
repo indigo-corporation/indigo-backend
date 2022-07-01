@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\ApiControllers\AuthController;
+use App\Http\ApiControllers\CommentsController;
 use App\Http\ApiControllers\FilmController;
 use App\Http\ApiControllers\GenreController;
 use Illuminate\Support\Facades\Route;
@@ -21,17 +22,30 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('auth')->group(function () {
-        Route::get('me', [\App\Http\ApiControllers\AuthController::class, 'me']);
-        Route::post('logout', [\App\Http\ApiControllers\AuthController::class, 'logout']);
-        Route::post('refresh', [\App\Http\ApiControllers\AuthController::class, 'refresh']);
+        Route::get('me', [AuthController::class, 'me']);
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('refresh', [AuthController::class, 'refresh']);
     });
 
 
 });
 
 Route::prefix('films')->group(function () {
-    Route::get('/search', [\App\Http\ApiControllers\FilmController::class, 'search']);
+    Route::get('/search', [FilmController::class, 'search']);
+    Route::get('/{film}/get_comments', [FilmController::class, 'getComments']);
 });
-Route::resource('films', \App\Http\ApiControllers\FilmController::class);
+Route::resource('films', FilmController::class);
 
-Route::resource('genres', \App\Http\ApiControllers\GenreController::class);
+Route::resource('genres', GenreController::class);
+
+
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::prefix('comments')->group(function (){
+        Route::post('/store', [CommentsController::class, 'store']);
+        Route::get('/edit/{comment}', [CommentsController::class, 'edit']);
+        Route::post('/update/{comment}', [CommentsController::class, 'update']);
+        Route::post('/destroy/{comment}', [CommentsController::class, 'destroy']);
+    });
+});
+

@@ -2,22 +2,15 @@
 
 namespace App\Http\ApiControllers;
 
+use App\Http\Resources\CommentAnswerResource;
+use App\Http\Resources\CommentEditResource;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -26,7 +19,48 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'filmId' => 'required|int|exists:films,id',
+            'parentId' => 'nullable|exists:comments,id',
+            'body' => 'required|string|max:500|min:1'
+        ];
+
+        $request->validate($rules);
+
+        $comment = new Comment([
+            'user_id' => Auth::user()->getAuthIdentifier(),
+            'film_id' => $request->get('filmId'),
+            'body' => $request->get('body'),
+        ]);
+
+        if ($parentId = $request->get('parentId', false)) {
+            $comment->parent_comment_id = $parentId;
+            $comment->type = Comment::COMMENT_TYPE_ANSWER;
+        } else {
+            $comment->type = Comment::COMMENT_TYPE_FILM;
+        }
+
+        $comment->save();
+
+        return response()->success(CommentAnswerResource::collection(collect([$comment])));
+
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param Comment $comment
+     * @return Response
+     */
+    public function edit(Comment $comment)
+    {
+        if ($comment->user_id != Auth::user()->getAuthIdentifier()) {
+            return response()->error([
+                'code' => '403',
+                'message' => 'Forbidden'
+            ]);
+        }
+        return response()->success(CommentEditResource::collection(collect([$comment])));
     }
 
     /**
@@ -38,7 +72,16 @@ class CommentsController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        //
+        $rules = [
+            'body' => 'required|string|max:500|min:1'
+        ];
+
+        $request->validate($rules);
+
+        $comment->body = json_encode($request->get('body'));
+        $comment->save();
+
+        return response()->success(CommentEditResource::collection(collect([$comment])));
     }
 
     /**
@@ -49,6 +92,7 @@ class CommentsController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+        return response()->success('Deleted');
     }
 }

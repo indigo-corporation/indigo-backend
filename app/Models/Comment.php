@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int id
  * @property int user_id
  * @property int film_id
  * @property string body
- * @property string comment_type
+ * @property string type
  * @property int parent_comment_id
 
  * @mixin Eloquent
@@ -32,7 +33,7 @@ class Comment extends Model
         'user_id',
         'film_id',
         'body',
-        'comment_type',
+        'type',
         'parent_comment_id'
     ];
 
@@ -44,5 +45,10 @@ class Comment extends Model
     public function users(): ?BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function parent_comments(): ?HasMany
+    {
+        return $this->hasMany(Comment::class, 'parent_comment_id');
     }
 }
