@@ -3,6 +3,7 @@
 namespace App\Models\Film;
 
 use App\Http\Traits\CustomTranslatableTrait;
+use App\Models\Comment;
 use App\Models\Country\Country;
 use App\Models\Genre\Genre;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
@@ -10,6 +11,7 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\MediaCollections\Models\Concerns\CustomMediaProperties;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Film extends Model implements TranslatableContract
 {
@@ -49,5 +51,10 @@ class Film extends Model implements TranslatableContract
             'id',
             'id'
         )->with('translations');
+    }
+
+    public function comments (): HasMany
+    {
+        return $this->hasMany(Comment::class)->where('type', '=', Comment::COMMENT_TYPE_FILM);
     }
 }
