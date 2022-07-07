@@ -42,7 +42,7 @@ class CommentsController extends Controller
 
         $comment->save();
 
-        return response()->success(CommentAnswerResource::collection(collect([$comment])));
+        return response()->success(new CommentAnswerResource($comment));
 
     }
 
