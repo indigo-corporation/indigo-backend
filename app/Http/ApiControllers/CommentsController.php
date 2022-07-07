@@ -60,7 +60,7 @@ class CommentsController extends Controller
                 'message' => 'Forbidden'
             ]);
         }
-        return response()->success(CommentEditResource::collection(collect([$comment])));
+        return response()->success(new CommentEditResource($comment));
     }
 
     /**
@@ -81,7 +81,7 @@ class CommentsController extends Controller
         $comment->body = json_encode($request->get('body'));
         $comment->save();
 
-        return response()->success(CommentEditResource::collection(collect([$comment])));
+        return response()->success(new CommentEditResource($comment));
     }
 
     /**
