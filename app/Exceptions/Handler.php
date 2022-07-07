@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\AuthenticationException;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -16,12 +17,14 @@ class Handler extends ExceptionHandler
     protected $errCodes = [
         'Illuminate\Validation\ValidationException' => 111,
         'Illuminate\Auth\AuthenticationException' => 123,
+        'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' => 200,
         'default' => 100
     ];
 
     protected $errStatuses = [
         'Illuminate\Validation\ValidationException' => 422,
         'Illuminate\Auth\AuthenticationException' => 401,
+        'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' => 404,
         'default' => self::DEFAULT_STATUS
     ];
 
@@ -80,11 +83,14 @@ class Handler extends ExceptionHandler
         $errClass = get_class($e);
         $code = $this->errCodes[$errClass] ?? $this->errCodes['default'];
         $status = $this->errStatuses[$errClass] ?? $this->errStatuses['default'];
-        $message = $e->getMessage();
+        $message = $e instanceof NotFoundHttpException
+            ? 'Not found'
+            : $e->getMessage();
 
         if ($e instanceof ValidationException) {
             foreach ($e->errors() as $error) {
                 $message = $error[0];
+                break;
             }
         }
 
