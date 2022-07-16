@@ -106,7 +106,7 @@ class AuthController extends Controller
      *     security={ {"sanctum": {} }},
      *     @OA\Response(
      *         response="200",
-     *         description="Access token",
+     *         description="Success response",
      *         @OA\JsonContent(ref="#/components/schemas/DefaultSuccessResource")
      *     ),
      *     @OA\Response(

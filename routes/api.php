@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\ApiControllers\UserController;
 use App\Http\ApiControllers\AuthController;
 use App\Http\ApiControllers\CommentsController;
 use App\Http\ApiControllers\FilmController;
@@ -27,7 +28,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('refresh', [AuthController::class, 'refresh']);
     });
 
-
+    Route::prefix('users')->group(function () {
+        Route::post('change-pass', [UserController::class, 'changePass']);
+    });
 });
 
 Route::prefix('films')->group(function () {

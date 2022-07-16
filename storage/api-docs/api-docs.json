@@ -105,7 +105,7 @@
                 "operationId": "logout",
                 "responses": {
                     "200": {
-                        "description": "Access token",
+                        "description": "Success response",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -357,6 +357,59 @@
                         }
                     }
                 }
+            }
+        },
+        "/users/change-pass": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Change pass",
+                "operationId": "change-pass",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "password"
+                                ],
+                                "properties": {
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultSuccessResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultErrorResource"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         }
     },
@@ -968,6 +1021,10 @@
         {
             "name": "Genres",
             "description": "Genres"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
         }
     ]
 }
