@@ -49,7 +49,11 @@ class StoreTopRated extends Command
                 . '&language=ru&page=' . $p;
 
             try {
-                dispatch(new FilmStoreJob($link));
+                $data = json_decode(file_get_contents($link));
+
+                foreach ($data->results as $item) {
+                    dispatch(new FilmStoreJob($item));
+                }
             } catch (\Throwable $e) {
                 dd($e->getMessage());
             }
