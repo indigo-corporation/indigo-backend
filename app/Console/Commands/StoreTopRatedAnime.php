@@ -57,6 +57,7 @@ class StoreTopRatedAnime extends Command
                 }
             }
 
+            dump('ok');
             sleep(60);
         }
     }

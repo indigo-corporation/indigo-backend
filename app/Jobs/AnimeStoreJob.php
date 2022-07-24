@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Film\Film;
+use App\Models\Genre\Genre;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -25,7 +26,7 @@ class AnimeStoreJob implements ShouldQueue
     {
         $is_serial = $this->film->episodes !== 1;
 
-        Film::create([
+        $film = Film::create([
             'original_title' => $this->film->name,
             'original_language' => 'ja',
             'poster' => $this->film->image->original
@@ -43,5 +44,18 @@ class AnimeStoreJob implements ShouldQueue
                 'description' => $this->film->description,
             ]
         ]);
+
+        //get genres
+        $genres = [];
+        foreach ($this->film->genres as $genre) {
+            $genreModel = Genre::where('name', strtolower($genre->name))
+                ->where('is_anime', true)
+                ->first();
+            if ($genreModel) {
+                $genres[] = $genreModel->id;
+            }
+        }
+
+        $film->genres()->attach($genres);
     }
 }
