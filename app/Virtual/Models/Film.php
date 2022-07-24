@@ -113,13 +113,63 @@ class Film
      * @OA\Property(
      *      title="imdb_rating",
      *      description="imdb rating",
-     *      format="string",
-     *      example="9.0"
+     *      type="number",
+     *      format="double",
+     *      example=9.1
      * )
      *
      * @var string
      */
     public $imdb_rating;
+
+    /**
+     * @OA\Property(
+     *      title="shiki_id",
+     *      description="shiki ID",
+     *      format="string",
+     *      example="16720"
+     * )
+     *
+     * @var string
+     */
+    public $shiki_id;
+
+    /**
+     * @OA\Property(
+     *      title="shiki_rating",
+     *      description="shiki rating",
+     *      type="number",
+     *      format="double",
+     *      example=9.1
+     * )
+     *
+     * @var string
+     */
+    public $shiki_rating;
+
+    /**
+     * @OA\Property(
+     *      title="is_anime",
+     *      description="is anime",
+     *      format="boolean",
+     *      example=false
+     * )
+     *
+     * @var string
+     */
+    public $is_anime;
+
+    /**
+     * @OA\Property(
+     *      title="is_serial",
+     *      description="is serial",
+     *      format="boolean",
+     *      example=false
+     * )
+     *
+     * @var string
+     */
+    public $is_serial;
 
     /**
      * @OA\Property(

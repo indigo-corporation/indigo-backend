@@ -556,9 +556,37 @@
                     "imdb_rating": {
                         "title": "imdb_rating",
                         "description": "imdb rating",
+                        "type": "number",
+                        "format": "double",
+                        "example": 9.1
+                    },
+                    "shiki_id": {
+                        "title": "shiki_id",
+                        "description": "shiki ID",
                         "type": "string",
                         "format": "string",
-                        "example": "9.0"
+                        "example": "16720"
+                    },
+                    "shiki_rating": {
+                        "title": "shiki_rating",
+                        "description": "shiki rating",
+                        "type": "number",
+                        "format": "double",
+                        "example": 9.1
+                    },
+                    "is_anime": {
+                        "title": "is_anime",
+                        "description": "is anime",
+                        "type": "string",
+                        "format": "boolean",
+                        "example": false
+                    },
+                    "is_serial": {
+                        "title": "is_serial",
+                        "description": "is serial",
+                        "type": "string",
+                        "format": "boolean",
+                        "example": false
                     },
                     "title": {
                         "title": "title",
@@ -624,9 +652,16 @@
                     "imdb_rating": {
                         "title": "imdb_rating",
                         "description": "imdb rating",
-                        "type": "string",
-                        "format": "string",
-                        "example": "9.0"
+                        "type": "number",
+                        "format": "double",
+                        "example": 9.1
+                    },
+                    "shiki_rating": {
+                        "title": "shiki_rating",
+                        "description": "shiki rating",
+                        "type": "number",
+                        "format": "double",
+                        "example": 9.1
                     },
                     "title": {
                         "title": "title",

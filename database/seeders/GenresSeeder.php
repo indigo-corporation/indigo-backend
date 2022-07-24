@@ -3,13 +3,15 @@
 namespace Database\Seeders;
 
 use App\Models\Genre\Genre;
-use App\Models\Genre\GenreTranslation;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class GenresSeeder extends Seeder
 {
     public function run()
     {
+        DB::table('genres')->truncate();
+
         $link1 = env('TMDB_API') . 'genre/movie/list?api_key=' . env('TMDB_KEY');
         $link2 = env('TMDB_API') . 'genre/movie/list?api_key=' . env('TMDB_KEY') . '&language=ru';
 
@@ -18,14 +20,10 @@ class GenresSeeder extends Seeder
 
         foreach ($data1 as $key => $item) {
             Genre::create([
-                'id' => $item['id'],
-                'name' => strtolower($item['name'])
-            ]);
-
-            GenreTranslation::create([
-                'locale' => 'ru',
-                'title' => $data2[$key]['name'],
-                'genre_id' => $item['id']
+                'name' => strtolower($item['name']),
+                'ru' => [
+                    'title' => $data2[$key]['name']
+                ]
             ]);
         }
     }

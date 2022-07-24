@@ -2,6 +2,7 @@
 
 namespace App\Models\Genre;
 
+use App\Http\Traits\CustomTranslatableTrait;
 use App\Models\Film\Film;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
@@ -13,12 +14,14 @@ class Genre extends Model implements TranslatableContract
 {
     use Translatable;
     use Sluggable;
+    use CustomTranslatableTrait;
 
     protected $fillable = [
         'id',
         'name',
         'slug',
-        'title'
+        'title',
+        'is_anime'
     ];
 
     public $translatedAttributes = [

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Country\Country;
 use App\Models\Film\Film;
+use App\Models\Genre\Genre;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -41,6 +42,16 @@ class FilmStoreJob implements ShouldQueue
         $data = json_decode(file_get_contents($link));
         // get imdb id
         $imdb_id = $data->imdb_id;
+        //get genres
+        $genres = [];
+        foreach ($data->genres as $genre) {
+            $genreModel = Genre::whereTranslationIlike('title', $genre->name)
+                ->where('is_anime', false)
+                ->first();
+            if ($genreModel) {
+                $genres[] = $genreModel->id;
+            }
+        }
         //get countries
         $countries = [];
         foreach ($data->production_countries as $country) {
@@ -63,7 +74,7 @@ class FilmStoreJob implements ShouldQueue
 
         $film->save();
 
-        $film->genres()->attach($item->genre_ids);
+        $film->genres()->attach($genres);
         $film->countries()->attach($countries);
     }
 }

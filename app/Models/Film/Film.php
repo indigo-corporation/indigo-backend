@@ -26,6 +26,10 @@ class Film extends Model implements TranslatableContract
         'runtime',
         'imdb_id',
         'imdb_rating',
+        'shiki_id',
+        'shiki_rating',
+        'is_anime',
+        'is_serial',
         'title',
         'overview'
     ];

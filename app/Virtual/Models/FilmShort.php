@@ -53,13 +53,27 @@ class FilmShort
      * @OA\Property(
      *      title="imdb_rating",
      *      description="imdb rating",
-     *      format="string",
-     *      example="9.0"
+     *      type="number",
+     *      format="double",
+     *      example=9.1
      * )
      *
      * @var string
      */
     public $imdb_rating;
+
+    /**
+     * @OA\Property(
+     *      title="shiki_rating",
+     *      description="shiki rating",
+     *      type="number",
+     *      format="double",
+     *      example=9.1
+     * )
+     *
+     * @var string
+     */
+    public $shiki_rating;
 
     /**
      * @OA\Property(
