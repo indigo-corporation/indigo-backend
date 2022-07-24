@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\AnimeStoreJob;
+use App\Models\Film\Film;
 use Illuminate\Console\Command;
 
 class StoreTopRatedAnime extends Command
@@ -38,6 +39,8 @@ class StoreTopRatedAnime extends Command
      */
     public function handle()
     {
+        Film::where('is_anime', true)->delete();
+
         for ($p = 1; $p <= 10; $p++) {
             dump('page ' . $p);
             $link = 'https://shikimori.one/api/animes'

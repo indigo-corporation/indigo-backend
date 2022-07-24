@@ -24,6 +24,7 @@ class Film extends Model implements TranslatableContract
         'release_date',
         'year',
         'runtime',
+        'poster_url',
         'imdb_id',
         'imdb_rating',
         'shiki_id',

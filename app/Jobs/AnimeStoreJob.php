@@ -25,13 +25,14 @@ class AnimeStoreJob implements ShouldQueue
     public function handle()
     {
         $is_serial = $this->film->episodes !== 1;
+        $poster_url = $this->film->image->original
+            ? 'https://shikimori.one' . $this->film->image->original
+            : null;
 
         $film = Film::create([
             'original_title' => $this->film->name,
             'original_language' => 'ja',
-            'poster' => $this->film->image->original
-                ? 'https://shikimori.one/' . $this->film->image->original
-                : null,
+            'poster_url' => $poster_url,
             'release_date' => $this->film->aired_on,
             'year' => (new Carbon($this->film->aired_on))?->year,
             'runtime' => $this->film->duration,
