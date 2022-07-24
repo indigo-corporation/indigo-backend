@@ -42,7 +42,7 @@ class AnimeStoreJob implements ShouldQueue
             'is_serial' => $is_serial,
             'ru' => [
                 'title' => $this->film->russian,
-                'description' => $this->film->description,
+                'overview' => $this->film->description,
             ]
         ]);
 
