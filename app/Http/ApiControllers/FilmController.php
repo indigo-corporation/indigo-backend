@@ -34,7 +34,7 @@ class FilmController extends Controller
     public function index()
     {
         return response()->success_paginated(
-            new PaginatedCollection(Film::paginate(20), FilmShortResource::class)
+            new PaginatedCollection(Film::orderBy('id', 'DESC')->paginate(20), FilmShortResource::class)
         );
     }
 
