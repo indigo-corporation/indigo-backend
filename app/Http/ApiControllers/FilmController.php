@@ -38,7 +38,10 @@ class FilmController extends Controller
         $query = Film::orderBy('id', 'DESC');
 
         if ($type === 'film') {
-            $query = $query->where('is_anime', false)->where('is_serial', false);
+            $query = $query->where('is_anime', false)->where('is_serial', false)
+                ->whereDoesnthave('genres', function ($q) {
+                    $q->where('name', 'animation');
+                });
         }
 
         if ($type === 'serial') {
@@ -50,7 +53,7 @@ class FilmController extends Controller
         }
 
         if ($type === 'cartoon') {
-            $query = $query->where('is_anime', false)->whereHas('genres', function($q){
+            $query = $query->where('is_anime', false)->whereHas('genres', function ($q) {
                 $q->where('name', 'animation');
             });
         }
