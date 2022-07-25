@@ -31,10 +31,32 @@ class FilmController extends Controller
      * )
      *
      **/
-    public function index()
+    public function index(Request $request)
     {
+        $type = $request->get('type');
+
+        $query = Film::orderBy('id', 'DESC');
+
+        if ($type === 'film') {
+            $query = $query->where('is_anime', false)->where('is_serial', false);
+        }
+
+        if ($type === 'serial') {
+            $query = $query->where('is_anime', false)->where('is_serial', true);
+        }
+
+        if ($type === 'anime') {
+            $query = $query->where('is_anime', true);
+        }
+
+        if ($type === 'cartoon') {
+            $query = $query->where('is_anime', false)->whereHas('genres', function($q){
+                $q->where('name', 'animation');
+            });
+        }
+
         return response()->success_paginated(
-            new PaginatedCollection(Film::orderBy('id', 'DESC')->paginate(20), FilmShortResource::class)
+            new PaginatedCollection($query->paginate(20), FilmShortResource::class)
         );
     }
 
