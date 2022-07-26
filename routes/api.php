@@ -5,6 +5,7 @@ use App\Http\ApiControllers\AuthController;
 use App\Http\ApiControllers\CommentsController;
 use App\Http\ApiControllers\FilmController;
 use App\Http\ApiControllers\GenreController;
+use \App\Http\ApiControllers\WorldController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,7 +43,8 @@ Route::resource('films', FilmController::class);
 Route::resource('genres', GenreController::class);
 
 Route::prefix('world')->group(function () {
-    Route::get('/countries', [\App\Http\ApiControllers\WorldController::class, 'countries']);
+    Route::get('/countries-for-select', [WorldController::class, 'countriesForSelect']);
+    Route::get('/cities-for-select', [WorldController::class, 'citiesForSelect']);
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
