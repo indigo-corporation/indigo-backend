@@ -41,7 +41,9 @@ Route::resource('films', FilmController::class);
 
 Route::resource('genres', GenreController::class);
 
-
+Route::prefix('world')->group(function () {
+    Route::get('/countries', [\App\Http\ApiControllers\WorldController::class, 'countries']);
+});
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('comments')->group(function (){
