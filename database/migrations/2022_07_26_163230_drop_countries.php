@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        \Illuminate\Support\Facades\DB::table('country_film')->truncate();
+        Schema::drop('country_film');
         Schema::drop('country_translations');
         Schema::drop('countries');
     }
