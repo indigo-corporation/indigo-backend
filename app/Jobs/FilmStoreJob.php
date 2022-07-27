@@ -44,20 +44,29 @@ class FilmStoreJob implements ShouldQueue
         $imdb_id = $data->imdb_id;
         //get genres
         $genres = [];
+        $is_animation = false;
         foreach ($data->genres as $genre) {
             $genreModel = Genre::whereTranslationIlike('title', $genre->name)
                 ->where('is_anime', false)
                 ->first();
             if ($genreModel) {
                 $genres[] = $genreModel->id;
+
+                if ($genreModel->animation === 'animation') {
+                    $is_animation = true;
+                }
             }
         }
         //get countries
         $countries = [];
         foreach ($data->production_countries as $country) {
-            $countryModel = Country::where('code', $country->iso_3166_1)->first();
+            $countryModel = Country::where('iso2', $country->iso_3166_1)->first();
             if ($countryModel) {
                 $countries[] = $countryModel->id;
+
+                if ($is_animation && $countryModel->iso2 === 'JP') {
+                    $film->is_anime = true;
+                }
             }
         }
 
