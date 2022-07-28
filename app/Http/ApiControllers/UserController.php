@@ -62,4 +62,15 @@ class UserController extends Controller
 
         return response()->success();
     }
+
+    public function storeUser(Request $request)
+    {
+        $user = Auth::user();
+
+        foreach ($request->all() as $key => $input) {
+            $user->$key = $input;
+        }
+
+        return response()->success($user->save());
+    }
 }
