@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Country\Country;
 use App\Models\Film\Film;
 use App\Models\Genre\Genre;
 use Illuminate\Bus\Queueable;
@@ -10,6 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\DB;
 
 class FilmStoreJob implements ShouldQueue
 {
@@ -24,6 +24,7 @@ class FilmStoreJob implements ShouldQueue
 
     public function handle()
     {
+        DB::table('films')->truncate();
         $item = $this->film;
 
         $film = new Film([
@@ -60,7 +61,7 @@ class FilmStoreJob implements ShouldQueue
         //get countries
         $countries = [];
         foreach ($data->production_countries as $country) {
-            $countryModel = Country::where('iso2', $country->iso_3166_1)->first();
+            $countryModel = DB::table('countries')->where('iso2', $country->iso_3166_1)->first();
             if ($countryModel) {
                 $countries[] = $countryModel->id;
 

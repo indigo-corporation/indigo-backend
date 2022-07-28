@@ -19,6 +19,15 @@ return new class extends Migration
             $table->unsignedInteger('country_id');
 
             $table->unique(['film_id', 'country_id']);
+
+            $table->foreign('country_id')
+                ->references('id')
+                ->on('countries')
+                ->onDelete('cascade');
+            $table->foreign('film_id')
+                ->references('id')
+                ->on('films')
+                ->onDelete('cascade');
         });
     }
 
