@@ -24,7 +24,6 @@ class FilmStoreJob implements ShouldQueue
 
     public function handle()
     {
-        DB::table('films')->truncate();
         $item = $this->film;
 
         $film = new Film([
