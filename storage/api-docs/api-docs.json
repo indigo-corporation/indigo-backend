@@ -14,13 +14,13 @@
         }
     ],
     "paths": {
-        "/auth/regiser": {
+        "/auth/register": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "Regiser",
-                "operationId": "regiser",
+                "operationId": "register",
                 "requestBody": {
                     "required": true,
                     "content": {

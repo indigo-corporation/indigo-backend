@@ -13,8 +13,8 @@ class AuthController extends Controller
 
     /**
      * @OA\Post (
-     *     path="/auth/regiser",
-     *     operationId="regiser",
+     *     path="/auth/register",
+     *     operationId="register",
      *     tags={"Auth"},
      *     summary="Regiser",
      *     @OA\RequestBody(
