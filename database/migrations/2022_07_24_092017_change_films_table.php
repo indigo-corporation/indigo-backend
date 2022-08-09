@@ -17,6 +17,9 @@ return new class extends Migration {
             $table->decimal('shiki_rating', 4, 2)->nullable();
             $table->boolean('is_anime')->default(false);
             $table->boolean('is_serial')->default(false);
+
+            $table->unique('shiki_id');
+            $table->unique('imdb_id');
         });
     }
 

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('films', function (Blueprint $table) {
             $table->id();
-            $table->string('original_title');
-            $table->string('original_language', 4);
+            $table->string('original_title')->nullable();
+            $table->string('original_language', 4)->nullable();
             $table->string('poster_url')->nullable();
             $table->smallInteger('runtime')->nullable();
             $table->date('release_date')->nullable();
@@ -34,23 +34,6 @@ return new class extends Migration
             $table->text('overview')->nullable();
 
             $table->unique(['film_id','locale']);
-
-            $table->foreign('film_id')
-                ->references('id')
-                ->on('films')
-                ->onDelete('cascade');
-        });
-
-        Schema::create('country_film', function (Blueprint $table) {
-            $table->id();
-
-            $table->integer('film_id')->unsigned();
-            $table->integer('country_id')->unsigned();
-
-            $table->foreign('country_id')
-                ->references('id')
-                ->on('countries')
-                ->onDelete('cascade');
 
             $table->foreign('film_id')
                 ->references('id')

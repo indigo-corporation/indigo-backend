@@ -2,6 +2,7 @@
 
 namespace App\Http\ApiControllers;
 
+use App\Http\Requests\UserStoreRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -63,7 +64,32 @@ class UserController extends Controller
         return response()->success();
     }
 
-    public function storeUser(Request $request)
+    /**
+     * @OA\Post (
+     *     path="/users/change-info",
+     *     operationId="change-info",
+     *     tags={"Users"},
+     *     security={ {"sanctum": {} }},
+     *     summary="Change info",
+     *     @OA\RequestBody(
+     *         @OA\MediaType(mediaType="multipart/form-data",
+     *
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Success response",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultSuccessResource")
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error",
+     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
+     *     )
+     * )
+     *
+     **/
+    public function storeUser(UserStoreRequest $request)
     {
         $user = Auth::user();
 
@@ -72,5 +98,10 @@ class UserController extends Controller
         }
 
         return response()->success($user->save());
+    }
+
+    public function storePicture()
+    {
+
     }
 }
