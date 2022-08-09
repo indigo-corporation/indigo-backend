@@ -93,7 +93,9 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        foreach ($request->all() as $key => $input) {
+        foreach ($request->only([
+            'name', 'birth_date', 'about', 'city_id'
+        ]) as $key => $input) {
             $user->$key = $input;
         }
 

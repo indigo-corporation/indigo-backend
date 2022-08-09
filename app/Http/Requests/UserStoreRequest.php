@@ -11,7 +11,7 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'birth_date' => 'string',
+            'birth_date' => 'date',
             'about' => 'string',
             'city_id' => 'integer'
         ];
