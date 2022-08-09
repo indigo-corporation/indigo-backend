@@ -17,13 +17,14 @@
         "cviebrock/eloquent-sluggable": "^9.0",
         "darkaonline/l5-swagger": "^8.3",
         "guzzlehttp/guzzle": "^7.2",
+        "imdbphp/imdbphp": "dev-fix-composer",
+        "intervention/image": "^2.7",
         "jenssegers/date": "^4.0",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "nnjeim/world": "^1.1",
-        "spatie/laravel-medialibrary": "^10.0.0",
-        "imdbphp/imdbphp": "dev-fix-composer"
+        "spatie/laravel-medialibrary": "^10.0.0"
     },
     "require-dev": {
         "backpack/generators": "^3.1",

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('birth_date')->nullable();
             $table->text('about')->nullable();
             $table->unsignedInteger('city_id')->nullable();
+            $table->string('poster_url')->nullable();
         });
     }
 
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->dropColumn('birth_date');
             $table->dropColumn('about');
             $table->dropColumn('city_id');
+            $table->dropColumn('poster_url');
         });
     }
 };

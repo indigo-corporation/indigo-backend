@@ -2,11 +2,14 @@
 
 namespace App\Http\ApiControllers;
 
+use App\Http\Requests\UserPictureStoreRequest;
 use App\Http\Requests\UserStoreRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Image;
 use function response;
 
 class UserController extends Controller
@@ -102,8 +105,13 @@ class UserController extends Controller
         return response()->success($user->save());
     }
 
-    public function storePicture()
+    public function storePicture(UserPictureStoreRequest $request)
     {
+        $path = Storage::put('images', $request->file('picture'));
 
+        $user = Auth::user();
+        $user->poster_url = $path;
+        $user->save();
+        dd($user);
     }
 }
