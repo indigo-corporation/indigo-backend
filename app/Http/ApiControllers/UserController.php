@@ -92,7 +92,7 @@ class UserController extends Controller
      * )
      *
      **/
-    public function storeUser(UserStoreRequest $request)
+    public function changeUser(UserStoreRequest $request)
     {
         $user = Auth::user();
 
@@ -105,13 +105,16 @@ class UserController extends Controller
         return response()->success($user->save());
     }
 
-    public function storePicture(UserPictureStoreRequest $request)
+    public function changePicture(UserPictureStoreRequest $request)
     {
-        $path = Storage::put('images', $request->file('picture'));
-
+        $file = $request->file('picture');
         $user = Auth::user();
-        $user->poster_url = $path;
+
+        $file->move(public_path().'/images/user_posters/',$user->id.'.jpg');
+
+        $user->poster_url = '/images/user_posters/'.$user->id.'.jpg';
         $user->save();
-        dd($user);
+
+        return response()->success($user);
     }
 }
