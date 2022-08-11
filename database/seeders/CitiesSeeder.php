@@ -12,5 +12,9 @@ class CitiesSeeder extends Seeder
         DB::table('cities')
             ->where('country_code', '<>','UA')
             ->delete();
+
+        DB::table('states')
+            ->where('country_code', '<>','UA')
+            ->delete();
     }
 }
