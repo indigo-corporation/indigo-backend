@@ -10,7 +10,7 @@ class UserPictureStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'picture' => 'required'
+            'picture' => 'required|image'
         ];
     }
 }
