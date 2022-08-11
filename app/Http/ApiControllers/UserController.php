@@ -111,9 +111,8 @@ class UserController extends Controller
 
         $file->move(public_path().'/images/user_posters/',$user->id.'.jpg');
 
-        $user->poster_url = url('/images/user_posters/'.$user->id.'.jpg');
-        $user->save();
+        $user->poster_url = '/images/user_posters/'.$user->id.'.jpg';
 
-        return response()->success($user);
+        return response()->success($user->save());
     }
 }

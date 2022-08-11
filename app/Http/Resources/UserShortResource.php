@@ -17,7 +17,7 @@ class UserShortResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'poster_url' => $this->poster_url
+            'poster_url' => url($this->poster_url)
         ];
     }
 }
