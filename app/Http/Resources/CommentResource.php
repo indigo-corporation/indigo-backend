@@ -16,7 +16,7 @@ class CommentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            'user' => new UserShortResource($this->user),
             'film_id' => $this->film_id,
             'body' => $this->body,
             'answers' => CommentAnswerResource::collection($this->parent_comments)

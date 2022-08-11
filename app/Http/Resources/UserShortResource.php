@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CommentAnswerResource extends JsonResource
+class UserShortResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,8 @@ class CommentAnswerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => new UserShortResource($this->user),
-            'film_id' => $this->film_id,
-            'body' => $this->body,
-            'parent_id' => $this->parent_comment_id,
+            'name' => $this->name,
+            'poster_url' => $this->poster_url
         ];
     }
 }
