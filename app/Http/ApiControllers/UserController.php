@@ -4,6 +4,7 @@ namespace App\Http\ApiControllers;
 
 use App\Http\Requests\UserPictureStoreRequest;
 use App\Http\Requests\UserStoreRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -101,7 +102,7 @@ class UserController extends Controller
         }
         $user->save();
 
-        return response()->success($user);
+        return response()->success(new UserResource($user));
     }
 
     public function changePicture(UserPictureStoreRequest $request)
