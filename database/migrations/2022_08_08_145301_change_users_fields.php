@@ -18,6 +18,11 @@ return new class extends Migration
             $table->text('about')->nullable();
             $table->unsignedInteger('city_id')->nullable();
             $table->string('poster_url')->nullable();
+
+            $table->foreign('city_id')
+                ->references('id')
+                ->on('cities')
+                ->onDelete('cascade');
         });
     }
 
