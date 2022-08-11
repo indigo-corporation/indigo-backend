@@ -101,8 +101,9 @@ class UserController extends Controller
         ]) as $key => $input) {
             $user->$key = $input;
         }
+        $user->save();
 
-        return response()->success($user->save());
+        return response()->success($user);
     }
 
     public function changePicture(UserPictureStoreRequest $request)
