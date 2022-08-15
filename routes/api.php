@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::prefix('users')->group(function () {
         Route::post('change-pass', [UserController::class, 'changePass']);
-        Route::post('change-info', [UserController::class, 'changeUser']);
+        Route::post('change-info', [UserController::class, 'changeInfo']);
         Route::post('change-picture', [UserController::class, 'changePicture']);
     });
 });

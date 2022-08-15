@@ -91,7 +91,7 @@ class UserController extends Controller
      * )
      *
      **/
-    public function changeUser(UserStoreRequest $request)
+    public function changeInfo(UserStoreRequest $request)
     {
         $user = Auth::user();
 
