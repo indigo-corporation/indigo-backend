@@ -41,8 +41,6 @@ class StoreTopRatedSerial extends Command
      */
     public function handle()
     {
-        DB::table('films')->truncate();
-
         for ($p = 1; $p <= 5; $p++) {
             dump('page ' . $p);
 
