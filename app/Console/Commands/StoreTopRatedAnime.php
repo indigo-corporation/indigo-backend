@@ -39,7 +39,7 @@ class StoreTopRatedAnime extends Command
      */
     public function handle()
     {
-        Film::where('is_anime', true)->delete();
+//        Film::where('is_anime', true)->delete();
 
         for ($p = 1; $p <= 10; $p++) {
             dump('page ' . $p);
