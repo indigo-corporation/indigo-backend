@@ -16,7 +16,8 @@ class CountryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'name' => $this->name,
+            'title' => trans('country.'.$this->iso2, [], 'ru')
         ];
     }
 }
