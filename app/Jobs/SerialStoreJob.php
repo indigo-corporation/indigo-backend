@@ -36,7 +36,7 @@ class SerialStoreJob implements ShouldQueue
             'imdb_rating' => $rating,
             'is_anime' => false,
             'is_serial' => true,
-            'poster_url' => $imdbData->photo() ?? null,
+            'poster_url' => $imdbData->photo(false) ?? null,
             'runtime' => $imdbData->runtime() ?? null,
             'release_date' => $this->film->start_date,
             'year' => $year,
