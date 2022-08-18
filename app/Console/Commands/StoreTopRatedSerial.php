@@ -54,7 +54,9 @@ class StoreTopRatedSerial extends Command
                 $data = json_decode(file_get_contents($link));
 
                 foreach ($data->data as $item) {
-                    dispatch(new SerialStoreJob($item));
+                    if ($item->imdb_id) {
+                        dispatch(new SerialStoreJob($item));
+                    }
                 }
             } catch (\Throwable $e) {
                 dd($e->getMessage());

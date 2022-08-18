@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Country;
 use App\Models\Film\Film;
 use App\Models\Genre\Genre;
 use Carbon\Carbon;
@@ -11,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class SerialStoreJob implements ShouldQueue
 {
@@ -25,24 +25,48 @@ class SerialStoreJob implements ShouldQueue
 
     public function handle()
     {
-        $item = Film::create([
+        $imdbData = new \Imdb\Title($this->film->imdb_id);
+
+        $year = (new Carbon($this->film->start_date))->year ?? null;
+        $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
+
+        $film = Film::create([
             'original_title' => $this->film->orig_title,
             'imdb_id' => $this->film->imdb_id,
-            'imdb_rating' => null,
-            'shiki_id' => null,
+            'imdb_rating' => $rating,
             'is_anime' => false,
             'is_serial' => true,
+            'poster_url' => $imdbData->photo() ?? null,
+            'runtime' => $imdbData->runtime() ?? null,
+            'release_date' => $this->film->start_date,
+            'year' => $year,
             'ru' => [
-                'title' => $this->film->ru_title
+                'title' => $this->film->ru_title,
+                'overview' => $imdbData->plotoutline()
             ]
         ]);
-        $title = new \Imdb\Title($item->imdb_id);
 
-        $item->poster_url = $title->photo();
-        $item->poster_url = $title->photo();
+        $genres = [];
+        foreach ($imdbData->genres() as $genre) {
+            $genreModel = Genre::where('name', lcfirst($genre))
+                ->where('is_anime', false)
+                ->first();
+            if ($genreModel) {
+                $genres[] = $genreModel->id;
+            }
+        }
 
-        $rating = $title->rating();
-        $plotOutline = $title->plotoutline();
-        dd($rating,$plotOutline, $title->photo());
+        //get countries
+        $countries = [];
+        foreach ($imdbData->country() as $country) {
+            $countryModel = DB::table('countries')
+                ->where('name', $country)->first();
+            if ($countryModel) {
+                $countries[] = $countryModel->id;
+            }
+        }
+
+        $film->genres()->attach($genres);
+        $film->countries()->attach($countries);
     }
 }
