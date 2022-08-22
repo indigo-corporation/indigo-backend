@@ -41,7 +41,7 @@ class StoreTopRated extends Command
     {
 //        DB::table('films')->truncate();
 
-        for ($p = 1; $p <= 25; $p++) {
+        for ($p = 1; $p <= 5; $p++) {
             dump('page ' . $p);
 
             $link = env('TMDB_API') . 'movie/top_rated'

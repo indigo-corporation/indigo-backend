@@ -41,9 +41,9 @@ class StoreTopRatedSerial extends Command
      */
     public function handle()
     {
-//        DB::table('films')->truncate();
+        DB::table('films')->truncate();
 
-        for ($p = 1; $p <= 5; $p++) {
+        for ($p = 1; $p <= 1; $p++) {
             dump('page ' . $p);
 
             $link = 'https://videocdn.tv/api/tv-series'
