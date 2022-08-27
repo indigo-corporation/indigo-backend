@@ -20,8 +20,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'birth_date' => $this->birth_date,
             'about' => $this->about,
-            'city' => new CityResource($this->city),
-            'country' => new CountryResource($this->country),
+//            'city' => new CityResource($this->city),
+//            'country' => new CountryResource($this->country),
             'poster_url' => url($this->poster_url)
         ];
     }
