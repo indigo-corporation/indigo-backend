@@ -10,7 +10,7 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|string',
             'birth_date' => 'date',
             'about' => 'string',
             'city_id' => 'integer'
