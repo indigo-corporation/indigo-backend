@@ -146,4 +146,15 @@ class FilmController extends Controller
             new PaginatedCollection($film->comments()->paginate(20), CommentResource::class)
         );
     }
+
+    public function getByGenre($genre_id)
+    {
+        $query = Film::whereHas('genres', function ($query) use ($genre_id) {
+            $query->where('genres.id', $genre_id);
+        });
+
+        return response()->success_paginated(
+            new PaginatedCollection($query->paginate(20), FilmShortResource::class)
+        );
+    }
 }

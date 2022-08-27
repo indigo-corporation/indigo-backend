@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::prefix('films')->group(function () {
     Route::get('/search', [FilmController::class, 'search']);
     Route::get('/{film}/get_comments', [FilmController::class, 'getComments']);
+    Route::get('/genre/{id}', [FilmController::class, 'getByGenre']);
 });
 Route::resource('films', FilmController::class);
 
