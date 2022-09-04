@@ -19,6 +19,7 @@ class CommentEditResource extends JsonResource
             'film_id' => $this->film_id,
             'user_id' => $this->user_id,
             'body' => $this->body,
+            'created_at' => $this->created_at
         ];
     }
 }

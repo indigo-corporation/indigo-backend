@@ -19,7 +19,8 @@ class CommentResource extends JsonResource
             'user' => new UserShortResource($this->user),
             'film_id' => $this->film_id,
             'body' => $this->body,
-            'answers' => CommentAnswerResource::collection($this->parent_comments)
+            'answers' => CommentAnswerResource::collection($this->parent_comments),
+            'created_at' => $this->created_at
         ];
     }
 }
