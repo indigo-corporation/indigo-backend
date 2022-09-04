@@ -37,25 +37,8 @@ class FilmController extends Controller
 
         $query = Film::orderBy('id', 'DESC');
 
-        if ($type === 'film') {
-            $query = $query->where('is_anime', false)->where('is_serial', false)
-                ->whereDoesnthave('genres', function ($q) {
-                    $q->where('name', 'animation');
-                });
-        }
-
-        if ($type === 'serial') {
-            $query = $query->where('is_anime', false)->where('is_serial', true);
-        }
-
-        if ($type === 'anime') {
-            $query = $query->where('is_anime', true);
-        }
-
-        if ($type === 'cartoon') {
-            $query = $query->where('is_anime', false)->whereHas('genres', function ($q) {
-                $q->where('name', 'animation');
-            });
+        if($type) {
+            $query = FilmController::typeQuery($query, $type);
         }
 
         return response()->success_paginated(
@@ -147,14 +130,44 @@ class FilmController extends Controller
         );
     }
 
-    public function getByGenre($genre_id)
+    public function getByGenre($genre_id, Request $request)
     {
         $query = Film::whereHas('genres', function ($query) use ($genre_id) {
             $query->where('genres.id', $genre_id);
         });
 
+        $type = $request->get('type');
+        if($type) {
+            $query = FilmController::typeQuery($query, $type);
+        }
+
         return response()->success_paginated(
             new PaginatedCollection($query->paginate(20), FilmShortResource::class)
         );
+    }
+
+    public static function typeQuery($query, $type) {
+        if ($type === 'film') {
+            $query = $query->where('is_anime', false)->where('is_serial', false)
+                ->whereDoesnthave('genres', function ($q) {
+                    $q->where('name', 'animation');
+                });
+        }
+
+        if ($type === 'serial') {
+            $query = $query->where('is_anime', false)->where('is_serial', true);
+        }
+
+        if ($type === 'anime') {
+            $query = $query->where('is_anime', true);
+        }
+
+        if ($type === 'cartoon') {
+            $query = $query->where('is_anime', false)->whereHas('genres', function ($q) {
+                $q->where('name', 'animation');
+            });
+        }
+
+        return $query;
     }
 }
