@@ -54,4 +54,29 @@ class Film extends Model implements TranslatableContract
     {
         return $this->hasMany(Comment::class)->where('type', '=', Comment::COMMENT_TYPE_FILM);
     }
+
+    public static function typeQuery($query, $type) {
+        if ($type === 'film') {
+            $query = $query->where('is_anime', false)->where('is_serial', false)
+                ->whereDoesnthave('genres', function ($q) {
+                    $q->where('name', 'animation');
+                });
+        }
+
+        if ($type === 'serial') {
+            $query = $query->where('is_anime', false)->where('is_serial', true);
+        }
+
+        if ($type === 'anime') {
+            $query = $query->where('is_anime', true);
+        }
+
+        if ($type === 'cartoon') {
+            $query = $query->where('is_anime', false)->whereHas('genres', function ($q) {
+                $q->where('name', 'animation');
+            });
+        }
+
+        return $query;
+    }
 }
