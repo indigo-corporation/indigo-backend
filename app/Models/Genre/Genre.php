@@ -21,7 +21,8 @@ class Genre extends Model implements TranslatableContract
         'name',
         'slug',
         'title',
-        'is_anime'
+        'is_anime',
+        'is_genre'
     ];
 
     public $translatedAttributes = [

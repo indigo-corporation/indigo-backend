@@ -41,7 +41,7 @@ class StoreTopRatedAnime extends Command
     {
 //        Film::where('is_anime', true)->delete();
 
-        for ($p = 1; $p <= 2; $p++) {
+        for ($p = 1; $p <= 10; $p++) {
             dump('page ' . $p);
             $link = 'https://shikimori.one/api/animes'
                 . '?limit=50&page=' . $p

@@ -41,9 +41,9 @@ class StoreTopRatedSerial extends Command
      */
     public function handle()
     {
-        DB::table('films')->truncate();
+//        Film::where('is_serial', true)->delete();
 
-        for ($p = 1; $p <= 1; $p++) {
+        for ($p = 1; $p <= 5; $p++) {
             dump('page ' . $p);
 
             $link = 'https://videocdn.tv/api/tv-series'
