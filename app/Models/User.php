@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Film\Film;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -83,5 +85,17 @@ class User extends Authenticatable
     public function favorite_films(): HasMany
     {
         return $this->hasMany(FavoriteFilms::class);
+    }
+
+    public function favorite_films_films(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Film::class,
+            FavoriteFilms::class,
+            'user_id',
+            'id',
+            'id',
+            'film_id'
+        );
     }
 }

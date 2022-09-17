@@ -15,7 +15,7 @@ class FavoriteFilmsController extends Controller
     public function all()
     {
         return response()->success_paginated(
-            new PaginatedCollection(Auth::user()->favorite_films()->paginate(20), FilmShortResource::class)
+            new PaginatedCollection(Auth::user()->favorite_films_films()->paginate(20), FilmShortResource::class)
         );
     }
 
@@ -52,7 +52,6 @@ class FavoriteFilmsController extends Controller
                 'user_id' => $user->id,
                 'film_id' => $request->film_id,
             ])->delete();
-            dd(1);
         }
 
         return response()->success(null, 204);
