@@ -6,6 +6,7 @@ use App\Http\ApiControllers\CommentsController;
 use App\Http\ApiControllers\FilmController;
 use App\Http\ApiControllers\GenreController;
 use \App\Http\ApiControllers\WorldController;
+use \App\Http\ApiControllers\FavoriteFilmsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,6 +57,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/edit/{comment}', [CommentsController::class, 'edit']);
         Route::post('/update/{comment}', [CommentsController::class, 'update']);
         Route::post('/destroy/{comment}', [CommentsController::class, 'destroy']);
+    });
+
+    Route::prefix('favorite-films')->group(function () {
+        Route::get('/all', [FavoriteFilmsController::class, 'all']);
+        Route::post('/add', [FavoriteFilmsController::class, 'add']);
+        Route::post('/remove', [FavoriteFilmsController::class, 'remove']);
     });
 });
 

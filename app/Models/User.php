@@ -79,4 +79,9 @@ class User extends Authenticatable
             'country_id'
         );
     }
+
+    public function favorite_films(): HasMany
+    {
+        return $this->hasMany(FavoriteFilms::class);
+    }
 }
