@@ -3,6 +3,7 @@
 namespace App\Http\ApiControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FavoriteFilmsRequest;
 use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\FavoriteFilms;
@@ -19,7 +20,7 @@ class FavoriteFilmsController extends Controller
         );
     }
 
-    public function add(Request $request)
+    public function add(FavoriteFilmsRequest $request)
     {
         $user = Auth::user();
 
@@ -38,7 +39,7 @@ class FavoriteFilmsController extends Controller
         return response()->success(null, 201);
     }
 
-    public function remove(Request $request)
+    public function remove(FavoriteFilmsRequest $request)
     {
         $user = Auth::user();
 
