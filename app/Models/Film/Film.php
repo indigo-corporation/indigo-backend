@@ -12,6 +12,7 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 class Film extends Model implements TranslatableContract
 {
@@ -40,6 +41,10 @@ class Film extends Model implements TranslatableContract
         'overview'
     ];
 
+    protected $appends = [
+        'is_favorite'
+    ];
+
     public function genres(): ?BelongsToMany
     {
         return $this->belongsToMany(Genre::class)
@@ -56,9 +61,9 @@ class Film extends Model implements TranslatableContract
         return $this->hasMany(Comment::class)->where('type', '=', Comment::COMMENT_TYPE_FILM);
     }
 
-    public function favorite_films(): ?BelongsToMany
+    public function favorite_films(): ?hasMany
     {
-        return $this->belongsToMany(FavoriteFilms::class);
+        return $this->hasMany(FavoriteFilms::class);
     }
 
     public static function typeQuery($query, $type) {

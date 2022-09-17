@@ -20,6 +20,13 @@ class FavoriteFilmsController extends Controller
         );
     }
 
+    public function allIDs()
+    {
+        $IDs = Auth::user()->favorite_films_films()->pluck('film_id')->toArray();
+
+        return response()->success($IDs);
+    }
+
     public function add(FavoriteFilmsRequest $request)
     {
         $user = Auth::user();
