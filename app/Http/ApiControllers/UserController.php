@@ -5,6 +5,7 @@ namespace App\Http\ApiControllers;
 use App\Http\Requests\UserPictureStoreRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -115,5 +116,12 @@ class UserController extends Controller
         $user->poster_url = '/images/user_posters/'.$user->id.'.jpg';
 
         return response()->success($user->save());
+    }
+
+    public function get(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        return response()->success(new UserResource($user));
     }
 }
