@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::prefix('users')->group(function () {
-        Route::get('get', [UserController::class, 'get']);
+        Route::get('/{id}', [UserController::class, 'get']);
         Route::post('change-pass', [UserController::class, 'changePass']);
         Route::post('change-info', [UserController::class, 'changeInfo']);
         Route::post('change-picture', [UserController::class, 'changePicture']);
