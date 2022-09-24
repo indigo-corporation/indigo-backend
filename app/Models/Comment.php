@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int id
@@ -50,5 +51,27 @@ class Comment extends Model
     public function parent_comments(): ?HasMany
     {
         return $this->hasMany(Comment::class, 'parent_comment_id');
+    }
+
+    public function likes(): ?HasMany
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function getLikesCountAttribute()
+    {
+        return $this->likes()->likes()->count() ?? 0;
+    }
+
+    public function getDislikesCountAttribute()
+    {
+        return $this->likes()->dislikes()->count() ?? 0;
+    }
+
+    public function getMyLike()
+    {
+        return Auth::id()
+            ? $this->likes()->where('user_id', Auth::id())->first()
+            : null;
     }
 }

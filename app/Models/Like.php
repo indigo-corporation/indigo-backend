@@ -26,4 +26,14 @@ class Like extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeLikes($query)
+    {
+        return $query->where('is_like', true);
+    }
+
+    public function scopeDislikes($query)
+    {
+        return $query->where('is_like', false);
+    }
 }
