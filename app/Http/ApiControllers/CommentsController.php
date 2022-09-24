@@ -2,8 +2,11 @@
 
 namespace App\Http\ApiControllers;
 
+use App\Http\Requests\LikeRequest;
+use App\Http\Requests\UnlikeRequest;
 use App\Http\Resources\CommentAnswerResource;
 use App\Http\Resources\CommentEditResource;
+use App\Http\Resources\LikeResource;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -94,5 +97,19 @@ class CommentsController extends Controller
     {
         $comment->delete();
         return response()->success('Deleted');
+    }
+
+    public function like(LikeRequest $request)
+    {
+        $like = Auth::user()->like($request->comment_id, $request->is_like);
+
+        return response()->success(new LikeResource($like));
+    }
+
+    public function unlike(UnlikeRequest $request)
+    {
+        Auth::user()->unlike($request->comment_id);
+
+        return response()->success();
     }
 }

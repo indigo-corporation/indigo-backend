@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 use Nnjeim\World\Models\City;
 
@@ -21,11 +22,9 @@ use Nnjeim\World\Models\City;
  * @property int id
  * @property string name
  * @property string email
-
  * @mixin Eloquent
  * @mixin Builder
  */
-
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
@@ -60,17 +59,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function comments (): HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
 
-    public function city() :BelongsTo
+    public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
     }
 
-    public function country() :HasOneThrough
+    public function country(): HasOneThrough
     {
         return $this->hasOneThrough(
             Country::class,
@@ -97,5 +96,26 @@ class User extends Authenticatable
             'id',
             'film_id'
         );
+    }
+
+    public function like($comment_id, $is_like = true)
+    {
+        $like = Like::firstOrNew([
+            'user_id' => Auth::id(),
+            'comment_id' => $comment_id
+        ]);
+
+        $like->is_like = $is_like;
+        $like->save();
+
+        return $like;
+    }
+
+    public function unlike($comment_id)
+    {
+        $like = Like::where('user_id', Auth::id())
+            ->where('comment_id', $comment_id);
+
+        $like->delete();
     }
 }

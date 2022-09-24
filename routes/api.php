@@ -58,6 +58,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/edit/{comment}', [CommentsController::class, 'edit']);
         Route::post('/update/{comment}', [CommentsController::class, 'update']);
         Route::post('/destroy/{comment}', [CommentsController::class, 'destroy']);
+        Route::post('/like', [CommentsController::class, 'like']);
+        Route::post('/unlike', [CommentsController::class, 'unlike']);
     });
 
     Route::prefix('favorite-films')->group(function () {
