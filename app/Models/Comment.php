@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int id
@@ -70,8 +69,10 @@ class Comment extends Model
 
     public function getMyLike()
     {
-        return Auth::id()
-            ? $this->likes()->where('user_id', Auth::id())->first()
+        $user = auth('sanctum')->user();
+
+        return $user
+            ? $this->likes()->where('user_id', $user->id)->first()
             : null;
     }
 }

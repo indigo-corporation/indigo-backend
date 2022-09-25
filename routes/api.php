@@ -31,28 +31,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::prefix('users')->group(function () {
-        Route::get('/{id}', [UserController::class, 'get']);
         Route::post('change-pass', [UserController::class, 'changePass']);
         Route::post('change-info', [UserController::class, 'changeInfo']);
         Route::post('change-picture', [UserController::class, 'changePicture']);
     });
-});
 
-Route::prefix('films')->group(function () {
-    Route::get('/search', [FilmController::class, 'search']);
-    Route::get('/{film}/get_comments', [FilmController::class, 'getComments']);
-    Route::get('/genre/{id}', [FilmController::class, 'getByGenre']);
-});
-Route::resource('films', FilmController::class);
-
-Route::resource('genres', GenreController::class);
-
-Route::prefix('world')->group(function () {
-    Route::get('/countries-for-select', [WorldController::class, 'countriesForSelect']);
-    Route::get('/cities-for-select', [WorldController::class, 'citiesForSelect']);
-});
-
-Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('comments')->group(function (){
         Route::post('/store', [CommentsController::class, 'store']);
         Route::get('/edit/{comment}', [CommentsController::class, 'edit']);
@@ -68,5 +51,23 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/add', [FavoriteFilmsController::class, 'add']);
         Route::post('/remove', [FavoriteFilmsController::class, 'remove']);
     });
+});
+
+Route::prefix('users')->group(function () {
+    Route::get('/{id}', [UserController::class, 'get']);
+});
+
+Route::prefix('films')->group(function () {
+    Route::get('/search', [FilmController::class, 'search']);
+    Route::get('/{film}/get_comments', [FilmController::class, 'getComments']);
+    Route::get('/genre/{id}', [FilmController::class, 'getByGenre']);
+});
+Route::resource('films', FilmController::class);
+
+Route::resource('genres', GenreController::class);
+
+Route::prefix('world')->group(function () {
+    Route::get('/countries-for-select', [WorldController::class, 'countriesForSelect']);
+    Route::get('/cities-for-select', [WorldController::class, 'citiesForSelect']);
 });
 
