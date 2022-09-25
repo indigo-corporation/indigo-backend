@@ -20,6 +20,9 @@ class CommentAnswerResource extends JsonResource
             'film_id' => $this->film_id,
             'body' => $this->body,
             'parent_id' => $this->parent_comment_id,
+            'like' => $this->getMyLike(),
+            'likes_count' => $this->likes_count,
+            'dislikes_count' => $this->dislikes_count,
             'created_at' => $this->created_at
         ];
     }
