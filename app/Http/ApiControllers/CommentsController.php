@@ -102,18 +102,24 @@ class CommentsController extends Controller
     public function like(LikeRequest $request)
     {
         $like = Auth::user()->like($request->comment_id, $request->is_like);
+        $comment = Comment::find($request->comment_id);
 
         return response()->success([
             'like' => new LikeResource($like),
-            'likes_count' => $like->comment->likes_count,
-            'dislikes_count' => $like->comment->dislikes_count
+            'likes_count' => $comment->likes_count,
+            'dislikes_count' => $comment->dislikes_count
         ]);
     }
 
     public function unlike(UnlikeRequest $request)
     {
         Auth::user()->unlike($request->comment_id);
+        $comment = Comment::find($request->comment_id);
 
-        return response()->success();
+        return response()->success([
+            'like' => null,
+            'likes_count' => $comment->likes_count,
+            'dislikes_count' => $comment->dislikes_count
+        ]);
     }
 }
