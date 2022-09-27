@@ -17,7 +17,7 @@ class Like extends Model
         'is_like' => 'bool'
     ];
 
-    public function comments(): BelongsTo
+    public function comment(): BelongsTo
     {
         return $this->belongsTo(Comment::class);
     }

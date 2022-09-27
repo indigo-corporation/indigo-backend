@@ -103,7 +103,11 @@ class CommentsController extends Controller
     {
         $like = Auth::user()->like($request->comment_id, $request->is_like);
 
-        return response()->success(new LikeResource($like));
+        return response()->success([
+            'like' => new LikeResource($like),
+            'likes_count' => $like->comment->likes_count,
+            'dislikes_count' => $like->comment->dislikes_count
+        ]);
     }
 
     public function unlike(UnlikeRequest $request)
