@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
@@ -96,6 +97,11 @@ class User extends Authenticatable
             'id',
             'film_id'
         );
+    }
+
+    public function chats(): ?BelongsToMany
+    {
+        return $this->belongsToMany(Chat::class)->orderBy('updated_at', 'desc');
     }
 
     public function like($comment_id, $is_like = true)

@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
             return Response::json($data, $status);
         });
 
-        Response::macro('error', function ($error = ['code' => 666, 'message' => 'some very bad error..'], $status = 400) {
+        Response::macro('error', function ($error = ['code' => 666, 'message' => 'some very bad error..'], $status = 500) {
             return Response::json([
                 'state' => false,
                 'data' => [

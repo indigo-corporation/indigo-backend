@@ -7,6 +7,8 @@ use App\Http\ApiControllers\FilmController;
 use App\Http\ApiControllers\GenreController;
 use \App\Http\ApiControllers\WorldController;
 use \App\Http\ApiControllers\FavoriteFilmsController;
+use App\Http\ApiControllers\ChatController;
+use App\Http\ApiControllers\MessageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,6 +53,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/add', [FavoriteFilmsController::class, 'add']);
         Route::post('/remove', [FavoriteFilmsController::class, 'remove']);
     });
+
+    Route::prefix('chats')->group(function () {
+        Route::get('/get-by-user', [ChatController::class, 'getByUser']);
+    });
+    Route::resource('chats', ChatController::class);
+    Route::resource('messages', MessageController::class);
 });
 
 Route::prefix('users')->group(function () {
