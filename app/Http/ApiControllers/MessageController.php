@@ -35,10 +35,8 @@ class MessageController extends Controller
     public function destroy($id)
     {
         $message = Message::find($id);
-        $chatId = $message->chat->id;
-        $chatIds = Auth::user()->chats->pluck('id')->toArray();
 
-        if (!in_array($chatId, $chatIds)) {
+        if ($message->user_id !== Auth::id()) {
             throw new \Exception('Forbidden', 403);
         }
 
