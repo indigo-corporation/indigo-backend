@@ -5,7 +5,7 @@ namespace App\Models\Film;
 use App\Http\Traits\CustomTranslatableTrait;
 use App\Models\Comment;
 use App\Models\Country;
-use App\Models\FavoriteFilms;
+use App\Models\FavoriteFilm;
 use App\Models\Genre\Genre;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
@@ -63,7 +63,7 @@ class Film extends Model implements TranslatableContract
 
     public function favorite_films(): ?hasMany
     {
-        return $this->hasMany(FavoriteFilms::class);
+        return $this->hasMany(FavoriteFilm::class);
     }
 
     public static function typeQuery($query, $type) {

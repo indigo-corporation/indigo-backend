@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FavoriteFilmsRequest;
 use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
-use App\Models\FavoriteFilms;
+use App\Models\FavoriteFilm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class FavoriteFilmsController extends Controller
+class FavoriteFilmController extends Controller
 {
 
     public function all()
@@ -31,7 +31,7 @@ class FavoriteFilmsController extends Controller
     {
         $user = Auth::user();
 
-        $exists = FavoriteFilms::query()
+        $exists = FavoriteFilm::query()
             ->where('user_id', $user->id)
             ->where('film_id', $request->film_id)
             ->exists();
@@ -50,7 +50,7 @@ class FavoriteFilmsController extends Controller
     {
         $user = Auth::user();
 
-        $exists = FavoriteFilms::query()
+        $exists = FavoriteFilm::query()
             ->where('user_id', $user->id)
             ->where('film_id', $request->film_id)
             ->exists();

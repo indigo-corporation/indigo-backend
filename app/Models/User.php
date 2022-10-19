@@ -84,14 +84,14 @@ class User extends Authenticatable
 
     public function favorite_films(): HasMany
     {
-        return $this->hasMany(FavoriteFilms::class);
+        return $this->hasMany(FavoriteFilm::class);
     }
 
     public function favorite_films_films(): HasManyThrough
     {
         return $this->hasManyThrough(
             Film::class,
-            FavoriteFilms::class,
+            FavoriteFilm::class,
             'user_id',
             'id',
             'id',
@@ -123,5 +123,22 @@ class User extends Authenticatable
             ->where('comment_id', $comment_id);
 
         $like->delete();
+    }
+
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(UserContact::class);
+    }
+
+    public function contact_users(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            User::class,
+            UserContact::class,
+            'user_id',
+            'id',
+            'id',
+            'contact_id'
+        );
     }
 }
