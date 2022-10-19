@@ -2,6 +2,7 @@
 
 namespace App\Http\ApiControllers;
 
+use App\Http\Requests\SearchRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\FilmResource;
 use App\Http\Resources\FilmShortResource;
@@ -110,13 +111,9 @@ class FilmController extends Controller
      * )
      *
      **/
-    public function search(Request $request)
+    public function search(SearchRequest $request)
     {
-        $attr = $request->validate([
-            'find' => 'required|string|min:2',
-        ]);
-
-        $films = Film::whereTranslationIlike('title', '%' . $attr['find'] . '%');
+        $films = Film::whereTranslationIlike('title', '%' . $request->find . '%');
 
         return response()->success_paginated(
             new PaginatedCollection($films->paginate(20), FilmShortResource::class)

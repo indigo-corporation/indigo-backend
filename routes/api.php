@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/all-ids', [UserContactController::class, 'allIDs']);
         Route::post('/add', [UserContactController::class, 'add']);
         Route::post('/remove', [UserContactController::class, 'remove']);
+        Route::get('/search', [UserContactController::class, 'search']);
     });
 
     Route::prefix('chats')->group(function () {

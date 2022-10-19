@@ -3,6 +3,7 @@
 namespace App\Http\ApiControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\UserShortResource;
@@ -63,5 +64,14 @@ class UserContactController extends Controller
         }
 
         return response()->success(null, 204);
+    }
+
+    public function search(SearchRequest $request)
+    {
+        $users = Auth::user()->contact_users()->where('name', 'ilike', $request->find . '%');
+
+        return response()->success_paginated(
+            new PaginatedCollection($users->paginate(20), UserShortResource::class)
+        );
     }
 }
