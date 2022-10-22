@@ -119,9 +119,9 @@ class UserController extends Controller
         return response()->success($user->save());
     }
 
-    public function get(UserRequest $user_id)
+    public function get($user_id)
     {
-        $user = User::find($user_id);
+        $user = User::findOrFail($user_id);
 
         return response()->success(new UserResource($user));
     }
