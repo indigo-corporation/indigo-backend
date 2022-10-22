@@ -3,6 +3,7 @@
 namespace App\Http\ApiControllers;
 
 use App\Http\Requests\UserPictureStoreRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -118,7 +119,7 @@ class UserController extends Controller
         return response()->success($user->save());
     }
 
-    public function get($user_id)
+    public function get(UserRequest $user_id)
     {
         $user = User::find($user_id);
 
