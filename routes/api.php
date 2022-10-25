@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('change-pass', [UserController::class, 'changePass']);
         Route::post('change-info', [UserController::class, 'changeInfo']);
         Route::post('change-picture', [UserController::class, 'changePicture']);
+        Route::get('search', [UserController::class, 'search']);
     });
 
     Route::prefix('comments')->group(function (){

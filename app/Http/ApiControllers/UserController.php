@@ -2,10 +2,13 @@
 
 namespace App\Http\ApiControllers;
 
+use App\Http\Requests\SearchRequest;
 use App\Http\Requests\UserPictureStoreRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserStoreRequest;
+use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserShortResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -124,5 +127,15 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
 
         return response()->success(new UserResource($user));
+    }
+
+    public function search(SearchRequest $request)
+    {
+        $users = User::where('name', 'ilike', $request->find . '%')
+            ->where('id', '<>', Auth::id());
+
+        return response()->success_paginated(
+            new PaginatedCollection($users->paginate(20), UserShortResource::class)
+        );
     }
 }
