@@ -68,7 +68,11 @@ class UserContactController extends Controller
 
     public function search(SearchRequest $request)
     {
-        $users = Auth::user()->contact_users()->where('name', 'ilike', $request->find . '%');
+        $users = Auth::user()->contact_users();
+
+        if ($request->find) {
+            $users = $users->where('name', 'ilike', $request->find . '%');
+        }
 
         return response()->success_paginated(
             new PaginatedCollection($users->paginate(20), UserShortResource::class)

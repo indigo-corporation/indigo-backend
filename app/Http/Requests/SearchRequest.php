@@ -10,7 +10,7 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'find' => 'required|string|min:2'
+            'find' => 'string|min:2'
         ];
     }
 }
