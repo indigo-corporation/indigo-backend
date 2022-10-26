@@ -8,6 +8,7 @@ use App\Http\ApiControllers\GenreController;
 use App\Http\ApiControllers\WorldController;
 use App\Http\ApiControllers\FavoriteFilmController;
 use App\Http\ApiControllers\UserContactController;
+use App\Http\ApiControllers\UserContactRequestController;
 use App\Http\ApiControllers\ChatController;
 use App\Http\ApiControllers\MessageController;
 use Illuminate\Support\Facades\Route;
@@ -59,9 +60,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('contacts')->group(function () {
         Route::get('/all', [UserContactController::class, 'all']);
         Route::get('/all-ids', [UserContactController::class, 'allIDs']);
-        Route::post('/add', [UserContactController::class, 'add']);
         Route::post('/remove', [UserContactController::class, 'remove']);
         Route::get('/search', [UserContactController::class, 'search']);
+    });
+
+    Route::prefix('contact-requests')->group(function () {
+        Route::get('/outcomes', [UserContactRequestController::class, 'outcomes']);
+        Route::get('/incomes', [UserContactRequestController::class, 'incomes']);
+        Route::post('/create', [UserContactRequestController::class, 'create']);
+        Route::post('/{id}/destroy', [UserContactRequestController::class, 'destroy']);
+        Route::post('/{id}/accept', [UserContactRequestController::class, 'accept']);
     });
 
     Route::prefix('chats')->group(function () {

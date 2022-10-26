@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserShortResource extends JsonResource
+class UserContactRequestFromResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,7 @@ class UserShortResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'poster_url' => $this->poster_url
+            'user' => new UserShortResource($this->user)
         ];
     }
 }

@@ -7,6 +7,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -39,6 +40,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'birth_date',
+        'about',
+        'city_id',
+        'poster_url'
     ];
 
     /**
@@ -139,6 +144,48 @@ class User extends Authenticatable
             'id',
             'id',
             'contact_id'
+        );
+    }
+
+    public function contact_requests_incomes_pivot(): HasMany
+    {
+        return $this->hasMany(UserContactRequest::class, 'contact_id');
+    }
+
+    public function contact_requests_outcomes_pivot(): HasMany
+    {
+        return $this->hasMany(UserContactRequest::class, 'user_id');
+    }
+
+    public function contact_requests_incomes(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            User::class,
+            UserContactRequest::class,
+            'contact_id',
+            'id',
+            'id',
+            'user_id'
+        );
+    }
+
+    public function contact_requests_outcomes(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            User::class,
+            UserContactRequest::class,
+            'user_id',
+            'id',
+            'id',
+            'contact_id'
+        );
+    }
+
+    protected function posterUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? url($value) : '',
+            set: fn ($value) => $value
         );
     }
 }
