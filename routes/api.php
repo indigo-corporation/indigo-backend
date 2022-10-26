@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('contact-requests')->group(function () {
         Route::get('/outcomes', [UserContactRequestController::class, 'outcomes']);
         Route::get('/incomes', [UserContactRequestController::class, 'incomes']);
+        Route::get('/ids', [UserContactRequestController::class, 'getIDs']);
         Route::post('/create', [UserContactRequestController::class, 'create']);
         Route::post('/{id}/destroy', [UserContactRequestController::class, 'destroy']);
         Route::post('/{id}/accept', [UserContactRequestController::class, 'accept']);

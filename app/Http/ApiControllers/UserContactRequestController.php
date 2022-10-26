@@ -33,6 +33,21 @@ class UserContactRequestController extends Controller
         );
     }
 
+    public function getIDs()
+    {
+        $in = Auth::user()->contact_requests_incomes_pivot()
+            ->pluck('user_id')
+            ->toArray();
+        $out = Auth::user()->contact_requests_outcomes_pivot()
+            ->pluck('contact_id')
+            ->toArray();
+
+        return response()->success([
+            'in' => $in,
+            'out' => $out
+        ]);
+    }
+
     public function create(UserRequest $request)
     {
         $user = Auth::user();
