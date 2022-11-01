@@ -67,7 +67,7 @@ class UserContactRequestController extends Controller
             'contact_id' => $request->user_id,
         ]);
 
-        return response()->success($request, 201);
+        return response()->success(new UserContactRequestToResource($request), 201);
     }
 
     public function destroy($request_id)
