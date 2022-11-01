@@ -62,12 +62,12 @@ class UserContactRequestController extends Controller
             return response()->error();
         }
 
-        UserContactRequest::firstOrCreate([
+        $request = UserContactRequest::firstOrCreate([
             'user_id' => $user->id,
             'contact_id' => $request->user_id,
         ]);
 
-        return response()->success(null, 201);
+        return response()->success($request, 201);
     }
 
     public function destroy($request_id)
