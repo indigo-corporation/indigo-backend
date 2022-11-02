@@ -17,9 +17,7 @@ return new class extends Migration
             $table->string('user_name')->unique()->nullable();
         });
 
-        $users = \Illuminate\Support\Facades\DB::table('users')
-            ->where('user_name', null)
-            ->get();
+        $users = \App\Models\User::where('user_name', null)->get();
 
         foreach ($users as $user) {
             $user->user_name = 'user' . $user->id;
