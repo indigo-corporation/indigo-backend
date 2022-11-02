@@ -14,8 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('username')->unique();
+            $table->string('user_name')->unique()->nullable();
         });
+
+        $users = \Illuminate\Support\Facades\DB::table('users')
+            ->where('user_name', null)
+            ->get();
+
+        foreach ($users as $user) {
+            $user->user_name = 'user' . $user->id;
+            $user->save();
+        }
     }
 
     /**
@@ -26,7 +35,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('username');
+            $table->dropColumn('user_name');
         });
     }
 };
