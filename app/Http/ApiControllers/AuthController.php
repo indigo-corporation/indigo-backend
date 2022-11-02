@@ -40,6 +40,7 @@ class AuthController extends Controller
         $attr = $request->validate([
             'name' => 'required|string|max:30',
             'email' => 'required|string|email|unique:users,email',
+            'user_name' => 'string|min:2|unique:users,username',
             'password' => 'required|string|min:6'
         ]);
 
@@ -48,6 +49,10 @@ class AuthController extends Controller
             'password' => Hash::make($attr['password']),
             'email' => $attr['email']
         ]);
+
+        if (!$user->user_name) {
+            $user->user_name = 'user' . $user->id;
+        }
 
         return response()->success(
             [

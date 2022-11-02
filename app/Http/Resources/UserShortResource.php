@@ -17,6 +17,7 @@ class UserShortResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'user_name' => $this->user_name,
             'poster_url' => $this->poster_url
         ];
     }
