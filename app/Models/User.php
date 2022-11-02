@@ -181,6 +181,18 @@ class User extends Authenticatable
         );
     }
 
+    public function banned_users(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            User::class,
+            BannedUser::class,
+            'user_id',
+            'id',
+            'id',
+            'banned_user_id'
+        );
+    }
+
     protected function posterUrl(): Attribute
     {
         return Attribute::make(

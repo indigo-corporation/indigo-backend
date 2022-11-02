@@ -11,6 +11,7 @@ use App\Http\ApiControllers\UserContactController;
 use App\Http\ApiControllers\UserContactRequestController;
 use App\Http\ApiControllers\ChatController;
 use App\Http\ApiControllers\MessageController;
+use App\Http\ApiControllers\BannedUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -71,6 +72,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/create', [UserContactRequestController::class, 'create']);
         Route::post('/{id}/destroy', [UserContactRequestController::class, 'destroy']);
         Route::post('/{id}/accept', [UserContactRequestController::class, 'accept']);
+    });
+
+    Route::prefix('banned-users')->group(function () {
+        Route::get('/all', [BannedUserController::class, 'all']);
+        Route::get('/all-ids', [BannedUserController::class, 'allIDs']);
+        Route::post('/add', [BannedUserController::class, 'add']);
+        Route::post('/remove', [BannedUserController::class, 'remove']);
+        Route::get('/search', [BannedUserController::class, 'search']);
     });
 
     Route::prefix('chats')->group(function () {
