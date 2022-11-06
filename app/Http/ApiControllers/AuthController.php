@@ -186,33 +186,37 @@ class AuthController extends Controller
 
     public function telegramAuth(Request $request)
     {
-        $userData = $this->checkTelegramAuthorization($request->get('data'));
+        try {
+            $userData = $this->checkTelegramAuthorization($request->get('data'));
 
-        $user = User::where('telegram_id', $userData['id'])->first();
+            $user = User::where('telegram_id', $userData['id'])->first();
 
-        if (!$user) {
-            $firstName = $userData['first_name'] ?? '';
-            $lastName = $userData['last_name'] ?? '';
-            $name = $lastName
-                ? $lastName . ' ' . $firstName
-                : $firstName;
+            if (!$user) {
+                $firstName = $userData['first_name'] ?? '';
+                $lastName = $userData['last_name'] ?? '';
+                $name = $lastName
+                    ? $lastName . ' ' . $firstName
+                    : $firstName;
 
-            $user = new User();
-            $user->name = $name;
-            $user->user_name = $userData['username'] ?? '';
-            $user->telegram_id = $userData['id'];
+                $user = new User();
+                $user->name = $name;
+                $user->user_name = $userData['username'] ?? '';
+                $user->telegram_id = $userData['id'];
 
-            $user->save();
+                $user->save();
+            }
+
+            if (!$user->user_name) {
+                $user->user_name = 'user' . $user->id;
+                $user->save();
+            }
+
+            return response()->success([
+                'access_token' => $user->createToken('api')->plainTextToken
+            ]);
+        } catch (\Throwable $e) {
+            return $e->getMessage();
         }
-
-        if (!$user->user_name) {
-            $user->user_name = 'user' . $user->id;
-            $user->save();
-        }
-
-        return response()->success([
-            'access_token' => $user->createToken('api')->plainTextToken
-        ]);
     }
 
     private function checkTelegramAuthorization($auth_data) {
