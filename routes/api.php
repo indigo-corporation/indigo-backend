@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/telegram', [AuthController::class, 'telegramAuth']);
+Route::post('/auth/google', [AuthController::class, 'googleAuth']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('auth')->group(function () {

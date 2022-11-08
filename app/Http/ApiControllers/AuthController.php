@@ -236,4 +236,11 @@ class AuthController extends Controller
 
         return $auth_data;
     }
+
+    public function googleAuth(Request $request)
+    {
+        var_dump(
+            $request->all()
+        );
+    }
 }
