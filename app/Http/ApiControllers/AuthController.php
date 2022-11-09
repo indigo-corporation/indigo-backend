@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 use Laravel\Socialite\Facades\Socialite;
 use function response;
 
@@ -213,9 +214,8 @@ class AuthController extends Controller
             $user->save();
 
             if ($photo_url) {
-                $image = file_get_contents($photo_url);
                 $user->poster_url = '/images/user_posters/' . $user->id . '.jpg';
-                file_put_contents(public_path($user->poster_url), $image);
+                Image::make($photo_url)->save(public_path($user->poster_url));
 
                 $user->save();
             }
