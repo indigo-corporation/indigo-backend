@@ -9,6 +9,6 @@ class RemoveUsersSeeder extends Seeder
 {
     public function run()
     {
-        User::whereIsNotNull('telegram_id')->delete();
+        User::whereNotNull('telegram_id')->delete();
     }
 }
