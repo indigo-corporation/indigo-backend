@@ -199,24 +199,24 @@ class AuthController extends Controller
             $name = $lastName
                 ? $lastName . ' ' . $firstName
                 : $firstName;
+            $userName= $userData['username'] ?? '';
 
             $user = new User();
             $user->name = $name;
-            $user->user_name = $userData['username'] ?? '';
-            $user->telegram_id = $userData['id'];
 
-            if ($photo_url) {
-                $image = file_get_contents($photo_url);
-                $user->poster_url = '/images/user_posters/' . $user->id . '.jpg';
-                file_put_contents(public_path() . $user->poster_url, $image);
+            if ($userName && !User::where('user_name', $userName)->exists()) {
+                $user->user_name = $userName;
             }
+
+            $user->telegram_id = $userData['id'];
 
             $user->save();
 
             if ($photo_url) {
-                $user->poster_url = '/images/user_posters/' . $user->id . '.jpg';
-                Image::make($photo_url)->save(public_path($user->poster_url));
+                $posterUrl = '/images/user_posters/' . $user->id . '.jpg';
+                Image::make($photo_url)->save(public_path($posterUrl));
 
+                $user->poster_url = $posterUrl;
                 $user->save();
             }
         }
