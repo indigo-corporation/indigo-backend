@@ -194,6 +194,7 @@ class AuthController extends Controller
         if (!$user) {
             $firstName = $userData['first_name'] ?? '';
             $lastName = $userData['last_name'] ?? '';
+            $photo_url = $userData['photo_url'] ?? '';
             $name = $lastName
                 ? $lastName . ' ' . $firstName
                 : $firstName;
@@ -202,6 +203,12 @@ class AuthController extends Controller
             $user->name = $name;
             $user->user_name = $userData['username'] ?? '';
             $user->telegram_id = $userData['id'];
+
+            if ($photo_url) {
+                $image = file_get_contents($photo_url);
+                $user->poster_url = '/images/user_posters/' . $user->id . '.jpg';
+                file_put_contents(public_path() . $user->poster_url, $image);
+            }
 
             $user->save();
         }
@@ -220,17 +227,21 @@ class AuthController extends Controller
     {
         $check_hash = $auth_data['hash'];
         unset($auth_data['hash']);
+
         $data_check_arr = [];
         foreach ($auth_data as $key => $value) {
             $data_check_arr[] = $key . '=' . $value;
         }
+
         sort($data_check_arr);
         $data_check_string = implode("\n", $data_check_arr);
         $secret_key = hash('sha256', env('TELEGRAM_TOKEN'), true);
         $hash = hash_hmac('sha256', $data_check_string, $secret_key);
+
         if (strcmp($hash, $check_hash) !== 0) {
             throw new \Exception('Data is NOT from Telegram');
         }
+
         if ((time() - $auth_data['auth_date']) > 86400) {
             throw new \Exception('Data is outdated');
         }
@@ -242,6 +253,6 @@ class AuthController extends Controller
     {
         $user = Socialite::driver('google')->stateless()->userFromToken($request->access_token);
 
-        var_dump($user);
+        return $user;
     }
 }
