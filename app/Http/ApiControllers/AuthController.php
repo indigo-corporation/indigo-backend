@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
 use function response;
 
 class AuthController extends Controller
@@ -239,8 +240,8 @@ class AuthController extends Controller
 
     public function googleAuth(Request $request)
     {
-        var_dump(
-            $request->all()
-        );
+        $user = Socialite::driver('google')->stateless()->userFromToken($request->access_token);
+
+        var_dump($user);
     }
 }
