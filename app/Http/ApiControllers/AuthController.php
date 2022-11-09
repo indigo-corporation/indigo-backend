@@ -213,11 +213,13 @@ class AuthController extends Controller
             $user->save();
 
             if ($photo_url) {
-                $posterUrl = '/images/user_posters/' . $user->id . '.jpg';
-                Image::make($photo_url)->save(public_path($posterUrl));
+                try {
+                    $posterUrl = '/images/user_posters/' . $user->id . '.jpg';
+                    Image::make($photo_url)->save(public_path($posterUrl));
 
-                $user->poster_url = $posterUrl;
-                $user->save();
+                    $user->poster_url = $posterUrl;
+                    $user->save();
+                } catch (\Throwable $e) {}
             }
         }
 
