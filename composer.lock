@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db7e55302996a6c306741bf8f67d774a",
+    "content-hash": "9477660eca0c905896158e73ad790fc7",
     "packages": [
         {
             "name": "astrotomic/laravel-translatable",
@@ -3298,16 +3298,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.62.1",
+            "version": "2.63.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "01bc4cdefe98ef58d1f9cb31bdbbddddf2a88f7a"
+                "reference": "ad35dd71a6a212b98e4b87e97389b6fa85f0e347"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/01bc4cdefe98ef58d1f9cb31bdbbddddf2a88f7a",
-                "reference": "01bc4cdefe98ef58d1f9cb31bdbbddddf2a88f7a",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/ad35dd71a6a212b98e4b87e97389b6fa85f0e347",
+                "reference": "ad35dd71a6a212b98e4b87e97389b6fa85f0e347",
                 "shasum": ""
             },
             "require": {
@@ -3396,7 +3396,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-02T07:48:13+00:00"
+            "time": "2022-10-30T18:34:28+00:00"
         },
         {
             "name": "nette/schema",
@@ -4725,16 +4725,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "10.6.1",
+            "version": "10.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "4d09b2f1f574e18dbca7587e6b89178cafb4ca2f"
+                "reference": "e39fb213dc35efdea233f75590ffc4afafe3e203"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/4d09b2f1f574e18dbca7587e6b89178cafb4ca2f",
-                "reference": "4d09b2f1f574e18dbca7587e6b89178cafb4ca2f",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/e39fb213dc35efdea233f75590ffc4afafe3e203",
+                "reference": "e39fb213dc35efdea233f75590ffc4afafe3e203",
                 "shasum": ""
             },
             "require": {
@@ -4817,7 +4817,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-medialibrary/issues",
-                "source": "https://github.com/spatie/laravel-medialibrary/tree/10.6.1"
+                "source": "https://github.com/spatie/laravel-medialibrary/tree/10.7.0"
             },
             "funding": [
                 {
@@ -4829,7 +4829,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-11-04T23:21:14+00:00"
+            "time": "2022-11-09T11:13:06+00:00"
         },
         {
             "name": "spatie/temporary-directory",
@@ -4894,16 +4894,16 @@
         },
         {
             "name": "swagger-api/swagger-ui",
-            "version": "v4.15.2",
+            "version": "v4.15.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swagger-api/swagger-ui.git",
-                "reference": "6ce623329e27e83995bb80797097345a07529785"
+                "reference": "118ea1329c0948f4f7d5aa6a7776a11c84df5b13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/6ce623329e27e83995bb80797097345a07529785",
-                "reference": "6ce623329e27e83995bb80797097345a07529785",
+                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/118ea1329c0948f4f7d5aa6a7776a11c84df5b13",
+                "reference": "118ea1329c0948f4f7d5aa6a7776a11c84df5b13",
                 "shasum": ""
             },
             "type": "library",
@@ -4949,9 +4949,9 @@
             ],
             "support": {
                 "issues": "https://github.com/swagger-api/swagger-ui/issues",
-                "source": "https://github.com/swagger-api/swagger-ui/tree/v4.15.2"
+                "source": "https://github.com/swagger-api/swagger-ui/tree/v4.15.5"
             },
-            "time": "2022-10-26T19:47:11+00:00"
+            "time": "2022-11-09T06:53:40+00:00"
         },
         {
             "name": "symfony/console",
@@ -7558,16 +7558,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.5.0",
+            "version": "4.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "6bd53355eb6505e1a1825f163dced55c240a3102"
+                "reference": "eb84fb4d65a327e604812fbddc6c27f69b9ed6e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/6bd53355eb6505e1a1825f163dced55c240a3102",
-                "reference": "6bd53355eb6505e1a1825f163dced55c240a3102",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/eb84fb4d65a327e604812fbddc6c27f69b9ed6e2",
+                "reference": "eb84fb4d65a327e604812fbddc6c27f69b9ed6e2",
                 "shasum": ""
             },
             "require": {
@@ -7630,9 +7630,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.5.0"
+                "source": "https://github.com/zircote/swagger-php/tree/4.5.1"
             },
-            "time": "2022-11-03T19:42:57+00:00"
+            "time": "2022-11-09T00:17:13+00:00"
         }
     ],
     "packages-dev": [
@@ -10094,7 +10094,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.1"
+        "php": "^8.1",
+        "ext-gd": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
