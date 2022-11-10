@@ -11,7 +11,7 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'user_name' => 'string|min:2|unique:users,username',
+            'user_name' => 'string|min:2|unique:users,user_name',
             'birth_date' => 'date',
             'about' => 'string',
             'city_id' => 'integer'
