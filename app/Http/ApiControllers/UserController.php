@@ -100,12 +100,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        foreach ($request->only([
-            'name', 'birth_date', 'about', 'city_id'
-        ]) as $key => $input) {
-            $user->$key = $input;
-        }
-        $user->save();
+        $user->update($request->all());
 
         return response()->success(new UserResource($user));
     }
