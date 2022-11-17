@@ -18,7 +18,7 @@ class UserContactController extends Controller
         $users = Auth::user()->contact_users();
 
         return response()->success_paginated(
-            new PaginatedCollection($users->paginate(20), UserShortResource::class)
+            new PaginatedCollection($users->paginate(5), UserShortResource::class)
         );
     }
 
