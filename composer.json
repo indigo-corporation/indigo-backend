@@ -15,6 +15,7 @@
         "ext-gd": "*",
         "astrotomic/laravel-translatable": "^11.10",
         "backpack/crud": "^5.0",
+        "beyondcode/laravel-websockets": "^1.13",
         "cviebrock/eloquent-sluggable": "^9.0",
         "darkaonline/l5-swagger": "^8.3",
         "guzzlehttp/guzzle": "^7.2",

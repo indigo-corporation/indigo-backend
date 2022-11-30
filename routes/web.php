@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\MessageReceived;
+use App\Models\Message;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/test-event', function () {
+    $message = Message::first();
+
+    if (!$message) return;
+
+    MessageReceived::dispatch($message);
+    return 'success';
 });
