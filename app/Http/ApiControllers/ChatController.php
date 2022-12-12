@@ -23,7 +23,7 @@ class ChatController extends Controller
     public function index()
     {
         return response()->success_paginated(
-            new PaginatedCollection(Auth::user()->chats()->paginate(5), ChatShortResource::class)
+            new PaginatedCollection(Auth::user()->chats()->paginate(10), ChatShortResource::class)
         );
     }
 
