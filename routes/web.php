@@ -24,6 +24,8 @@ Route::get('/test-event', function () {
 
     if (!$message) return;
 
-    MessageReceived::dispatch($message);
-    return 'success';
+//    MessageReceived::dispatch($message);
+    event(new MessageReceived($message));
+
+    return $message;
 });
