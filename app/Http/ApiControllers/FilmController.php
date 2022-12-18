@@ -125,8 +125,13 @@ class FilmController extends Controller
         );
     }
 
-    public function getComments(Film $film)
+    public function getComments($filmId)
     {
+        $film = Film::find((int)$filmId);
+        if (!$film) {
+            abort(404);
+        }
+
         return response()->success_paginated(
             new PaginatedCollection($film->comments()->paginate(20), CommentResource::class)
         );
