@@ -66,13 +66,9 @@ class FilmController extends Controller
      * )
      *
      **/
-    public function show(Film $filmId)
+    public function show($filmId)
     {
-        if (!is_int($filmId)) {
-            throw new \Exception('invalid id', 422);
-        }
-
-        $film = Film::find($filmId);
+        $film = Film::find((int)$filmId);
         if (!$film) {
             abort(404);
         }
