@@ -21,6 +21,7 @@ class FilmShortResource extends JsonResource
             'imdb_rating' => $this->imdb_rating,
             'shiki_rating' => $this->shiki_rating,
             'title' => $this->title,
+            'overview' => $this->overview,
             'genres' => GenreResource::collection($this->genres)
         ];
     }
