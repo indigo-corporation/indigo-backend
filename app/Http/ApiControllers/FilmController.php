@@ -43,7 +43,7 @@ class FilmController extends Controller
         }
 
         return response()->success_paginated(
-            new PaginatedCollection($query->paginate(20), FilmShortResource::class)
+            new PaginatedCollection($query->paginate(20), FilmResource::class)
         );
     }
 
