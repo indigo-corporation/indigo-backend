@@ -30,8 +30,7 @@
         "nnjeim/world": "^1.1",
         "predis/predis": "^2.0",
         "pusher/pusher-php-server": "^7.2",
-        "spatie/laravel-medialibrary": "^10.0.0",
-        "vladimir-yuldashev/laravel-queue-rabbitmq": "^13.0"
+        "spatie/laravel-medialibrary": "^10.0.0"
     },
     "require-dev": {
         "backpack/generators": "^3.1",

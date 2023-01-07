@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Film\Film;
+use App\Models\FilmStar;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -92,6 +93,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(FavoriteFilm::class);
     }
+
+    public function stars(): HasMany
+        {
+            return $this->hasMany(FilmStar::class);
+        }
 
     public function favorite_films_films(): HasManyThrough
     {

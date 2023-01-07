@@ -12,6 +12,7 @@ use App\Http\ApiControllers\UserContactRequestController;
 use App\Http\ApiControllers\ChatController;
 use App\Http\ApiControllers\MessageController;
 use App\Http\ApiControllers\BannedUserController;
+use App\Http\ApiControllers\FilmStarController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,6 +59,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/all-ids', [FavoriteFilmController::class, 'allIDs']);
         Route::post('/add', [FavoriteFilmController::class, 'add']);
         Route::post('/remove', [FavoriteFilmController::class, 'remove']);
+    });
+
+    Route::prefix('film-stars')->group(function () {
+        Route::get('/get-by-film', [FilmStarController::class, 'getByFilm']);
+        Route::post('/add', [FilmStarController::class, 'add']);
+        Route::post('/remove', [FilmStarController::class, 'remove']);
     });
 
     Route::prefix('contacts')->group(function () {

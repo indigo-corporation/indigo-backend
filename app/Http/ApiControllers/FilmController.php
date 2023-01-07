@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 class FilmController extends Controller
 {
 
+    const FILMS_PER_PAGE = 24;
+
     /**
      * @OA\Get (
      *     path="/films",
@@ -43,7 +45,7 @@ class FilmController extends Controller
         }
 
         return response()->success_paginated(
-            new PaginatedCollection($query->paginate(20), FilmResource::class)
+            new PaginatedCollection($query->paginate(self::FILMS_PER_PAGE), FilmResource::class)
         );
     }
 
@@ -121,7 +123,7 @@ class FilmController extends Controller
         $films = Film::whereTranslationIlike('title', '%' . $request->find . '%');
 
         return response()->success_paginated(
-            new PaginatedCollection($films->paginate(20), FilmShortResource::class)
+            new PaginatedCollection($films->paginate(self::FILMS_PER_PAGE), FilmShortResource::class)
         );
     }
 
@@ -149,7 +151,7 @@ class FilmController extends Controller
         }
 
         return response()->success_paginated(
-            new PaginatedCollection($query->paginate(20), FilmShortResource::class)
+            new PaginatedCollection($query->paginate(self::FILMS_PER_PAGE), FilmShortResource::class)
         );
     }
 
