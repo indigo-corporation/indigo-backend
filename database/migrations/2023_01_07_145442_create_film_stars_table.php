@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('film_id');
-            $table->integer('count');
+            $table->integer('count')->nullable();
 
             $table->timestamps();
 

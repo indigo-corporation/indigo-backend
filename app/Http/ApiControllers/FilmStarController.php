@@ -8,6 +8,7 @@ use App\Http\Requests\FilmStarStoreRequest;
 use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\FilmStar;
+use App\Models\Film\Film;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +37,9 @@ class FilmStarController extends Controller
         $star->count = $request->count;
         $star->save();
 
-        return response()->success($star, 201);
+        $filmStars = Film::find($request->film_id)->stars()->avg('count');
+
+        return response()->success($filmStars);
     }
 
     public function remove(FavoriteFilmsRequest $request)
@@ -48,6 +51,8 @@ class FilmStarController extends Controller
             ->where('film_id', $request->film_id)
             ->delete();
 
-        return response()->success(null, 204);
+        $filmStars = Film::find($request->film_id)->stars()->avg('count');
+
+        return response()->success($filmStars);
     }
 }
