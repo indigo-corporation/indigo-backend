@@ -27,6 +27,12 @@ class SerialStoreJob implements ShouldQueue
     {
         $imdbData = new \Imdb\Title($this->film->imdb_id);
 
+        // TODO: actors, directors
+//         dd(
+//             $imdbData->actor_stars(),
+//             $imdbData->director(), // режиссеры
+//         );
+
         $year = (new Carbon($this->film->start_date))->year ?? null;
         $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
 
