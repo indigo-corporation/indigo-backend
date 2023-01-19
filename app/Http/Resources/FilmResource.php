@@ -31,7 +31,8 @@ class FilmResource extends JsonResource
             'title' => $this->title,
             'overview' => $this->overview,
             'genres' => GenreResource::collection($this->genres),
-            'countries' => CountryResource::collection($this->countries)
+            'countries' => CountryResource::collection($this->countries),
+            'stars' => $this->stars()->avg('count')
         ];
     }
 }

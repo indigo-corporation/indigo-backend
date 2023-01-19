@@ -10,7 +10,7 @@ class FavoriteFilmsRequest extends FormRequest
     public function rules()
     {
         return [
-            'film_id' => 'required|integer'
+            'film_id' => 'required|integer|exists:films,id'
         ];
     }
 }

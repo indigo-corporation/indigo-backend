@@ -6,6 +6,7 @@ use App\Http\Traits\CustomTranslatableTrait;
 use App\Models\Comment;
 use App\Models\Country;
 use App\Models\FavoriteFilm;
+use App\Models\FilmStar;
 use App\Models\Genre\Genre;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
@@ -65,6 +66,11 @@ class Film extends Model implements TranslatableContract
     {
         return $this->hasMany(FavoriteFilm::class);
     }
+
+     public function stars(): ?hasMany
+     {
+        return $this->hasMany(FilmStar::class);
+     }
 
     public static function typeQuery($query, $type) {
         if ($type === 'film') {

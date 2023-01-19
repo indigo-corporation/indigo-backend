@@ -42,6 +42,8 @@ class FilmStoreJob implements ShouldQueue
         $data = json_decode(file_get_contents($link));
         // get imdb id
         $imdb_id = $data->imdb_id;
+        $imdbIdExists = Film::where('imdb_id', $imdb_id)->exists();
+        if($imdbIdExists) return;
         //get genres
         $genres = [];
         $is_animation = false;
@@ -52,7 +54,7 @@ class FilmStoreJob implements ShouldQueue
             if ($genreModel) {
                 $genres[] = $genreModel->id;
 
-                if ($genreModel->animation === 'animation') {
+                if ($genreModel->name === 'animation') {
                     $is_animation = true;
                 }
             }
