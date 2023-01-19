@@ -19,7 +19,7 @@
         "cviebrock/eloquent-sluggable": "^9.0",
         "darkaonline/l5-swagger": "^8.3",
         "enqueue/amqp-bunny": "^0.10.9",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.5",
         "imdbphp/imdbphp": "dev-fix-composer",
         "intervention/image": "^2.7",
         "jenssegers/date": "^4.0",
@@ -30,8 +30,7 @@
         "nnjeim/world": "^1.1",
         "predis/predis": "^2.0",
         "pusher/pusher-php-server": "^7.2",
-        "spatie/laravel-medialibrary": "^10.0.0",
-        "vladimir-yuldashev/laravel-queue-rabbitmq": "^13.0"
+        "spatie/laravel-medialibrary": "^10.0.0"
     },
     "require-dev": {
         "backpack/generators": "^3.1",
