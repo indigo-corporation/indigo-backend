@@ -40,7 +40,6 @@ class AnimeStoreJob implements ShouldQueue
             $imdbId = (($kodikData[0])->imdb_id);
         }
 
-        $imdbData = null;
         if($imdbId) {
             $imdbData = new \Imdb\Title($imdbId);
             $poster_url = $imdbData->photo(false) ?? $poster_url;
@@ -57,7 +56,7 @@ class AnimeStoreJob implements ShouldQueue
             'year' => (new Carbon($this->film->aired_on))?->year,
             'runtime' => $this->film->duration,
             'imdb_id' => $imdbId,
-            'imdb_rating' => $imdbData->rating() ?? null,
+            'imdb_rating' => isset($imdbData) ? $imdbData->rating() : null,
             'shiki_id' => $this->film->id,
             'shiki_rating' => (float)$this->film->score,
             'is_anime' => true,
