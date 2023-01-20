@@ -56,7 +56,7 @@ class AnimeStoreJob implements ShouldQueue
             'year' => (new Carbon($this->film->aired_on))?->year,
             'runtime' => $this->film->duration,
             'imdb_id' => $imdbId,
-            'imdb_rating' => $imdbData->rating() !== '' ? $imdbData->rating() : null,
+            'imdb_rating' => $imdbData->rating() ?? null,
             'shiki_id' => $this->film->id,
             'shiki_rating' => (float)$this->film->score,
             'is_anime' => true,
