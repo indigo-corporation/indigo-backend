@@ -40,6 +40,7 @@ class AnimeStoreJob implements ShouldQueue
             $imdbId = (($kodikData[0])->imdb_id);
         }
 
+        $imdbData = null;
         if($imdbId) {
             $imdbData = new \Imdb\Title($imdbId);
             $poster_url = $imdbData->photo(false) ?? $poster_url;
