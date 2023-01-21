@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SerialStoreJob implements ShouldQueue
 {
@@ -28,7 +29,11 @@ class SerialStoreJob implements ShouldQueue
         $imdbIdExists = Film::where('imdb_id', $this->film->imdb_id)->exists();
         if($imdbIdExists) return;
 
-        $imdbData = new \Imdb\Title($this->film->imdb_id);
+        try {
+            $imdbData = new \Imdb\Title($this->film->imdb_id);
+        } catch (\Throwable $e) {
+            if (!Str::contains($e->getMessage(), 'Status code [404]')) throw $e;
+        }
 
         dump($this->film->imdb_id);
         sleep(15);
