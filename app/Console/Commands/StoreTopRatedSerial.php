@@ -61,6 +61,9 @@ class StoreTopRatedSerial extends Command
             } catch (\Throwable $e) {
                 dd($e->getMessage());
             }
+
+            dump('ok');
+            sleep(60);
         }
     }
 }
