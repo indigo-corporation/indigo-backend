@@ -25,6 +25,9 @@ class SerialStoreJob implements ShouldQueue
 
     public function handle()
     {
+        $imdbIdExists = Film::where('imdb_id', $this->film->imdb_id)->exists();
+        if($imdbIdExists) return;
+
         $imdbData = new \Imdb\Title($this->film->imdb_id);
 
         // TODO: actors, directors

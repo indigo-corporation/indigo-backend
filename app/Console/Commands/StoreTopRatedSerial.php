@@ -43,7 +43,7 @@ class StoreTopRatedSerial extends Command
     {
 //        Film::where('is_serial', true)->delete();
 
-        for ($p = 1; $p <= 5; $p++) {
+        for ($p = 1; $p <= 50; $p++) {
             dump('page ' . $p);
 
             $link = 'https://videocdn.tv/api/tv-series'
