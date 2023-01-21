@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Str;
 
 class AnimeStoreJob implements ShouldQueue
 {
@@ -40,12 +41,20 @@ class AnimeStoreJob implements ShouldQueue
             $imdbId = (($kodikData[0])->imdb_id);
         }
 
+        $imdbRating = null;
         if($imdbId) {
-            $imdbData = new \Imdb\Title($imdbId);
-            $poster_url = $imdbData->photo(false) ?? $poster_url;
-
             $imdbIdExists = Film::where('imdb_id', $imdbId)->exists();
             if($imdbIdExists) return;
+
+            try {
+                $imdbData = new \Imdb\Title($imdbId);
+                $poster_url = $imdbData->photo(false) ?? $poster_url;
+                $imdbRating = $imdbData->rating() ?? null;
+            } catch (\Throwable $e) {
+                if (!Str::contains($e->getMessage(), 'Status code [404]')) {
+                    throw $e;
+                }
+            }
         }
 
         $film = Film::create([
@@ -56,7 +65,7 @@ class AnimeStoreJob implements ShouldQueue
             'year' => (new Carbon($this->film->aired_on))?->year,
             'runtime' => $this->film->duration,
             'imdb_id' => $imdbId,
-            'imdb_rating' => isset($imdbData) ? $imdbData->rating() : null,
+            'imdb_rating' => $imdbRating,
             'shiki_id' => $this->film->id,
             'shiki_rating' => (float)$this->film->score,
             'is_anime' => true,
