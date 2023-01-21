@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class FilmStoreJob implements ShouldQueue
 {
@@ -42,8 +43,10 @@ class FilmStoreJob implements ShouldQueue
         $data = json_decode(file_get_contents($link));
         // get imdb id
         $imdb_id = $data->imdb_id;
+
         $imdbIdExists = Film::where('imdb_id', $imdb_id)->exists();
-        if($imdbIdExists) return;
+        if ($imdbIdExists) return;
+
         //get genres
         $genres = [];
         $is_animation = false;
@@ -72,16 +75,28 @@ class FilmStoreJob implements ShouldQueue
             }
         }
 
-        // imdb
-        $link = env('OMDB_API') . '?apikey=' . env('OMDB_KEY') . '&i=' . $imdb_id;
-        $data = json_decode(file_get_contents($link));
-        $film->poster_url = $data->Poster;
+        try {
+            $imdbData = new \Imdb\Title($imdb_id);
+            $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
+            $posterUrl = $imdbData->photo(false) ?? null;
+            $runtime = $imdbData->runtime() ?? null;
+            $year = $imdbData->year() ?? null;
+
+        } catch (\Throwable $e) {
+            if (Str::contains($e->getMessage(), 'Status code [404]')) {
+                return;
+            } else {
+                throw $e;
+            }
+        }
+        dump($imdb_id);
+        sleep(15);
+
+        $film->poster_url = $posterUrl;
         $film->imdb_id = $imdb_id;
-        $film->imdb_rating = $data->imdbRating !== 'N/A' ? $data->imdbRating : null;
-        $film->year = is_int((int)$data->Year) ? (int)$data->Year : null;
-        $film->runtime = $data->Runtime !== 'N/A'
-            ? explode(' ', $data->Runtime)[0]
-            : null;
+        $film->imdb_rating = $rating;
+        $film->runtime = $runtime;
+        $film->year = $year;
 
         $film->save();
 
