@@ -56,6 +56,8 @@ class StoreTopRatedSerial extends Command
                 foreach ($data->data as $item) {
                     if ($item->imdb_id) {
                         dispatch(new SerialStoreJob($item));
+
+                        sleep(30);
                     }
                 }
             } catch (\Throwable $e) {
@@ -63,7 +65,7 @@ class StoreTopRatedSerial extends Command
             }
 
             dump('ok');
-            sleep(60);
+            sleep(30);
         }
     }
 }
