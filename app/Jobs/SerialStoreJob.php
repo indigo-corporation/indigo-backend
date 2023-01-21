@@ -31,8 +31,16 @@ class SerialStoreJob implements ShouldQueue
 
         try {
             $imdbData = new \Imdb\Title($this->film->imdb_id);
+            $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
+            $posterUrl = $imdbData->photo(false) ?? null;
+            $runtime = $imdbData->runtime() ?? null;
+            $overview = $imdbData->plotoutline();
         } catch (\Throwable $e) {
-            if (!Str::contains($e->getMessage(), 'Status code [404]')) throw $e;
+            if (Str::contains($e->getMessage(), 'Status code [404]')) {
+                return;
+            } else {
+                throw $e;
+            }
         }
 
         dump($this->film->imdb_id);
@@ -44,7 +52,6 @@ class SerialStoreJob implements ShouldQueue
 //         );
 
         $year = (new Carbon($this->film->start_date))->year ?? null;
-        $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
 
         $film = Film::create([
             'original_title' => $this->film->orig_title,
@@ -52,13 +59,13 @@ class SerialStoreJob implements ShouldQueue
             'imdb_rating' => $rating,
             'is_anime' => false,
             'is_serial' => true,
-            'poster_url' => $imdbData->photo(false) ?? null,
-            'runtime' => $imdbData->runtime() ?? null,
+            'poster_url' => $posterUrl,
+            'runtime' => $runtime,
             'release_date' => $this->film->start_date,
             'year' => $year,
             'ru' => [
                 'title' => $this->film->ru_title,
-                'overview' => $imdbData->plotoutline()
+                'overview' => $overview
             ]
         ]);
 
