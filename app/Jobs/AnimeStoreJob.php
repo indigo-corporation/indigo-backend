@@ -24,7 +24,7 @@ class AnimeStoreJob implements ShouldQueue
 
     public function handle()
     {
-        $shikiIdExists = Film::where('imdb_id', $this->film->id)->exists();
+        $shikiIdExists = Film::where('shiki_id', $this->film->id)->exists();
         if($shikiIdExists) return;
 
         $is_serial = $this->film->episodes !== 1;
