@@ -19,6 +19,7 @@
         "cviebrock/eloquent-sluggable": "^9.0",
         "darkaonline/l5-swagger": "^8.3",
         "enqueue/amqp-bunny": "^0.10.9",
+        "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.5",
         "imdbphp/imdbphp": "dev-fix-composer",
         "intervention/image": "^2.7",
