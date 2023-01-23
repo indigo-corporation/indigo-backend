@@ -63,7 +63,7 @@ class StoreTopRatedSerial extends Command
             }
 
             dump('ok');
-            sleep(30);
+            sleep(20);
         }
     }
 }

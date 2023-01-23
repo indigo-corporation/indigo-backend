@@ -44,7 +44,7 @@ class SerialStoreJob implements ShouldQueue
         }
 
         dump($this->film->imdb_id);
-        sleep(15);
+        sleep(10);
         // TODO: actors, directors
 //         dd(
 //             $imdbData->actor_stars(),
