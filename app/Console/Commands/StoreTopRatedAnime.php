@@ -55,7 +55,7 @@ class StoreTopRatedAnime extends Command
         $kodikData = json_decode(file_get_contents($kodikUrl))->results;
         if (!$kodikData) return false;
 
-        $this->imdbId = (($kodikData[0])->imdb_id);
+        $this->imdbId = (($kodikData[0])->imdb_id) ?? null;
 
         if ($this->imdbId) {
             $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();

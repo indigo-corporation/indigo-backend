@@ -23,7 +23,8 @@ class FilmShortResource extends JsonResource
             'title' => $this->title,
             'overview' => $this->overview,
             'genres' => GenreResource::collection($this->genres),
-            'slug' => $this->slug
+            'slug' => $this->slug,
+            'category' => $this->category
         ];
     }
 }

@@ -41,8 +41,17 @@ class Film extends Model implements TranslatableContract
     ];
 
     protected $appends = [
-        'is_favorite'
+        'category'
     ];
+
+    protected $with = [
+        'genres'
+    ];
+
+    const CATEGORY_FILM = 'film';
+    const CATEGORY_SERIAL = 'serial';
+    const CATEGORY_ANIME = 'anime';
+    const CATEGORY_CARTOON = 'cartoon';
 
     public function genres(): ?BelongsToMany
     {
@@ -71,27 +80,40 @@ class Film extends Model implements TranslatableContract
      }
 
     public static function typeQuery($query, $type) {
-        if ($type === 'film') {
+        if ($type === self::CATEGORY_FILM) {
             $query = $query->where('is_anime', false)->where('is_serial', false)
                 ->whereDoesnthave('genres', function ($q) {
                     $q->where('name', 'animation');
                 });
         }
 
-        if ($type === 'serial') {
+        if ($type === self::CATEGORY_SERIAL) {
             $query = $query->where('is_anime', false)->where('is_serial', true);
         }
 
-        if ($type === 'anime') {
+        if ($type === self::CATEGORY_ANIME) {
             $query = $query->where('is_anime', true);
         }
 
-        if ($type === 'cartoon') {
+        if ($type === self::CATEGORY_CARTOON) {
             $query = $query->where('is_anime', false)->whereHas('genres', function ($q) {
                 $q->where('name', 'animation');
             });
         }
 
         return $query;
+    }
+
+    public function getCategoryAttribute()
+    {
+        if ($this->is_anime) return self::CATEGORY_ANIME;
+
+        if ($this->is_serial) return self::CATEGORY_SERIAL;
+
+        if ($this->genres->firstWhere(['name' => 'animation']) !== null) {
+            return self::CATEGORY_CARTOON;
+        }
+
+        return self::CATEGORY_FILM;
     }
 }
