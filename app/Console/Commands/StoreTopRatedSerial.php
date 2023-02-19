@@ -41,25 +41,23 @@ class StoreTopRatedSerial extends Command
      */
     public function handle()
     {
-//        Film::where('is_serial', true)->delete();
-
         for ($p = 1; $p <= 50; $p++) {
             dump('page ' . $p);
 
-            $link = 'https://videocdn.tv/api/tv-series'
-                . '?api_token=mkCYL7WFzktgIqXJ8UTgVr2lZ5ZJknFX'
+            $link = env('VIDEOCDN_API') . 'api/tv-series'
+                . '?api_token=' . env('VIDEOCDN_TOKEN')
                 . '&limit=100&page=' . $p;
 
-            try {
-                $data = json_decode(file_get_contents($link));
+            $data = json_decode(file_get_contents($link));
 
-                foreach ($data->data as $item) {
-                    if ($item->imdb_id) {
-                        dispatch(new SerialStoreJob($item));
-                    }
+            foreach ($data->data as $item) {
+                if ($item->imdb_id) {
+                    $imdbIdExists = Film::where('imdb_id', $item->imdb_id)->exists();
+                    if ($imdbIdExists) continue;
+
+                    dispatch(new SerialStoreJob($item->imdb_id));
+                    sleep(10);
                 }
-            } catch (\Throwable $e) {
-                dd($e->getMessage());
             }
 
             dump('ok');

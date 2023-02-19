@@ -8,25 +8,12 @@ use Illuminate\Console\Command;
 
 class StoreTopRatedAnime extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'store-top-rated-anime';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'store-top-rated-anime';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
+    private $shikiId = null;
+    private $imdbId = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -39,29 +26,42 @@ class StoreTopRatedAnime extends Command
      */
     public function handle()
     {
-//        Film::where('is_anime', true)->delete();
-
         for ($p = 1; $p <= 30; $p++) {
             dump('page ' . $p);
-            $link = 'https://shikimori.one/api/animes'
-                . '?limit=50&page=' . $p
-                . '&order=popularity';
 
+            $link = 'https://shikimori.one/api/animes' . '?limit=50&page=' . $p . '&order=popularity';
             $data = json_decode(file_get_contents($link));
 
             foreach ($data as $item) {
-                $link = 'https://shikimori.one/api/animes/' . $item->id;
-                $data = json_decode(file_get_contents($link));
+                $this->shikiId = $item->id;
 
-                try {
-                    dispatch(new AnimeStoreJob($data));
-                } catch (\Throwable $e) {
-                    dd($e->getMessage());
-                }
+                if (!$this->needToStore()) continue;
+
+                dispatch(new AnimeStoreJob($this->shikiId, $this->imdbId));
+                sleep(10);
             }
 
             dump('ok');
-            sleep(60);
+            sleep(30);
         }
+    }
+
+    private function needToStore(): bool
+    {
+        $shikiIdExists = Film::where('shiki_id', $this->shikiId)->exists();
+        if ($shikiIdExists) return false;
+
+        $kodikUrl = env('KODIK_API') . 'search?token=' . env('KODIK_TOKEN') . '&shikimori_id=' . $this->shikiId;
+        $kodikData = json_decode(file_get_contents($kodikUrl))->results;
+        if (!$kodikData) return false;
+
+        $this->imdbId = (($kodikData[0])->imdb_id);
+
+        if ($this->imdbId) {
+            $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
+            if ($imdbIdExists) return false;
+        }
+
+        return true;
     }
 }

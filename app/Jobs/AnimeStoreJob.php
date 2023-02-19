@@ -10,44 +10,36 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AnimeStoreJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $film;
+    private $shikiId;
+    private $imdbId;
 
-    public function __construct($film)
+    public function __construct($shikiId, $imdbId)
     {
-        $this->film = $film;
+        $this->shikiId = $shikiId;
+        $this->imdbId = $imdbId;
     }
 
     public function handle()
     {
-        $shikiIdExists = Film::where('shiki_id', $this->film->id)->exists();
-        if($shikiIdExists) return;
+        $link = 'https://shikimori.one/api/animes/' . $this->shikiId;
+        $shikiData = json_decode(file_get_contents($link));
 
-        $is_serial = $this->film->episodes !== 1;
-        $poster_url = $this->film->image->original
-            ? 'https://shikimori.one' . $this->film->image->original
+        $is_serial = $shikiData->episodes !== 1;
+        $poster_url = $shikiData->image->original
+            ? 'https://shikimori.one' . $shikiData->image->original
             : null;
 
-        $kodikUrl = 'https://kodikapi.com/search?token=c93d194dd1a2f6cc95b3095a9940dfb2&shikimori_id=' . $this->film->id;
-        $kodikData = json_decode(file_get_contents($kodikUrl))->results;
-
-        $imdbId = null;
-        if($kodikData) {
-            $imdbId = (($kodikData[0])->imdb_id);
-        }
-
         $imdbRating = null;
-        if($imdbId) {
-            $imdbIdExists = Film::where('imdb_id', $imdbId)->exists();
-            if($imdbIdExists) return;
-
+        if($this->imdbId) {
             try {
-                $imdbData = new \Imdb\Title($imdbId);
+                $imdbData = new \Imdb\Title($this->imdbId);
                 $poster_url = $imdbData->photo(false) ?? $poster_url;
                 $imdbRating = $imdbData->rating() ?? null;
             } catch (\Throwable $e) {
@@ -58,33 +50,45 @@ class AnimeStoreJob implements ShouldQueue
         }
 
         $film = Film::create([
-            'original_title' => $this->film->name,
+            'original_title' => $shikiData->name,
             'original_language' => 'ja',
             'poster_url' => $poster_url,
-            'release_date' => $this->film->aired_on,
-            'year' => (new Carbon($this->film->aired_on))?->year,
-            'runtime' => $this->film->duration,
-            'imdb_id' => $imdbId,
+            'release_date' => $shikiData->aired_on,
+            'year' => (new Carbon($shikiData->aired_on))?->year,
+            'runtime' => $shikiData->duration,
+            'imdb_id' => $this->imdbId,
             'imdb_rating' => $imdbRating,
-            'shiki_id' => $this->film->id,
-            'shiki_rating' => (float)$this->film->score,
+            'shiki_id' => $shikiData->id,
+            'shiki_rating' => (float)$shikiData->score,
             'is_anime' => true,
             'is_serial' => $is_serial,
             'ru' => [
-                'title' => $this->film->russian,
-                'overview' => $this->film->description,
+                'title' => $shikiData->russian,
+                'overview' => $shikiData->description,
             ]
         ]);
 
-        //get genres
         $genres = [];
-        foreach ($this->film->genres as $genre) {
+        foreach ($shikiData->genres as $genre) {
             $genreModel = Genre::where('name', strtolower($genre->name))
                 ->where('is_anime', true)
                 ->first();
             if ($genreModel) {
                 $genres[] = $genreModel->id;
             }
+        }
+
+        //get countries
+        if (isset($imdbData)) {
+            $countries = [];
+            foreach ($imdbData->country() as $country) {
+                $countryModel = DB::table('countries')
+                    ->where('name', $country)->first();
+                if ($countryModel) {
+                    $countries[] = $countryModel->id;
+                }
+            }
+            $film->countries()->attach($countries);
         }
 
         $film->genres()->attach($genres);

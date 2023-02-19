@@ -17,24 +17,31 @@ class SerialStoreJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $film;
+    private $imdbId;
 
-    public function __construct($film)
+    public function __construct($imdbId)
     {
-        $this->film = $film;
+        $this->imdbId = $imdbId;
     }
 
     public function handle()
     {
-        $imdbIdExists = Film::where('imdb_id', $this->film->imdb_id)->exists();
-        if($imdbIdExists) return;
+        $link = env('VIDEOCDN_API') . 'api/tv-series'
+            . '?api_token=' . env('VIDEOCDN_TOKEN')
+            . '&field=imdb_id&query=' . $this->imdbId;
+
+        $videocdnResponse = json_decode(file_get_contents($link));
+        $videocdnData = ($videocdnResponse->data)[0] ?? null;
+
+        if (!$videocdnData) return;
 
         try {
-            $imdbData = new \Imdb\Title($this->film->imdb_id);
+            $imdbData = new \Imdb\Title($videocdnData->imdb_id);
             $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
             $posterUrl = $imdbData->photo(false) ?? null;
             $runtime = $imdbData->runtime() ?? null;
             $overview = $imdbData->plotoutline();
+            $year = $imdbData->year();
         } catch (\Throwable $e) {
             if (Str::contains($e->getMessage(), 'Status code [404]')) {
                 return;
@@ -42,41 +49,38 @@ class SerialStoreJob implements ShouldQueue
                 throw $e;
             }
         }
+        dump($this->imdbId);
 
-        dump($this->film->imdb_id);
-        sleep(10);
         // TODO: actors, directors
 //         dd(
 //             $imdbData->actor_stars(),
 //             $imdbData->director(), // режиссеры
 //         );
 
-        $year = (new Carbon($this->film->start_date))->year ?? null;
-
         $film = Film::create([
-            'original_title' => $this->film->orig_title,
-            'imdb_id' => $this->film->imdb_id,
+            'original_title' => $videocdnData->orig_title,
+            'imdb_id' => $videocdnData->imdb_id,
             'imdb_rating' => $rating,
             'is_anime' => false,
             'is_serial' => true,
             'poster_url' => $posterUrl,
             'runtime' => $runtime,
-            'release_date' => $this->film->start_date,
+            'release_date' => $videocdnData->start_date,
             'year' => $year,
             'ru' => [
-                'title' => $this->film->ru_title,
+                'title' => $videocdnData->ru_title,
                 'overview' => $overview
             ]
         ]);
 
         $genres = [];
         foreach ($imdbData->genres() as $genre) {
-            $genreModel = Genre::where('name', lcfirst($genre))
-                ->where('is_anime', false)
-                ->first();
-            if ($genreModel) {
-                $genres[] = $genreModel->id;
-            }
+            $genreModel = Genre::firstOrCreate([
+                'name' => lcfirst($genre),
+                'is_anime' => false
+            ]);
+
+            $genres[] = $genreModel->id;
         }
 
         //get countries

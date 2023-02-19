@@ -114,7 +114,9 @@ class UserController extends Controller
 
         $user->poster_url = '/images/user_posters/'.$user->id.'.jpg';
 
-        return response()->success($user->save());
+        return response()->success(
+            $user->save()->poster_url
+        );
     }
 
     public function get($user_id)

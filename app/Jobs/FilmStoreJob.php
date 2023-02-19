@@ -16,72 +16,31 @@ class FilmStoreJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $film;
+    private $imdbId;
 
-    public function __construct($film)
+    public function __construct($imdbId)
     {
-        $this->film = $film;
+        $this->imdbId = $imdbId;
     }
 
     public function handle()
     {
-        $item = $this->film;
+        $link = env('VIDEOCDN_API') . 'movies'
+            . '?api_token=' . env('VIDEOCDN_TOKEN')
+            . '&field=imdb_id&query=' . $this->imdbId;
 
-        $film = new Film([
-            'original_title' => $item->original_title,
-            'original_language' => $item->original_language,
-            'release_date' => $item->release_date,
-            'ru' => [
-                'title' => $item->title,
-                'overview' => $item->overview,
-            ]
-        ]);
+        $videocdnResponse = json_decode(file_get_contents($link));
+        $videocdnData = ($videocdnResponse->data)[0] ?? null;
 
-        // film details
-        $link = env('TMDB_API') . 'movie/' . $item->id
-            . '?api_key=' . env('TMDB_KEY') . '&language=ru';
-        $data = json_decode(file_get_contents($link));
-        // get imdb id
-        $imdb_id = $data->imdb_id;
-
-        $imdbIdExists = Film::where('imdb_id', $imdb_id)->exists();
-        if ($imdbIdExists) return;
-
-        //get genres
-        $genres = [];
-        $is_animation = false;
-        foreach ($data->genres as $genre) {
-            $genreModel = Genre::whereTranslationIlike('title', $genre->name)
-                ->where('is_anime', false)
-                ->first();
-            if ($genreModel) {
-                $genres[] = $genreModel->id;
-
-                if ($genreModel->name === 'animation') {
-                    $is_animation = true;
-                }
-            }
-        }
-        //get countries
-        $countries = [];
-        foreach ($data->production_countries as $country) {
-            $countryModel = DB::table('countries')->where('iso2', $country->iso_3166_1)->first();
-            if ($countryModel) {
-                $countries[] = $countryModel->id;
-
-                if ($is_animation && $countryModel->iso2 === 'JP') {
-                    $film->is_anime = true;
-                }
-            }
-        }
+        if (!$videocdnData) return;
 
         try {
-            $imdbData = new \Imdb\Title($imdb_id);
+            $imdbData = new \Imdb\Title($this->imdbId);
             $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
             $posterUrl = $imdbData->photo(false) ?? null;
             $runtime = $imdbData->runtime() ?? null;
-            $year = $imdbData->year() ?? null;
-
+            $overview = $imdbData->plotoutline();
+            $year = $imdbData->year();
         } catch (\Throwable $e) {
             if (Str::contains($e->getMessage(), 'Status code [404]')) {
                 return;
@@ -89,16 +48,49 @@ class FilmStoreJob implements ShouldQueue
                 throw $e;
             }
         }
-        dump($imdb_id);
-        sleep(15);
 
-        $film->poster_url = $posterUrl;
-        $film->imdb_id = $imdb_id;
-        $film->imdb_rating = $rating;
-        $film->runtime = $runtime;
-        $film->year = $year;
+        dump($this->imdbId);
 
-        $film->save();
+        // TODO: actors, directors
+//         dd(
+//             $imdbData->actor_stars(),
+//             $imdbData->director(), // режиссеры
+//         );
+
+        $film = Film::create([
+            'original_title' => $videocdnData->orig_title,
+            'imdb_id' => $videocdnData->imdb_id,
+            'imdb_rating' => $rating,
+            'is_anime' => false,
+            'is_serial' => false,
+            'poster_url' => $posterUrl,
+            'runtime' => $runtime,
+            'release_date' => $videocdnData->released,
+            'year' => $year,
+            'ru' => [
+                'title' => $videocdnData->ru_title,
+                'overview' => $overview
+            ]
+        ]);
+
+        $genres = [];
+        foreach ($imdbData->genres() as $genre) {
+            $genreModel = Genre::firstOrCreate([
+                'name' => lcfirst($genre),
+                'is_anime' => false
+            ]);
+
+            $genres[] = $genreModel->id;
+        }
+
+        $countries = [];
+        foreach ($imdbData->country() as $country) {
+            $countryModel = DB::table('countries')
+                ->where('name', $country)->first();
+            if ($countryModel) {
+                $countries[] = $countryModel->id;
+            }
+        }
 
         $film->genres()->attach($genres);
         $film->countries()->attach($countries);
