@@ -13,7 +13,6 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Auth;
 
 class Film extends Model implements TranslatableContract
 {
@@ -33,13 +32,12 @@ class Film extends Model implements TranslatableContract
         'shiki_rating',
         'is_anime',
         'is_serial',
-        'title',
-        'overview'
     ];
 
     public $translatedAttributes = [
         'title',
-        'overview'
+        'overview',
+        'slug',
     ];
 
     protected $appends = [
