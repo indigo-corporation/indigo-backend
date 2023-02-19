@@ -22,7 +22,8 @@ class FilmShortResource extends JsonResource
             'shiki_rating' => $this->shiki_rating,
             'title' => $this->title,
             'overview' => $this->overview,
-            'genres' => GenreResource::collection($this->genres)
+            'genres' => GenreResource::collection($this->genres),
+            'slug' => $this->slug
         ];
     }
 }
