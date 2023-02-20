@@ -49,6 +49,8 @@ class AnimeStoreJob implements ShouldQueue
             }
         }
 
+        if (empty($imdbRating)) $imdbRating = null;
+
         $film = Film::create([
             'original_title' => $shikiData->name,
             'original_language' => 'ja',
