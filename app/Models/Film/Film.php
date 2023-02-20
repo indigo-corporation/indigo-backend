@@ -88,7 +88,10 @@ class Film extends Model implements TranslatableContract
         }
 
         if ($type === self::CATEGORY_SERIAL) {
-            $query = $query->where('is_anime', false)->where('is_serial', true);
+            $query = $query->where('is_anime', false)->where('is_serial', true)
+                ->whereDoesnthave('genres', function ($q) {
+                    $q->where('name', 'animation');
+                });
         }
 
         if ($type === self::CATEGORY_ANIME) {
