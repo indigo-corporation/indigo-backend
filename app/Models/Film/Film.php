@@ -108,7 +108,7 @@ class Film extends Model implements TranslatableContract
     {
         if ($this->is_anime) return self::CATEGORY_ANIME;
 
-        if ($this->genres->where('name', 'animation')->exists()) {
+        if ($this->genres->contains('name', 'animation')) {
             return self::CATEGORY_CARTOON;
         }
 
