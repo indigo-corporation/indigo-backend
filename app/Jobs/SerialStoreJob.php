@@ -26,7 +26,7 @@ class SerialStoreJob implements ShouldQueue
 
     public function handle()
     {
-        $link = env('VIDEOCDN_API') . 'api/tv-series'
+        $link = env('VIDEOCDN_API') . 'tv-series'
             . '?api_token=' . env('VIDEOCDN_TOKEN')
             . '&field=imdb_id&query=' . $this->imdbId;
 

@@ -44,7 +44,7 @@ class StoreTopRatedSerial extends Command
         for ($p = 1; $p <= 50; $p++) {
             dump('page ' . $p);
 
-            $link = env('VIDEOCDN_API') . 'api/tv-series'
+            $link = env('VIDEOCDN_API') . 'tv-series'
                 . '?api_token=' . env('VIDEOCDN_TOKEN')
                 . '&limit=100&page=' . $p;
 
