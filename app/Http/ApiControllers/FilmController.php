@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class FilmController extends Controller
 {
 
-    const FILMS_PER_PAGE = 24;
+    const FILMS_PER_PAGE = 48;
 
     /**
      * @OA\Get (
