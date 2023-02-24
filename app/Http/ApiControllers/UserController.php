@@ -18,7 +18,6 @@ use function response;
 
 class UserController extends Controller
 {
-
     public function sendResetPass(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -30,34 +29,6 @@ class UserController extends Controller
         return response()->success($status === Password::RESET_LINK_SENT);
     }
 
-    /**
-     * @OA\Post (
-     *     path="/users/change-pass",
-     *     operationId="change-pass",
-     *     tags={"Users"},
-     *     security={ {"sanctum": {} }},
-     *     summary="Change pass",
-     *     @OA\RequestBody(
-     *         @OA\MediaType(mediaType="multipart/form-data",
-     *              @OA\Schema(
-     *                  @OA\Property(property="password", type="string"),
-     *                  required={"password"}
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response="200",
-     *         description="Success response",
-     *         @OA\JsonContent(ref="#/components/schemas/DefaultSuccessResource")
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error",
-     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
-     *     )
-     * )
-     *
-     **/
     public function changePass(Request $request)
     {
         $attr = $request->validate([
@@ -71,31 +42,6 @@ class UserController extends Controller
         return response()->success();
     }
 
-    /**
-     * @OA\Post (
-     *     path="/users/change-info",
-     *     operationId="change-info",
-     *     tags={"Users"},
-     *     security={ {"sanctum": {} }},
-     *     summary="Change info",
-     *     @OA\RequestBody(
-     *         @OA\MediaType(mediaType="multipart/form-data",
-     *
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response="200",
-     *         description="Success response",
-     *         @OA\JsonContent(ref="#/components/schemas/DefaultSuccessResource")
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error",
-     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
-     *     )
-     * )
-     *
-     **/
     public function changeInfo(UserStoreRequest $request)
     {
         $user = Auth::user();

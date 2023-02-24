@@ -14,12 +14,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
-     */
     public function store(Request $request)
     {
         $rules = [
@@ -49,12 +43,6 @@ class CommentController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Comment $comment
-     * @return Response
-     */
     public function edit(Comment $comment)
     {
         if ($comment->user_id != Auth::user()->getAuthIdentifier()) {
@@ -66,13 +54,6 @@ class CommentController extends Controller
         return response()->success(new CommentEditResource($comment));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Comment $comment
-     * @return Response
-     */
     public function update(Request $request, Comment $comment)
     {
         $rules = [
@@ -87,12 +68,6 @@ class CommentController extends Controller
         return response()->success(new CommentEditResource($comment));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Comment $comment
-     * @return Response
-     */
     public function destroy(Comment $comment)
     {
         $comment->delete();

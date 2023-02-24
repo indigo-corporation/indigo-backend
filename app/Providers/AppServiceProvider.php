@@ -11,20 +11,16 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
+        //
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         JsonResource::withoutWrapping();
         ResourceCollection::withoutWrapping();

@@ -12,28 +12,8 @@ use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
-
     const FILMS_PER_PAGE = 48;
 
-    /**
-     * @OA\Get (
-     *     path="/films",
-     *     operationId="filmsGet",
-     *     tags={"Films"},
-     *     summary="Get films",
-     *     @OA\Response(
-     *         response="200",
-     *         description="Films list",
-     *         @OA\JsonContent(ref="#/components/schemas/FilmsResource")
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error",
-     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
-     *     )
-     * )
-     *
-     **/
     public function index(Request $request)
     {
         $type = $request->get('type');
@@ -49,25 +29,6 @@ class FilmController extends Controller
         );
     }
 
-    /**
-     * @OA\Get (
-     *     path="/films/{id}",
-     *     operationId="filmGet",
-     *     tags={"Films"},
-     *     summary="Get film",
-     *     @OA\Response(
-     *         response="200",
-     *         description="Film",
-     *         @OA\JsonContent(ref="#/components/schemas/FilmResource")
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error",
-     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
-     *     )
-     * )
-     *
-     **/
     public function show($filmId)
     {
         $film = Film::find((int)$filmId);
@@ -99,25 +60,6 @@ class FilmController extends Controller
         return response()->success(null, 204);
     }
 
-    /**
-     * @OA\Get (
-     *     path="/films/search",
-     *     operationId="filmsSearch",
-     *     tags={"Films"},
-     *     summary="Search films",
-     *     @OA\Response(
-     *         response="200",
-     *         description="Films list",
-     *         @OA\JsonContent(ref="#/components/schemas/FilmsResource")
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error",
-     *         @OA\JsonContent(ref="#/components/schemas/DefaultErrorResource")
-     *     )
-     * )
-     *
-     **/
     public function search(SearchRequest $request)
     {
         $films = Film::whereTranslationIlike('title', '%' . $request->find . '%');

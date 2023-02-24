@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserContactController extends Controller
 {
-
     public function all()
     {
         $users = Auth::user()->contact_users();
