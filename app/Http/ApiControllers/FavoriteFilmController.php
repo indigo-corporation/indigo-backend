@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteFilmController extends Controller
 {
-
     public function all()
     {
         return response()->success_paginated(

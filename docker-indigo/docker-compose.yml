@@ -23,7 +23,7 @@ services:
             - rabbitmq
 
     db:
-        image: postgres:14.1
+        image: postgres:15.2
         container_name: indigo-db
         restart: unless-stopped
         environment:

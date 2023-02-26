@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class BannedUserController extends Controller
 {
-
     public function all()
     {
         $users = Auth::user()->banned_users();
