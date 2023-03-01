@@ -13,7 +13,6 @@ use Nnjeim\World\World;
 
 class WorldController extends Controller
 {
-
     public function countriesForSelect(Request $request)
     {
         $query = DB::table('countries')->select(['id', 'name']);
