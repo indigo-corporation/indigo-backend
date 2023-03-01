@@ -94,5 +94,8 @@ class AnimeStoreJob implements ShouldQueue
         }
 
         $film->genres()->attach($genres);
+
+        $film->updateCategory();
+//        $film->savePosterThumb($film->poster_url);
     }
 }

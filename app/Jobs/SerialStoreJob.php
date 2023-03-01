@@ -95,5 +95,8 @@ class SerialStoreJob implements ShouldQueue
 
         $film->genres()->attach($genres);
         $film->countries()->attach($countries);
+
+        $film->updateCategory();
+//        $film->savePosterThumb($film->poster_url);
     }
 }

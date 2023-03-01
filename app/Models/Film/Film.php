@@ -13,6 +13,8 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
+use Image;
 
 class Film extends Model implements TranslatableContract
 {
@@ -32,16 +34,13 @@ class Film extends Model implements TranslatableContract
         'shiki_rating',
         'is_anime',
         'is_serial',
+        'category',
     ];
 
     public $translatedAttributes = [
         'title',
         'overview',
         'slug',
-    ];
-
-    protected $appends = [
-        'category'
     ];
 
     protected $with = [
@@ -64,7 +63,7 @@ class Film extends Model implements TranslatableContract
         return $this->belongsToMany(Country::class);
     }
 
-    public function comments (): HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class)->where('type', '=', Comment::COMMENT_TYPE_FILM);
     }
@@ -74,12 +73,13 @@ class Film extends Model implements TranslatableContract
         return $this->hasMany(FavoriteFilm::class);
     }
 
-     public function stars(): ?hasMany
-     {
+    public function stars(): ?hasMany
+    {
         return $this->hasMany(FilmStar::class);
-     }
+    }
 
-    public static function typeQuery($query, $type) {
+    public static function typeQuery($query, $type)
+    {
         if ($type === self::CATEGORY_FILM) {
             $query = $query->where('is_anime', false)->where('is_serial', false)
                 ->whereDoesnthave('genres', function ($q) {
@@ -107,7 +107,7 @@ class Film extends Model implements TranslatableContract
         return $query;
     }
 
-    public function getCategoryAttribute()
+    public function getCategoryName()
     {
         if ($this->is_anime) return self::CATEGORY_ANIME;
 
@@ -118,5 +118,40 @@ class Film extends Model implements TranslatableContract
         if ($this->is_serial) return self::CATEGORY_SERIAL;
 
         return self::CATEGORY_FILM;
+    }
+
+    public function updateCategory()
+    {
+        $this->category = $this->getCategoryName();
+        $this->save();
+    }
+
+    public function savePosterThumb($url)
+    {
+        $imagePath = 'images/film_thumbs';
+        Storage::put($imagePath . '/temp_' . $this->id, file_get_contents($url));
+
+        dump(Storage::path($imagePath));
+
+        $imageName = $this->id . '.jpg';
+        Image::configure(['driver' => 'imagick']);
+
+        if (!file_exists(public_path(Storage::path($imagePath) . '/small/'))) { //Verify if the directory exists
+            mkdir(public_path(Storage::path($imagePath) . '/small/'), 666, true); //create it if do not exists
+        }
+        Image::make(Storage::path($imagePath)  . '/temp_' . $this->id)->encode('jpg')->resize(193, 272)
+            ->save(Storage::path($imagePath) . '/small/' . $imageName);
+        if (!file_exists(public_path(Storage::path($imagePath) . '/medium/'))) { //Verify if the directory exists
+            mkdir(public_path(Storage::path($imagePath) . '/medium/'), 666, true); //create it if do not exists
+        }
+        Image::make(Storage::path($imagePath)  . '/temp_' . $this->id)->encode('jpg')->resize(386, 544)
+            ->save(Storage::path($imagePath) . '/medium/' . $imageName);
+        dump(Storage::path($imagePath) . '/' . $imageName);
+
+        Storage::delete($imagePath . '/temp_' . $this->id);
+        $url = url($imagePath . '/' . $imageName);
+        dd(
+            $url
+        );
     }
 }

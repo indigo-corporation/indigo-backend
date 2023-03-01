@@ -21,7 +21,7 @@
         "enqueue/amqp-bunny": "^0.10.9",
         "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.5",
-        "imdbphp/imdbphp": "dev-fix-composer",
+        "imdbphp/imdbphp": "dev-fix",
         "intervention/image": "^2.7",
         "jenssegers/date": "^4.0",
         "laravel/framework": "^9.2",
