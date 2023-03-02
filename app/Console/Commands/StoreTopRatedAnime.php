@@ -29,9 +29,11 @@ class StoreTopRatedAnime extends Command
             $link = 'https://shikimori.one/api/animes' . '?limit=50&page=' . $p . '&order=popularity';
             $data = json_decode(file_get_contents($link));
 
+            $shikiIds = collect($data)->pluck('id')->toArray();
+            $shikiIdsExists = Film::whereIn('shiki_id', $shikiIds)->pluck('shiki_id')->toArray();
+
             foreach ($data as $item) {
-                $shikiIdExists = Film::where('shiki_id', $item->id)->exists();
-                if ($shikiIdExists) return false;
+                if (in_array($item->id, $shikiIdsExists)) continue;
 
                 dispatch(new AnimeStoreJob($item->id));
                 sleep(10);

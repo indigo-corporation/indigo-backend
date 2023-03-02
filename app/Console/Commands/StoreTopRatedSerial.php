@@ -50,10 +50,12 @@ class StoreTopRatedSerial extends Command
 
             $data = json_decode(file_get_contents($link));
 
+            $imdbIds = collect($data->data)->pluck('imdb_id')->toArray();
+            $imdbIdsExists = Film::whereIn('imdb_id', $imdbIds)->pluck('imdb_id')->toArray();
+
             foreach ($data->data as $item) {
                 if ($item->imdb_id) {
-                    $imdbIdExists = Film::where('imdb_id', $item->imdb_id)->exists();
-                    if ($imdbIdExists) continue;
+                    if (in_array($item->imdb_id, $imdbIdsExists)) continue;
 
                     dispatch(new SerialStoreJob($item->imdb_id));
                     sleep(10);
