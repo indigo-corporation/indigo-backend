@@ -23,7 +23,7 @@ class StoreTopRatedAnime extends Command
      */
     public function handle()
     {
-        for ($p = 1; $p <= 30; $p++) {
+        for ($p = 1; $p <= 100; $p++) {
             dump('page ' . $p);
 
             $link = 'https://shikimori.one/api/animes' . '?limit=50&page=' . $p . '&order=popularity';
