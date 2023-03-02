@@ -10,6 +10,7 @@ use App\Models\FilmStar;
 use App\Models\Genre\Genre;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,7 +29,9 @@ class Film extends Model implements TranslatableContract
         'release_date',
         'year',
         'runtime',
-        'poster_url',
+        'poster',
+        'poster_small',
+        'poster_medium',
         'imdb_id',
         'imdb_rating',
         'shiki_id',
@@ -81,6 +84,22 @@ class Film extends Model implements TranslatableContract
         return $this->hasMany(FilmStar::class);
     }
 
+    protected function posterSmall(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? url($value) : '',
+            set: fn ($value) => $value
+        );
+    }
+
+    protected function posterMedium(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? url($value) : '',
+            set: fn ($value) => $value
+        );
+    }
+
     public static function typeQuery($query, $type)
     {
         if ($type === self::CATEGORY_FILM) {
@@ -129,40 +148,40 @@ class Film extends Model implements TranslatableContract
         $this->save();
     }
 
-    public function savePosterThumb($url)
+    public function savePosterThumbs($url)
     {
+        $imageName = $this->id . '.jpg';
         $tempName = 'temp_' . $this->id;
         Storage::disk('public')->put(self::THUMB_FOLDER . '/' . $tempName, file_get_contents($url));
 
-        $imageName = $this->id . '.jpg';
-        Image::configure(['driver' => 'imagick']);
         $imagePath = storage_path('app/public') . '/' . self::THUMB_FOLDER;
         $tempFile = $imagePath . '/' . $tempName;
-
         $smallPath = $imagePath . '/small';
+        $mediumPath = $imagePath . '/medium';
+
         if (!file_exists($smallPath)) {
             mkdir($smallPath, 0775, true);
         }
-        Image::make($tempFile)->encode('jpg')->resize(193, 272)
-            ->save($smallPath . '/' . $imageName);
 
-        $mediumPath = $imagePath . '/medium';
         if (!file_exists($mediumPath)) {
             mkdir($mediumPath, 0775, true);
         }
+
+        Image::configure(['driver' => 'imagick']);
+
+        Image::make($tempFile)->encode('jpg')->resize(193, 272)
+            ->save($smallPath . '/' . $imageName);
         Image::make($tempFile)->encode('jpg')->resize(386, 544)
             ->save($mediumPath . '/' . $imageName);
 
-//        Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
+        Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
 
-        ImageOptimizer::optimize($tempFile, $imagePath . '/optimized.jpeg');
-        ImageOptimizer::optimize($smallPath . '/' . $imageName, $smallPath . '/optimized.jpeg');
-        ImageOptimizer::optimize($mediumPath . '/' . $imageName, $mediumPath . '/optimized.jpeg');
+        ImageOptimizer::optimize($smallPath . '/' . $imageName);
+        ImageOptimizer::optimize($mediumPath . '/' . $imageName);
 
-        dd(
-            Storage::disk('public')->url('images/film_thumbs/small/' . $imageName),
-            url('images/film_thumbs/small/' . $imageName),
-            url('images/film_thumbs/medium/' . $imageName)
-        );
+        $this->poster_small = 'storage/images/film_thumbs/small/' . $imageName;
+        $this->poster_medium = 'storage/images/film_thumbs/medium/' . $imageName;
+
+        $this->save();
     }
 }

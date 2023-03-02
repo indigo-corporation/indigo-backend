@@ -54,7 +54,7 @@ class AnimeStoreJob implements ShouldQueue
         $film = Film::create([
             'original_title' => $shikiData->name,
             'original_language' => 'ja',
-            'poster_url' => $poster_url,
+            'poster' => $poster_url,
             'release_date' => $shikiData->aired_on,
             'year' => (new Carbon($shikiData->aired_on))?->year,
             'runtime' => $shikiData->duration,
@@ -96,6 +96,6 @@ class AnimeStoreJob implements ShouldQueue
         $film->genres()->attach($genres);
 
         $film->updateCategory();
-//        $film->savePosterThumb($film->poster_url);
+        $film->savePosterThumbs($film->poster);
     }
 }

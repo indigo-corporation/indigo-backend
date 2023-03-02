@@ -63,7 +63,7 @@ class SerialStoreJob implements ShouldQueue
             'imdb_rating' => $rating,
             'is_anime' => false,
             'is_serial' => true,
-            'poster_url' => $posterUrl,
+            'poster' => $posterUrl,
             'runtime' => $runtime,
             'release_date' => $videocdnData->start_date,
             'year' => $year,
@@ -97,6 +97,6 @@ class SerialStoreJob implements ShouldQueue
         $film->countries()->attach($countries);
 
         $film->updateCategory();
-//        $film->savePosterThumb($film->poster_url);
+        $film->savePosterThumbs($film->poster);
     }
 }
