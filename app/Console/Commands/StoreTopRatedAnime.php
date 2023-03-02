@@ -11,9 +11,6 @@ class StoreTopRatedAnime extends Command
     protected $signature = 'store-top-rated-anime';
     protected $description = 'store-top-rated-anime';
 
-    private $shikiId = null;
-    private $imdbId = null;
-
     public function __construct()
     {
         parent::__construct();
@@ -33,35 +30,15 @@ class StoreTopRatedAnime extends Command
             $data = json_decode(file_get_contents($link));
 
             foreach ($data as $item) {
-                $this->shikiId = $item->id;
+                $shikiIdExists = Film::where('shiki_id', $item->id)->exists();
+                if ($shikiIdExists) return false;
 
-                if (!$this->needToStore()) continue;
-
-                dispatch(new AnimeStoreJob($this->shikiId, $this->imdbId));
+                dispatch(new AnimeStoreJob($item->id));
                 sleep(10);
             }
 
             dump('ok');
             sleep(30);
         }
-    }
-
-    private function needToStore(): bool
-    {
-        $shikiIdExists = Film::where('shiki_id', $this->shikiId)->exists();
-        if ($shikiIdExists) return false;
-
-        $kodikUrl = env('KODIK_API') . 'search?token=' . env('KODIK_TOKEN') . '&shikimori_id=' . $this->shikiId;
-        $kodikData = json_decode(file_get_contents($kodikUrl))->results;
-        if (!$kodikData) return false;
-
-        $this->imdbId = (($kodikData[0])->imdb_id) ?? null;
-
-        if ($this->imdbId) {
-            $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
-            if ($imdbIdExists) return false;
-        }
-
-        return true;
     }
 }

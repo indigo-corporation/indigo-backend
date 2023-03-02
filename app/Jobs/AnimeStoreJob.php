@@ -18,16 +18,17 @@ class AnimeStoreJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $shikiId;
-    private $imdbId;
+    private $imdbId = null;
 
-    public function __construct($shikiId, $imdbId)
+    public function __construct($shikiId)
     {
         $this->shikiId = $shikiId;
-        $this->imdbId = $imdbId;
     }
 
     public function handle()
     {
+        if (!$this->needToStore()) return;
+
         $link = 'https://shikimori.one/api/animes/' . $this->shikiId;
         $shikiData = json_decode(file_get_contents($link));
 
@@ -48,6 +49,8 @@ class AnimeStoreJob implements ShouldQueue
                 }
             }
         }
+
+        dump($this->shikiId);
 
         if (empty($imdbRating)) $imdbRating = null;
 
@@ -97,5 +100,24 @@ class AnimeStoreJob implements ShouldQueue
 
         $film->updateCategory();
         $film->savePosterThumbs($film->poster);
+    }
+
+    private function needToStore(): bool
+    {
+        $shikiIdExists = Film::where('shiki_id', $this->shikiId)->exists();
+        if ($shikiIdExists) return false;
+
+        $kodikUrl = env('KODIK_API') . 'search?token=' . env('KODIK_TOKEN') . '&shikimori_id=' . $this->shikiId;
+        $kodikData = json_decode(file_get_contents($kodikUrl))->results;
+        if (!$kodikData) return false;
+
+        $this->imdbId = (($kodikData[0])->imdb_id) ?? null;
+
+        if ($this->imdbId) {
+            $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
+            if ($imdbIdExists) return false;
+        }
+
+        return true;
     }
 }

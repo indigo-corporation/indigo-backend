@@ -25,6 +25,9 @@ class FilmStoreJob implements ShouldQueue
 
     public function handle()
     {
+        $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
+        if ($imdbIdExists) return;
+
         $link = env('VIDEOCDN_API') . 'movies'
             . '?api_token=' . env('VIDEOCDN_TOKEN')
             . '&field=imdb_id&query=' . $this->imdbId;
