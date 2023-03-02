@@ -96,6 +96,6 @@ class FilmStoreJob implements ShouldQueue
         $film->countries()->attach($countries);
 
         $film->updateCategory();
-//        $film->savePosterThumb($film->poster_url);
+        $film->savePosterThumb($film->poster_url);
     }
 }

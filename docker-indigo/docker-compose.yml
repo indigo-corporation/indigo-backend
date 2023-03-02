@@ -1,16 +1,10 @@
 version: "3.7"
 services:
     app:
-        build:
-            args:
-                user: indigo
-                uid: 1000
-            context: ./
-            dockerfile: Dockerfile
-        image: indigo
+        container_name: indigo-app
+        build: ./images/php
         ports:
             - "6001:6001"
-        container_name: indigo-app
         restart: unless-stopped
         working_dir: /var/www/
         volumes:
@@ -19,8 +13,6 @@ services:
             - indigo
         depends_on:
             - db
-            - redis
-            - rabbitmq
 
     db:
         image: postgres:15.2
@@ -50,26 +42,8 @@ services:
             - ./nginx:/etc/nginx/conf.d/
         networks:
             - indigo
-
-    redis:
-        image: redis
-        container_name: indigo-redis
-        ports:
-            - "6379:6379"
-        networks:
-            - indigo
-
-    rabbitmq:
-        image: rabbitmq:3-management
-        container_name: indigo-rabbitmq
-        ports:
-            - "15672:15672"
-            - "5672:5672"
-        environment:
-            RABBITMQ_DEFAULT_USER: rabbituser
-            RABBITMQ_DEFAULT_PASS: PXkaU2Ekj6vbUQHS
-        networks:
-            - indigo
+        depends_on:
+            - app
 
 networks:
     indigo:

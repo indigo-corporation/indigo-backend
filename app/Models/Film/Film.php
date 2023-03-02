@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 use Image;
+use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 
 class Film extends Model implements TranslatableContract
 {
@@ -51,6 +52,8 @@ class Film extends Model implements TranslatableContract
     const CATEGORY_SERIAL = 'serial';
     const CATEGORY_ANIME = 'anime';
     const CATEGORY_CARTOON = 'cartoon';
+
+    const THUMB_FOLDER = 'images/film_thumbs';
 
     public function genres(): ?BelongsToMany
     {
@@ -128,30 +131,38 @@ class Film extends Model implements TranslatableContract
 
     public function savePosterThumb($url)
     {
-        $imagePath = 'images/film_thumbs';
-        Storage::put($imagePath . '/temp_' . $this->id, file_get_contents($url));
-
-        dump(Storage::path($imagePath));
+        $tempName = 'temp_' . $this->id;
+        Storage::disk('public')->put(self::THUMB_FOLDER . '/' . $tempName, file_get_contents($url));
 
         $imageName = $this->id . '.jpg';
         Image::configure(['driver' => 'imagick']);
+        $imagePath = storage_path('app/public') . '/' . self::THUMB_FOLDER;
+        $tempFile = $imagePath . '/' . $tempName;
 
-        if (!file_exists(public_path(Storage::path($imagePath) . '/small/'))) { //Verify if the directory exists
-            mkdir(public_path(Storage::path($imagePath) . '/small/'), 666, true); //create it if do not exists
+        $smallPath = $imagePath . '/small';
+        if (!file_exists($smallPath)) {
+            mkdir($smallPath, 0775, true);
         }
-        Image::make(Storage::path($imagePath)  . '/temp_' . $this->id)->encode('jpg')->resize(193, 272)
-            ->save(Storage::path($imagePath) . '/small/' . $imageName);
-        if (!file_exists(public_path(Storage::path($imagePath) . '/medium/'))) { //Verify if the directory exists
-            mkdir(public_path(Storage::path($imagePath) . '/medium/'), 666, true); //create it if do not exists
-        }
-        Image::make(Storage::path($imagePath)  . '/temp_' . $this->id)->encode('jpg')->resize(386, 544)
-            ->save(Storage::path($imagePath) . '/medium/' . $imageName);
-        dump(Storage::path($imagePath) . '/' . $imageName);
+        Image::make($tempFile)->encode('jpg')->resize(193, 272)
+            ->save($smallPath . '/' . $imageName);
 
-        Storage::delete($imagePath . '/temp_' . $this->id);
-        $url = url($imagePath . '/' . $imageName);
+        $mediumPath = $imagePath . '/medium';
+        if (!file_exists($mediumPath)) {
+            mkdir($mediumPath, 0775, true);
+        }
+        Image::make($tempFile)->encode('jpg')->resize(386, 544)
+            ->save($mediumPath . '/' . $imageName);
+
+//        Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
+
+        ImageOptimizer::optimize($tempFile, $imagePath . '/optimized.jpeg');
+        ImageOptimizer::optimize($smallPath . '/' . $imageName, $smallPath . '/optimized.jpeg');
+        ImageOptimizer::optimize($mediumPath . '/' . $imageName, $mediumPath . '/optimized.jpeg');
+
         dd(
-            $url
+            Storage::disk('public')->url('images/film_thumbs/small/' . $imageName),
+            url('images/film_thumbs/small/' . $imageName),
+            url('images/film_thumbs/medium/' . $imageName)
         );
     }
 }
