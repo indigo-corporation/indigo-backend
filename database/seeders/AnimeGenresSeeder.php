@@ -14,7 +14,9 @@ class AnimeGenresSeeder extends Seeder
         $data = json_decode(file_get_contents($link), true);
 
         foreach ($data as $item) {
-            if($item['kind'] !== 'anime') continue;
+            if ($item['kind'] !== 'anime') {
+                continue;
+            }
 
             Genre::create([
                 'name' => strtolower($item['name']),

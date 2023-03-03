@@ -99,7 +99,9 @@ class GetFromUrlService
         $result = curl_exec($ch);
         curl_close($ch);
 
-        if (!$result) throw new \Error('response error');
+        if (!$result) {
+            throw new \Error('response error');
+        }
 
         return $result;
     }

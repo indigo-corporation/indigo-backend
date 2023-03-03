@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class MessageStoreRequest extends FormRequest
 {
-
     public function rules()
     {
         return [

@@ -9,7 +9,6 @@ use App\Http\Resources\CommentEditResource;
 use App\Http\Resources\LikeResource;
 use App\Models\Comment;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -40,7 +39,6 @@ class CommentController extends Controller
         $comment->save();
 
         return response()->success(new CommentAnswerResource($comment));
-
     }
 
     public function edit(Comment $comment)

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\ChatShortResource;
-use App\Http\Resources\FilmResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\Chat;
 use Illuminate\Database\Eloquent\Builder;
@@ -71,9 +70,10 @@ class ChatController extends Controller
     {
         $user_id = $request->get('user_id');
 
-        $chat = Auth::user()->chats()->whereHas('users', function (Builder $query) use($user_id) {
-            $query->where('users.id', $user_id);
-        })->first();
+        $chat = Auth::user()->chats()
+            ->whereHas('users', function (Builder $query) use ($user_id) {
+                $query->where('users.id', $user_id);
+            })->first();
 
         if (!$chat) {
             $chat = Chat::create();

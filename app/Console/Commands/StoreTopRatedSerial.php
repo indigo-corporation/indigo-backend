@@ -2,12 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\AnimeStoreJob;
 use App\Jobs\SerialStoreJob;
 use App\Models\Film\Film;
 use App\Services\GetFromUrlService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class StoreTopRatedSerial extends Command
 {
@@ -57,7 +55,9 @@ class StoreTopRatedSerial extends Command
 
             foreach ($items as $item) {
                 if ($item->imdb_id) {
-                    if (in_array($item->imdb_id, $imdbIdsExists)) continue;
+                    if (in_array($item->imdb_id, $imdbIdsExists)) {
+                        continue;
+                    }
 
                     dispatch(new SerialStoreJob($item->imdb_id));
                     sleep(10);

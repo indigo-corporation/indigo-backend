@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class GenresGetRequest extends FormRequest
 {
-
     public function rules()
     {
         return [

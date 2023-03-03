@@ -5,11 +5,8 @@ namespace App\Http\ApiControllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FavoriteFilmsRequest;
 use App\Http\Requests\FilmStarStoreRequest;
-use App\Http\Resources\FilmShortResource;
-use App\Http\Resources\PaginatedCollection;
 use App\Models\FilmStar;
 use App\Models\Film\Film;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FilmStarController extends Controller

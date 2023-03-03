@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\DB;
 
 class AnimeStoreJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private int $shikiId;
     private string|null $imdbId = null;
@@ -29,10 +32,14 @@ class AnimeStoreJob implements ShouldQueue
 
     public function handle()
     {
-        if (!$this->needToStore()) return;
+        if (!$this->needToStore()) {
+            return;
+        }
 
         $shikiData = $this->getService->getShiki($this->shikiId);
-        if (!$shikiData) return;
+        if (!$shikiData) {
+            return;
+        }
 
         $is_serial = $shikiData->episodes !== 1;
         $poster_url = $shikiData->image->original
@@ -103,16 +110,22 @@ class AnimeStoreJob implements ShouldQueue
     private function needToStore(): bool
     {
         $shikiIdExists = Film::where('shiki_id', $this->shikiId)->exists();
-        if ($shikiIdExists) return false;
+        if ($shikiIdExists) {
+            return false;
+        }
 
         $kodikData = $this->getService->getKodik($this->shikiId);
-        if (!$kodikData) return false;
+        if (!$kodikData) {
+            return false;
+        }
 
         $this->imdbId = $kodikData->imdb_id;
 
         if ($this->imdbId) {
             $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
-            if ($imdbIdExists) return false;
+            if ($imdbIdExists) {
+                return false;
+            }
         }
 
         return true;

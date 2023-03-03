@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait CustomTranslatableTrait
 {
-
     /**
      * This scope filters results by checking the translation fields.
      *

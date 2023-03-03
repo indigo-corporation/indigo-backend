@@ -3,10 +3,8 @@
 namespace App\Models;
 
 use App\Models\Film\Film;
-use App\Models\FilmStar;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,7 +28,10 @@ use Nnjeim\World\Models\City;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use CanResetPassword;
 
     /**
      * The attributes that are mass assignable.
@@ -95,9 +96,9 @@ class User extends Authenticatable
     }
 
     public function stars(): HasMany
-        {
-            return $this->hasMany(FilmStar::class);
-        }
+    {
+        return $this->hasMany(FilmStar::class);
+    }
 
     public function favorite_films_films(): HasManyThrough
     {

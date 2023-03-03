@@ -34,7 +34,9 @@ class StoreTopRatedAnime extends Command
             $shikiIdsExists = Film::whereIn('shiki_id', $shikiIds)->pluck('shiki_id')->toArray();
 
             foreach ($items as $item) {
-                if (in_array($item->id, $shikiIdsExists)) continue;
+                if (in_array($item->id, $shikiIdsExists)) {
+                    continue;
+                }
 
                 dispatch(new AnimeStoreJob($item->id));
                 sleep(10);

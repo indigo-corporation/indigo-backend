@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UnlikeRequest extends FormRequest
 {
-
     public function rules()
     {
         return [

@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('search', [UserController::class, 'search']);
     });
 
-    Route::prefix('comments')->group(function (){
+    Route::prefix('comments')->group(function () {
         Route::post('/store', [CommentController::class, 'store']);
         Route::get('/edit/{comment}', [CommentController::class, 'edit']);
         Route::post('/update/{comment}', [CommentController::class, 'update']);
@@ -115,4 +115,3 @@ Route::prefix('world')->group(function () {
     Route::get('/countries-for-select', [WorldController::class, 'countriesForSelect']);
     Route::get('/cities-for-select', [WorldController::class, 'citiesForSelect']);
 });
-

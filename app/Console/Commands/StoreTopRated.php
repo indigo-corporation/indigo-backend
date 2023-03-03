@@ -44,7 +44,9 @@ class StoreTopRated extends Command
 
                 foreach ($items as $item) {
                     if ($item->imdb_id) {
-                        if (in_array($item->imdb_id, $imdbIdsExists)) continue;
+                        if (in_array($item->imdb_id, $imdbIdsExists)) {
+                            continue;
+                        }
 
                         dispatch(new FilmStoreJob($item->imdb_id));
                         sleep(10);

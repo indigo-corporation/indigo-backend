@@ -51,12 +51,12 @@ class Film extends Model implements TranslatableContract
         'genres'
     ];
 
-    const CATEGORY_FILM = 'film';
-    const CATEGORY_SERIAL = 'serial';
-    const CATEGORY_ANIME = 'anime';
-    const CATEGORY_CARTOON = 'cartoon';
+    public const CATEGORY_FILM = 'film';
+    public const CATEGORY_SERIAL = 'serial';
+    public const CATEGORY_ANIME = 'anime';
+    public const CATEGORY_CARTOON = 'cartoon';
 
-    const THUMB_FOLDER = 'images/film_thumbs';
+    public const THUMB_FOLDER = 'images/film_thumbs';
 
     public function genres(): ?BelongsToMany
     {
@@ -131,13 +131,17 @@ class Film extends Model implements TranslatableContract
 
     public function getCategoryName()
     {
-        if ($this->is_anime) return self::CATEGORY_ANIME;
+        if ($this->is_anime) {
+            return self::CATEGORY_ANIME;
+        }
 
         if ($this->genres->contains('name', 'animation')) {
             return self::CATEGORY_CARTOON;
         }
 
-        if ($this->is_serial) return self::CATEGORY_SERIAL;
+        if ($this->is_serial) {
+            return self::CATEGORY_SERIAL;
+        }
 
         return self::CATEGORY_FILM;
     }

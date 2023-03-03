@@ -7,7 +7,6 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\UserContactRequestFromResource;
 use App\Http\Resources\UserContactRequestToResource;
-use App\Http\Resources\UserShortResource;
 use App\Models\UserContact;
 use App\Models\UserContactRequest;
 use Illuminate\Support\Facades\Auth;

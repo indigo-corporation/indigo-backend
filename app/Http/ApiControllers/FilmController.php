@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
-    const FILMS_PER_PAGE = 48;
+    public const FILMS_PER_PAGE = 48;
 
     public function index(Request $request)
     {
@@ -20,7 +20,7 @@ class FilmController extends Controller
 
         $query = Film::orderBy('id', 'DESC');
 
-        if($type) {
+        if ($type) {
             $query = Film::typeQuery($query, $type);
         }
 
@@ -88,7 +88,7 @@ class FilmController extends Controller
         });
 
         $type = $request->get('type');
-        if($type) {
+        if ($type) {
             $query = Film::typeQuery($query, $type);
         }
 
@@ -96,6 +96,4 @@ class FilmController extends Controller
             new PaginatedCollection($query->paginate(self::FILMS_PER_PAGE), FilmShortResource::class)
         );
     }
-
-
 }

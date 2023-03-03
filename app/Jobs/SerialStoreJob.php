@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\DB;
 
 class SerialStoreJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private string $imdbId;
     private GetFromUrlService $getService;
@@ -28,13 +31,19 @@ class SerialStoreJob implements ShouldQueue
     public function handle()
     {
         $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
-        if ($imdbIdExists) return;
+        if ($imdbIdExists) {
+            return;
+        }
 
         $videocdnData = $this->getService->getVideocdnSerial($this->imdbId, true);
-        if (!$videocdnData) return;
+        if (!$videocdnData) {
+            return;
+        }
 
         $imdbData = $this->getService->getImdb($this->imdbId, true);
-        if (!$imdbData) return;
+        if (!$imdbData) {
+            return;
+        }
 
         dump($this->imdbId);
 

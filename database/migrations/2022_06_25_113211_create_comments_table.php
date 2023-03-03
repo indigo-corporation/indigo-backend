@@ -34,7 +34,7 @@ return new class extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('comments',function (Blueprint $table){
+        Schema::table('comments', function (Blueprint $table) {
             $table->foreign('parent_comment_id')
                 ->references('id')
                 ->on('comments')
