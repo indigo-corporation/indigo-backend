@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\FilmStoreJob;
 use App\Models\Film\Film;
+use App\Services\GetFromUrlService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -30,17 +31,18 @@ class StoreTopRated extends Command
         for ($p = 1; $p <= 50; $p++) {
             dump('page ' . $p);
 
-            $link = env('VIDEOCDN_API') . 'movies'
+            $url = env('VIDEOCDN_API') . 'movies'
                 . '?api_token=' . env('VIDEOCDN_TOKEN')
                 . '&limit=100&page=' . $p;
 
             try {
-                $data = json_decode(file_get_contents($link));
+                $data = (new GetFromUrlService())->get($url, true);
+                $items = $data->data;
 
-                $imdbIds = collect($data->data)->pluck('imdb_id')->toArray();
+                $imdbIds = collect($items)->pluck('imdb_id')->toArray();
                 $imdbIdsExists = Film::whereIn('imdb_id', $imdbIds)->pluck('imdb_id')->toArray();
 
-                foreach ($data->data as $item) {
+                foreach ($items as $item) {
                     if ($item->imdb_id) {
                         if (in_array($item->imdb_id, $imdbIdsExists)) continue;
 

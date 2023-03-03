@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Film\Film;
 use App\Models\Genre\Genre;
+use App\Services\GetFromUrlService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -11,26 +12,27 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class AnimeStoreJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $shikiId;
-    private $imdbId = null;
+    private int $shikiId;
+    private string|null $imdbId = null;
+    private GetFromUrlService $getService;
 
-    public function __construct($shikiId)
+    public function __construct(int $shikiId)
     {
         $this->shikiId = $shikiId;
+        $this->getService = new GetFromUrlService();
     }
 
     public function handle()
     {
         if (!$this->needToStore()) return;
 
-        $link = 'https://shikimori.one/api/animes/' . $this->shikiId;
-        $shikiData = json_decode(file_get_contents($link));
+        $shikiData = $this->getService->getShiki($this->shikiId);
+        if (!$shikiData) return;
 
         $is_serial = $shikiData->episodes !== 1;
         $poster_url = $shikiData->image->original
@@ -38,21 +40,15 @@ class AnimeStoreJob implements ShouldQueue
             : null;
 
         $imdbRating = null;
-        if($this->imdbId) {
-            try {
-                $imdbData = new \Imdb\Title($this->imdbId);
+        if ($this->imdbId) {
+            $imdbData = $this->getService->getImdb($this->imdbId);
+            if ($imdbData) {
                 $poster_url = $imdbData->photo(false) ?? $poster_url;
                 $imdbRating = $imdbData->rating() ?? null;
-            } catch (\Throwable $e) {
-                if (!Str::contains($e->getMessage(), 'Status code [404]')) {
-                    throw $e;
-                }
             }
         }
 
         dump($this->shikiId);
-
-        if (empty($imdbRating)) $imdbRating = null;
 
         $film = Film::create([
             'original_title' => $shikiData->name,
@@ -100,6 +96,8 @@ class AnimeStoreJob implements ShouldQueue
 
         $film->updateCategory();
         $film->savePosterThumbs($film->poster);
+
+        dump('stored');
     }
 
     private function needToStore(): bool
@@ -107,11 +105,10 @@ class AnimeStoreJob implements ShouldQueue
         $shikiIdExists = Film::where('shiki_id', $this->shikiId)->exists();
         if ($shikiIdExists) return false;
 
-        $kodikUrl = env('KODIK_API') . 'search?token=' . env('KODIK_TOKEN') . '&shikimori_id=' . $this->shikiId;
-        $kodikData = json_decode(file_get_contents($kodikUrl))->results;
+        $kodikData = $this->getService->getKodik($this->shikiId);
         if (!$kodikData) return false;
 
-        $this->imdbId = (($kodikData[0])->imdb_id) ?? null;
+        $this->imdbId = $kodikData->imdb_id;
 
         if ($this->imdbId) {
             $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();

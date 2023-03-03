@@ -4,24 +4,25 @@ namespace App\Jobs;
 
 use App\Models\Film\Film;
 use App\Models\Genre\Genre;
-use Carbon\Carbon;
+use App\Services\GetFromUrlService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class SerialStoreJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $imdbId;
+    private string $imdbId;
+    private GetFromUrlService $getService;
 
-    public function __construct($imdbId)
+    public function __construct(string $imdbId)
     {
         $this->imdbId = $imdbId;
+        $this->getService = new GetFromUrlService();
     }
 
     public function handle()
@@ -29,30 +30,19 @@ class SerialStoreJob implements ShouldQueue
         $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
         if ($imdbIdExists) return;
 
-        $link = env('VIDEOCDN_API') . 'tv-series'
-            . '?api_token=' . env('VIDEOCDN_TOKEN')
-            . '&field=imdb_id&query=' . $this->imdbId;
-
-        $videocdnResponse = json_decode(file_get_contents($link));
-        $videocdnData = ($videocdnResponse->data)[0] ?? null;
-
+        $videocdnData = $this->getService->getVideocdnSerial($this->imdbId, true);
         if (!$videocdnData) return;
 
-        try {
-            $imdbData = new \Imdb\Title($videocdnData->imdb_id);
-            $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
-            $posterUrl = $imdbData->photo(false) ?? null;
-            $runtime = $imdbData->runtime() ?? null;
-            $overview = $imdbData->plotoutline();
-            $year = $imdbData->year();
-        } catch (\Throwable $e) {
-            if (Str::contains($e->getMessage(), 'Status code [404]')) {
-                return;
-            } else {
-                throw $e;
-            }
-        }
+        $imdbData = $this->getService->getImdb($this->imdbId, true);
+        if (!$imdbData) return;
+
         dump($this->imdbId);
+
+        $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
+        $posterUrl = $imdbData->photo(false) ?? null;
+        $runtime = $imdbData->runtime() ?? null;
+        $overview = $imdbData->plotoutline();
+        $year = $imdbData->year();
 
         // TODO: actors, directors
 //         dd(
@@ -101,5 +91,7 @@ class SerialStoreJob implements ShouldQueue
 
         $film->updateCategory();
         $film->savePosterThumbs($film->poster);
+
+        dump('stored');
     }
 }

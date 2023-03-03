@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\AnimeStoreJob;
 use App\Models\Film\Film;
+use App\Services\GetFromUrlService;
 use Illuminate\Console\Command;
 
 class StoreTopRatedAnime extends Command
@@ -26,13 +27,13 @@ class StoreTopRatedAnime extends Command
         for ($p = 1; $p <= 100; $p++) {
             dump('page ' . $p);
 
-            $link = 'https://shikimori.one/api/animes' . '?limit=50&page=' . $p . '&order=popularity';
-            $data = json_decode(file_get_contents($link));
+            $url = 'https://shikimori.one/api/animes' . '?limit=50&page=' . $p . '&order=popularity';
+            $items = (new GetFromUrlService())->get($url, true);
 
-            $shikiIds = collect($data)->pluck('id')->toArray();
+            $shikiIds = collect($items)->pluck('id')->toArray();
             $shikiIdsExists = Film::whereIn('shiki_id', $shikiIds)->pluck('shiki_id')->toArray();
 
-            foreach ($data as $item) {
+            foreach ($items as $item) {
                 if (in_array($item->id, $shikiIdsExists)) continue;
 
                 dispatch(new AnimeStoreJob($item->id));
