@@ -100,7 +100,11 @@ class SerialStoreJob implements ShouldQueue
         $film->countries()->attach($countries);
 
         $film->updateCategory();
-        $film->savePosterThumbs($film->poster);
+        try {
+            $film->savePosterThumbs($film->poster);
+        } catch (\Throwable $e) {
+
+        }
 
         dump('stored');
     }
