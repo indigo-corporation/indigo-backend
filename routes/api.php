@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\ApiControllers\UserController;
 use App\Http\ApiControllers\AuthController;
+use App\Http\ApiControllers\BannedUserController;
+use App\Http\ApiControllers\ChatController;
 use App\Http\ApiControllers\CommentController;
-use App\Http\ApiControllers\FilmController;
-use App\Http\ApiControllers\GenreController;
-use App\Http\ApiControllers\WorldController;
 use App\Http\ApiControllers\FavoriteFilmController;
+use App\Http\ApiControllers\FilmController;
+use App\Http\ApiControllers\FilmStarController;
+use App\Http\ApiControllers\GenreController;
+use App\Http\ApiControllers\MessageController;
 use App\Http\ApiControllers\UserContactController;
 use App\Http\ApiControllers\UserContactRequestController;
-use App\Http\ApiControllers\ChatController;
-use App\Http\ApiControllers\MessageController;
-use App\Http\ApiControllers\BannedUserController;
-use App\Http\ApiControllers\FilmStarController;
+use App\Http\ApiControllers\UserController;
+use App\Http\ApiControllers\WorldController;
 use Illuminate\Support\Facades\Route;
 
 /*

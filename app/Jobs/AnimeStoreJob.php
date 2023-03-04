@@ -7,10 +7,10 @@ use App\Models\Genre\Genre;
 use App\Services\GetFromUrlService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
 class AnimeStoreJob implements ShouldQueue
@@ -21,7 +21,9 @@ class AnimeStoreJob implements ShouldQueue
     use SerializesModels;
 
     private int $shikiId;
+
     private string|null $imdbId = null;
+
     private GetFromUrlService $getService;
 
     public function __construct(int $shikiId)

@@ -2,8 +2,8 @@
 
 namespace App\Models\Film;
 
-use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Model;
 
 class FilmTranslation extends Model
 {

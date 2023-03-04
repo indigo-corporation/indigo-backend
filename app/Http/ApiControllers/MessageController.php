@@ -31,7 +31,6 @@ class MessageController extends Controller
         }
     }
 
-
     public function destroy($id)
     {
         $message = Message::find($id);

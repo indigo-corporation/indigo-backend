@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-
 use function response;
 
 class UserController extends Controller
@@ -56,9 +55,9 @@ class UserController extends Controller
         $file = $request->file('picture');
         $user = Auth::user();
 
-        $file->move(public_path().'/images/user_posters/', $user->id.'.jpg');
+        $file->move(public_path() . '/images/user_posters/', $user->id . '.jpg');
 
-        $user->poster_url = '/images/user_posters/'.$user->id.'.jpg';
+        $user->poster_url = '/images/user_posters/' . $user->id . '.jpg';
 
         return response()->success(
             $user->save()->poster_url

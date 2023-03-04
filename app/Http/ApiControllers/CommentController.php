@@ -49,6 +49,7 @@ class CommentController extends Controller
                 'message' => 'Forbidden'
             ]);
         }
+
         return response()->success(new CommentEditResource($comment));
     }
 
@@ -69,6 +70,7 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         $comment->delete();
+
         return response()->success('Deleted');
     }
 

@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('overview')->nullable();
 
-            $table->unique(['film_id','locale']);
+            $table->unique(['film_id', 'locale']);
 
             $table->foreign('film_id')
                 ->references('id')

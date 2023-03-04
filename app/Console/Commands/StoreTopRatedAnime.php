@@ -10,6 +10,7 @@ use Illuminate\Console\Command;
 class StoreTopRatedAnime extends Command
 {
     protected $signature = 'store-top-rated-anime';
+
     protected $description = 'store-top-rated-anime';
 
     public function __construct()

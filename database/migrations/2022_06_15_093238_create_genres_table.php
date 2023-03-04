@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('locale', 3);
             $table->string('title');
 
-            $table->unique(['genre_id','locale']);
+            $table->unique(['genre_id', 'locale']);
 
             $table->foreign('genre_id')
                 ->references('id')

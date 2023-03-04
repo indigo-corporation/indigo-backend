@@ -9,7 +9,7 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -21,8 +21,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'birth_date' => $this->birth_date,
             'about' => $this->about,
-//            'city' => new CityResource($this->city),
-//            'country' => new CountryResource($this->country),
+            //            'city' => new CityResource($this->city),
+            //            'country' => new CountryResource($this->country),
             'poster_url' => $this->poster_url
         ];
     }

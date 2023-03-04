@@ -23,6 +23,7 @@ use Nnjeim\World\Models\City;
  * @property int id
  * @property string name
  * @property string email
+ *
  * @mixin Eloquent
  * @mixin Builder
  */

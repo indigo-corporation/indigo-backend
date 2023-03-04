@@ -9,28 +9,27 @@ trait CustomTranslatableTrait
     /**
      * This scope filters results by checking the translation fields.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string                                $key
-     * @param string                                $value
-     * @param string                                $locale
-     *
+     * @param  string  $key
+     * @param  string  $value
+     * @param  string  $locale
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
     public function scopeOrWhereTranslationIlike(Builder $query, $key, $value, $locale = null)
     {
         return $query->orWhereHas('translations', function (Builder $query) use ($key, $value, $locale) {
-            $query->where($this->getTranslationsTable().'.'.$key, 'ILIKE', $value);
+            $query->where($this->getTranslationsTable() . '.' . $key, 'ILIKE', $value);
             if ($locale) {
-                $query->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), 'ILIKE', $locale);
+                $query->where($this->getTranslationsTable() . '.' . $this->getLocaleKey(), 'ILIKE', $locale);
             }
         });
     }
+
     public function scopeWhereTranslationIlike(Builder $query, $key, $value, $locale = null)
     {
         return $query->whereHas('translations', function (Builder $query) use ($key, $value, $locale) {
-            $query->where($this->getTranslationsTable().'.'.$key, 'ILIKE', $value);
+            $query->where($this->getTranslationsTable() . '.' . $key, 'ILIKE', $value);
             if ($locale) {
-                $query->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), 'ILIKE', $locale);
+                $query->where($this->getTranslationsTable() . '.' . $this->getLocaleKey(), 'ILIKE', $locale);
             }
         });
     }
@@ -38,9 +37,9 @@ trait CustomTranslatableTrait
     public function scopeWhereTranslationNotIlike(Builder $query, $key, $value, $locale = null)
     {
         return $query->whereHas('translations', function (Builder $query) use ($key, $value, $locale) {
-            $query->where($this->getTranslationsTable().'.'.$key, 'NOT ILIKE', $value);
+            $query->where($this->getTranslationsTable() . '.' . $key, 'NOT ILIKE', $value);
             if ($locale) {
-                $query->where($this->getTranslationsTable().'.'.$this->getLocaleKey(), 'NOT ILIKE', $locale);
+                $query->where($this->getTranslationsTable() . '.' . $this->getLocaleKey(), 'NOT ILIKE', $locale);
             }
         });
     }

@@ -52,8 +52,11 @@ class Film extends Model implements TranslatableContract
     ];
 
     public const CATEGORY_FILM = 'film';
+
     public const CATEGORY_SERIAL = 'serial';
+
     public const CATEGORY_ANIME = 'anime';
+
     public const CATEGORY_CARTOON = 'cartoon';
 
     public const THUMB_FOLDER = 'images/film_thumbs';

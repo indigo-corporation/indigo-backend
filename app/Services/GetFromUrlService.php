@@ -23,8 +23,9 @@ class GetFromUrlService
 
         $kodikResponse = $this->get($url, $dump);
 
-        return ($kodikResponse->results)[0] ?? null;
+        return $kodikResponse->results[0] ?? null;
     }
+
     public function getVideocdnFilm($imdbId, $dump = false)
     {
         $url = env('VIDEOCDN_API') . 'movies'
@@ -33,7 +34,7 @@ class GetFromUrlService
 
         $videocdnResponse = $this->get($url, $dump);
 
-        return ($videocdnResponse->data)[0] ?? null;
+        return $videocdnResponse->data[0] ?? null;
     }
 
     public function getVideocdnSerial($imdbId, $dump = false)
@@ -44,7 +45,7 @@ class GetFromUrlService
 
         $videocdnResponse = $this->get($url, $dump);
 
-        return ($videocdnResponse->data)[0] ?? null;
+        return $videocdnResponse->data[0] ?? null;
     }
 
     public function getImdb($imdbId, $dump = false)

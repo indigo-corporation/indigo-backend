@@ -6,10 +6,10 @@ use App\Models\Film\Film;
 use App\Models\Genre\Genre;
 use App\Services\GetFromUrlService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
 class FilmStoreJob implements ShouldQueue
@@ -20,6 +20,7 @@ class FilmStoreJob implements ShouldQueue
     use SerializesModels;
 
     private string $imdbId;
+
     private GetFromUrlService $getService;
 
     public function __construct(string $imdbId)

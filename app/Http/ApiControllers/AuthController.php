@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 use Laravel\Socialite\Facades\Socialite;
-
 use function response;
 
 class AuthController extends Controller

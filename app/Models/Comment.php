@@ -18,15 +18,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string type
  * @property int parent_comment_id
 
+ *
  * @mixin Eloquent
  * @mixin Builder
  */
-
 class Comment extends Model
 {
     use HasFactory;
 
     public const COMMENT_TYPE_FILM = 'FilmComment';
+
     public const COMMENT_TYPE_ANSWER = 'AnswerComment';
 
     protected $fillable = [

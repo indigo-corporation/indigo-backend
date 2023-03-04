@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 
-//    'allowed_origins' => ['indigofilms.online'],
+    //    'allowed_origins' => ['indigofilms.online'],
     'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],

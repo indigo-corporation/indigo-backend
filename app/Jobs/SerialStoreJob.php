@@ -20,6 +20,7 @@ class SerialStoreJob implements ShouldQueue
     use SerializesModels;
 
     private string $imdbId;
+
     private GetFromUrlService $getService;
 
     public function __construct(string $imdbId)

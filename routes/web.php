@@ -1,7 +1,7 @@
 <?php
 
-use App\Jobs\FilmStoreJob;
 use App\Jobs\AnimeStoreJob;
+use App\Jobs\FilmStoreJob;
 use App\Jobs\SerialStoreJob;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +25,7 @@ Route::get('/add-film', function () {
 
     if ($imdb_id) {
         dispatch(new FilmStoreJob($imdb_id));
+
         return 'ok';
     }
 
@@ -36,6 +37,7 @@ Route::get('/add-serial', function () {
 
     if ($imdb_id) {
         dispatch(new SerialStoreJob($imdb_id));
+
         return 'ok';
     }
 
@@ -47,6 +49,7 @@ Route::get('/add-anime', function () {
 
     if ($shiki_id) {
         dispatch(new AnimeStoreJob($shiki_id));
+
         return 'ok';
     }
 
