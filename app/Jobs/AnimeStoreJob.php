@@ -52,8 +52,8 @@ class AnimeStoreJob implements ShouldQueue
         if ($this->imdbId) {
             $imdbData = $this->getService->getImdb($this->imdbId, true);
             if ($imdbData) {
-                $poster_url = $imdbData->photo(false) ?? $poster_url;
-                $imdbRating = $imdbData->rating() ?? null;
+                $poster_url = $imdbData->photo(false) ?: $poster_url;
+                $imdbRating = $imdbData->rating() ?: null;
             }
         }
 
