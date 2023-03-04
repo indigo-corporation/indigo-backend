@@ -38,7 +38,7 @@ class AnimeStoreJob implements ShouldQueue
             return;
         }
 
-        $shikiData = $this->getService->getShiki($this->shikiId);
+        $shikiData = $this->getService->getShiki($this->shikiId, true);
         if (!$shikiData) {
             return;
         }
@@ -50,7 +50,7 @@ class AnimeStoreJob implements ShouldQueue
 
         $imdbRating = null;
         if ($this->imdbId) {
-            $imdbData = $this->getService->getImdb($this->imdbId);
+            $imdbData = $this->getService->getImdb($this->imdbId, true);
             if ($imdbData) {
                 $poster_url = $imdbData->photo(false) ?? $poster_url;
                 $imdbRating = $imdbData->rating() ?? null;
@@ -116,7 +116,7 @@ class AnimeStoreJob implements ShouldQueue
             return false;
         }
 
-        $kodikData = $this->getService->getKodik($this->shikiId);
+        $kodikData = $this->getService->getKodik($this->shikiId, true);
         if (!$kodikData) {
             return false;
         }
