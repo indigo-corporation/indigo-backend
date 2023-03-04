@@ -104,11 +104,7 @@ class AnimeStoreJob implements ShouldQueue
         $film->genres()->attach($genres);
 
         $film->updateCategory();
-        try {
-            $film->savePosterThumbs($film->poster);
-        } catch (\Throwable $e) {
-
-        }
+        $film->savePosterThumbs($film->poster);
 
         dump('stored');
     }

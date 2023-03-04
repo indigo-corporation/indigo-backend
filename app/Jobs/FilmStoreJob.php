@@ -48,11 +48,11 @@ class FilmStoreJob implements ShouldQueue
 
         dump($this->imdbId);
 
-        $rating = $imdbData->rating() !== '' ? $imdbData->rating() : null;
-        $posterUrl = $imdbData->photo(false) ?? null;
-        $runtime = $imdbData->runtime() ?? null;
-        $overview = $imdbData->plotoutline();
-        $year = $imdbData->year();
+        $rating = $imdbData->rating() ?: null;
+        $posterUrl = $imdbData->photo(false) ?: null;
+        $runtime = $imdbData->runtime() ?: null;
+        $overview = $imdbData->plotoutline() ?: null;
+        $year = $imdbData->year() ?: null;
 
         // TODO: actors, directors
 //         dd(
@@ -99,11 +99,7 @@ class FilmStoreJob implements ShouldQueue
         $film->countries()->attach($countries);
 
         $film->updateCategory();
-        try {
-            $film->savePosterThumbs($film->poster);
-        } catch (\Throwable $e) {
-
-        }
+        $film->savePosterThumbs($film->poster);
 
         dump('stored');
     }

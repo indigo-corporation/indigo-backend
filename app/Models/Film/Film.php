@@ -157,6 +157,8 @@ class Film extends Model implements TranslatableContract
 
     public function savePosterThumbs($url)
     {
+        if (!$url) return;
+
         $imageName = $this->id . '.jpg';
         $tempName = 'temp_' . $this->id;
         Storage::disk('public')->put(self::THUMB_FOLDER . '/' . $tempName, file_get_contents($url));
