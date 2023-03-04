@@ -127,7 +127,9 @@ class AnimeStoreJob implements ShouldQueue
             return false;
         }
 
-        $this->imdbId = $kodikData->imdb_id;
+        if (isset($kodikData->imdb_id)) {
+            $this->imdbId = $kodikData->imdb_id;
+        }
 
         if ($this->imdbId) {
             $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
