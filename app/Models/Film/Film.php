@@ -159,38 +159,42 @@ class Film extends Model implements TranslatableContract
     {
         if (!$url) return;
 
-        $imageName = $this->id . '.jpg';
-        $tempName = 'temp_' . $this->id;
-        Storage::disk('public')->put(self::THUMB_FOLDER . '/' . $tempName, file_get_contents($url));
+        try {
+            $imageName = $this->id . '.jpg';
+            $tempName = 'temp_' . $this->id;
+            Storage::disk('public')->put(self::THUMB_FOLDER . '/' . $tempName, file_get_contents($url));
 
-        $imagePath = storage_path('app/public') . '/' . self::THUMB_FOLDER;
-        $tempFile = $imagePath . '/' . $tempName;
-        $smallPath = $imagePath . '/small';
-        $mediumPath = $imagePath . '/medium';
+            $imagePath = storage_path('app/public') . '/' . self::THUMB_FOLDER;
+            $tempFile = $imagePath . '/' . $tempName;
+            $smallPath = $imagePath . '/small';
+            $mediumPath = $imagePath . '/medium';
 
-        if (!file_exists($smallPath)) {
-            mkdir($smallPath, 0775, true);
+            if (!file_exists($smallPath)) {
+                mkdir($smallPath, 0775, true);
+            }
+
+            if (!file_exists($mediumPath)) {
+                mkdir($mediumPath, 0775, true);
+            }
+
+            Image::configure(['driver' => 'imagick']);
+
+            Image::make($tempFile)->encode('jpg')->resize(193, 272)
+                ->save($smallPath . '/' . $imageName);
+            Image::make($tempFile)->encode('jpg')->resize(386, 544)
+                ->save($mediumPath . '/' . $imageName);
+
+            Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
+
+            ImageOptimizer::optimize($smallPath . '/' . $imageName);
+            ImageOptimizer::optimize($mediumPath . '/' . $imageName);
+
+            $this->poster_small = 'storage/images/film_thumbs/small/' . $imageName;
+            $this->poster_medium = 'storage/images/film_thumbs/medium/' . $imageName;
+
+            $this->save();
+        } catch (\Throwable $e) {
+            dump($e->getMessage());
         }
-
-        if (!file_exists($mediumPath)) {
-            mkdir($mediumPath, 0775, true);
-        }
-
-        Image::configure(['driver' => 'imagick']);
-
-        Image::make($tempFile)->encode('jpg')->resize(193, 272)
-            ->save($smallPath . '/' . $imageName);
-        Image::make($tempFile)->encode('jpg')->resize(386, 544)
-            ->save($mediumPath . '/' . $imageName);
-
-        Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
-
-        ImageOptimizer::optimize($smallPath . '/' . $imageName);
-        ImageOptimizer::optimize($mediumPath . '/' . $imageName);
-
-        $this->poster_small = 'storage/images/film_thumbs/small/' . $imageName;
-        $this->poster_medium = 'storage/images/film_thumbs/medium/' . $imageName;
-
-        $this->save();
     }
 }
