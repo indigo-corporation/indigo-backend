@@ -99,7 +99,13 @@ class FilmStoreJob implements ShouldQueue
         $film->countries()->attach($countries);
 
         $film->updateCategory();
-        $film->savePosterThumbs($film->poster);
+
+        try {
+            $film->savePosterThumbs($film->poster);
+        } catch (\Throwable $e) {
+            dump('Poster error');
+            dump($e->getMessage());
+        }
 
         dump('stored');
     }
