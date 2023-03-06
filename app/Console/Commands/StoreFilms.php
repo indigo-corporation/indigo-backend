@@ -31,7 +31,7 @@ class StoreFilms extends Command
         if (
             $startPage <= 0
             || $lastPage <= 0
-            || $this->page > $lastPage
+            || $startPage > $lastPage
         ) {
             throw new \Error('wrong page');
         }
