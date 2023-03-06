@@ -59,6 +59,13 @@ class Film extends Model implements TranslatableContract
 
     public const CATEGORY_CARTOON = 'cartoon';
 
+    public const CATEGORIES = [
+        self::CATEGORY_FILM,
+        self::CATEGORY_SERIAL,
+        self::CATEGORY_ANIME,
+        self::CATEGORY_CARTOON
+    ];
+
     public const THUMB_FOLDER = 'images/film_thumbs';
 
     public function genres(): ?BelongsToMany
