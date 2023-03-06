@@ -11,7 +11,7 @@ use Illuminate\Console\Command;
 
 class StoreFilms extends Command
 {
-    protected $signature = 'store-films {category=film} {page=1}';
+    protected $signature = 'store-films {category=film} {start_page=1} {end_page=50}';
 
     protected $description = 'store-films';
 
@@ -21,21 +21,26 @@ class StoreFilms extends Command
     public function handle()
     {
         $this->category = $this->argument('category');
-        $this->page = (int)$this->argument('page');
+        $startPage = (int)$this->argument('start_page');
+        $lastPage = (int)$this->argument('end_page');
 
         if (!in_array($this->category, Film::CATEGORIES)) {
             throw new \Error('wrong category');
         }
 
-        if ($this->page <= 0) {
+        if (
+            $startPage <= 0
+            || $lastPage <= 0
+            || $this->page > $lastPage
+        ) {
             throw new \Error('wrong page');
         }
 
-        for ($p = $this->page; $p <= 50; $p++) {
+        for ($p = $startPage; $p <= $lastPage; $p++) {
             $this->page = $p;
             dump('=== page ===');
-            dump($p);
-            dump('------------');
+            dump($this->page);
+            dump('============');
 
             try {
                 $this->processPage();
