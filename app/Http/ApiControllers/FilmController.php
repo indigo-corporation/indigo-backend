@@ -2,6 +2,7 @@
 
 namespace App\Http\ApiControllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\FilmResource;
@@ -13,15 +14,49 @@ use Illuminate\Http\Request;
 class FilmController extends Controller
 {
     public const FILMS_PER_PAGE = 48;
+    public const FILMS_LIMIT_MAIN = 12;
 
-    public function index(Request $request)
+    public function main()
     {
-        $type = $request->get('type');
+        $new = Film::orderBy('release_date', 'DESC')->limit(self::FILMS_LIMIT_MAIN)->get();
+        $film = Film::orderBy('imdb_id', 'DESC')
+            ->where('category', Film::CATEGORY_FILM)
+            ->where('year', 2023)
+            ->limit(self::FILMS_LIMIT_MAIN)
+            ->get();
+        $serial = Film::orderBy('imdb_id', 'DESC')
+            ->where('category', Film::CATEGORY_SERIAL)
+            ->where('year', 2023)
+            ->limit(self::FILMS_LIMIT_MAIN)
+            ->get();
+        $anime = Film::orderBy('imdb_id', 'DESC')
+            ->where('category', Film::CATEGORY_ANIME)
+            ->where('year', 2023)
+            ->limit(self::FILMS_LIMIT_MAIN)
+            ->get();
+        $cartoon = Film::orderBy('imdb_id', 'DESC')
+            ->where('category', Film::CATEGORY_CARTOON)
+            ->where('year', 2023)
+            ->limit(self::FILMS_LIMIT_MAIN)
+            ->get();
 
-        $query = Film::orderBy('id', 'DESC');
+        return response()->success([
+            'new' => FilmShortResource::collection($new),
+            'films' => FilmShortResource::collection($film),
+            'serials' => FilmShortResource::collection($serial),
+            'anime' => FilmShortResource::collection($anime),
+            'cartoons' => FilmShortResource::collection($cartoon),
+        ]);
+    }
 
-        if ($type) {
-            $query = Film::typeQuery($query, $type);
+    public function index(CategoryRequest $request)
+    {
+        $category = $request->get('category');
+
+        $query = Film::orderBy('release_date', 'DESC');
+
+        if ($category) {
+            $query = $query->where('category', $category);
         }
 
         return response()->success_paginated(
@@ -81,15 +116,15 @@ class FilmController extends Controller
         );
     }
 
-    public function getByGenre($genre_id, Request $request)
+    public function getByGenre($genre_id, CategoryRequest $request)
     {
         $query = Film::whereHas('genres', function ($query) use ($genre_id) {
             $query->where('genres.id', $genre_id);
         });
 
-        $type = $request->get('type');
-        if ($type) {
-            $query = Film::typeQuery($query, $type);
+        $category = $request->get('category');
+        if ($category) {
+            $query = $query->where('category', $category);
         }
 
         return response()->success_paginated(

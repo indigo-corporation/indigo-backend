@@ -46,72 +46,73 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::prefix('comments')->group(function () {
-        Route::post('/store', [CommentController::class, 'store']);
-        Route::get('/edit/{comment}', [CommentController::class, 'edit']);
-        Route::post('/update/{comment}', [CommentController::class, 'update']);
-        Route::post('/destroy/{comment}', [CommentController::class, 'destroy']);
-        Route::post('/like', [CommentController::class, 'like']);
-        Route::post('/unlike', [CommentController::class, 'unlike']);
+        Route::post('store', [CommentController::class, 'store']);
+        Route::get('edit/{comment}', [CommentController::class, 'edit']);
+        Route::post('update/{comment}', [CommentController::class, 'update']);
+        Route::post('destroy/{comment}', [CommentController::class, 'destroy']);
+        Route::post('like', [CommentController::class, 'like']);
+        Route::post('unlike', [CommentController::class, 'unlike']);
     });
 
     Route::prefix('favorite-films')->group(function () {
-        Route::get('/all', [FavoriteFilmController::class, 'all']);
-        Route::get('/all-ids', [FavoriteFilmController::class, 'allIDs']);
-        Route::post('/add', [FavoriteFilmController::class, 'add']);
-        Route::post('/remove', [FavoriteFilmController::class, 'remove']);
+        Route::get('all', [FavoriteFilmController::class, 'all']);
+        Route::get('all-ids', [FavoriteFilmController::class, 'allIDs']);
+        Route::post('add', [FavoriteFilmController::class, 'add']);
+        Route::post('remove', [FavoriteFilmController::class, 'remove']);
     });
 
     Route::prefix('film-stars')->group(function () {
-        Route::get('/get-by-film', [FilmStarController::class, 'getByFilm']);
-        Route::post('/add', [FilmStarController::class, 'add']);
-        Route::post('/remove', [FilmStarController::class, 'remove']);
+        Route::get('get-by-film', [FilmStarController::class, 'getByFilm']);
+        Route::post('add', [FilmStarController::class, 'add']);
+        Route::post('remove', [FilmStarController::class, 'remove']);
     });
 
     Route::prefix('contacts')->group(function () {
-        Route::get('/all', [UserContactController::class, 'all']);
-        Route::get('/all-ids', [UserContactController::class, 'allIDs']);
-        Route::post('/remove', [UserContactController::class, 'remove']);
-        Route::get('/search', [UserContactController::class, 'search']);
+        Route::get('all', [UserContactController::class, 'all']);
+        Route::get('all-ids', [UserContactController::class, 'allIDs']);
+        Route::post('remove', [UserContactController::class, 'remove']);
+        Route::get('search', [UserContactController::class, 'search']);
     });
 
     Route::prefix('contact-requests')->group(function () {
-        Route::get('/outcomes', [UserContactRequestController::class, 'outcomes']);
-        Route::get('/incomes', [UserContactRequestController::class, 'incomes']);
-        Route::get('/ids', [UserContactRequestController::class, 'getIDs']);
-        Route::post('/create', [UserContactRequestController::class, 'create']);
-        Route::post('/{id}/destroy', [UserContactRequestController::class, 'destroy']);
-        Route::post('/{id}/accept', [UserContactRequestController::class, 'accept']);
+        Route::get('outcomes', [UserContactRequestController::class, 'outcomes']);
+        Route::get('incomes', [UserContactRequestController::class, 'incomes']);
+        Route::get('ids', [UserContactRequestController::class, 'getIDs']);
+        Route::post('create', [UserContactRequestController::class, 'create']);
+        Route::post('{id}/destroy', [UserContactRequestController::class, 'destroy']);
+        Route::post('{id}/accept', [UserContactRequestController::class, 'accept']);
     });
 
     Route::prefix('banned-users')->group(function () {
-        Route::get('/all', [BannedUserController::class, 'all']);
-        Route::get('/all-ids', [BannedUserController::class, 'allIDs']);
-        Route::post('/add', [BannedUserController::class, 'add']);
-        Route::post('/remove', [BannedUserController::class, 'remove']);
-        Route::get('/search', [BannedUserController::class, 'search']);
+        Route::get('all', [BannedUserController::class, 'all']);
+        Route::get('all-ids', [BannedUserController::class, 'allIDs']);
+        Route::post('add', [BannedUserController::class, 'add']);
+        Route::post('remove', [BannedUserController::class, 'remove']);
+        Route::get('search', [BannedUserController::class, 'search']);
     });
 
     Route::prefix('chats')->group(function () {
-        Route::get('/get-by-user', [ChatController::class, 'getByUser']);
+        Route::get('get-by-user', [ChatController::class, 'getByUser']);
     });
     Route::resource('chats', ChatController::class);
     Route::resource('messages', MessageController::class);
 });
 
 Route::prefix('users')->group(function () {
-    Route::get('/{id}', [UserController::class, 'get']);
+    Route::get('{id}', [UserController::class, 'get']);
 });
 
 Route::prefix('films')->group(function () {
-    Route::get('/search', [FilmController::class, 'search']);
-    Route::get('/{film}/get_comments', [FilmController::class, 'getComments']);
-    Route::get('/genre/{id}', [FilmController::class, 'getByGenre']);
+    Route::get('main', [FilmController::class, 'main']);
+    Route::get('search', [FilmController::class, 'search']);
+    Route::get('{film}/get_comments', [FilmController::class, 'getComments']);
+    Route::get('genre/{id}', [FilmController::class, 'getByGenre']);
 });
 Route::resource('films', FilmController::class);
 
 Route::resource('genres', GenreController::class);
 
 Route::prefix('world')->group(function () {
-    Route::get('/countries-for-select', [WorldController::class, 'countriesForSelect']);
-    Route::get('/cities-for-select', [WorldController::class, 'citiesForSelect']);
+    Route::get('countries-for-select', [WorldController::class, 'countriesForSelect']);
+    Route::get('cities-for-select', [WorldController::class, 'citiesForSelect']);
 });

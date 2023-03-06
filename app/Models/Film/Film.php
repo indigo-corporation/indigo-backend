@@ -110,35 +110,6 @@ class Film extends Model implements TranslatableContract
         );
     }
 
-    public static function typeQuery($query, $type)
-    {
-        if ($type === self::CATEGORY_FILM) {
-            $query = $query->where('is_anime', false)->where('is_serial', false)
-                ->whereDoesnthave('genres', function ($q) {
-                    $q->where('name', 'animation');
-                });
-        }
-
-        if ($type === self::CATEGORY_SERIAL) {
-            $query = $query->where('is_anime', false)->where('is_serial', true)
-                ->whereDoesnthave('genres', function ($q) {
-                    $q->where('name', 'animation');
-                });
-        }
-
-        if ($type === self::CATEGORY_ANIME) {
-            $query = $query->where('is_anime', true);
-        }
-
-        if ($type === self::CATEGORY_CARTOON) {
-            $query = $query->where('is_anime', false)->whereHas('genres', function ($q) {
-                $q->where('name', 'animation');
-            });
-        }
-
-        return $query;
-    }
-
     public function getCategoryName()
     {
         if ($this->is_anime) {
