@@ -92,7 +92,7 @@ class StoreFilms extends Command
     {
         $url = env('VIDEOCDN_API') . 'movies'
             . '?api_token=' . env('VIDEOCDN_TOKEN')
-//            . '&ordering=released&direction=desc'
+            . '&ordering=released&direction=desc'
             . '&limit=100&page=' . $this->page;
 
         $data = (new GetFromUrlService())->get($url, true);
