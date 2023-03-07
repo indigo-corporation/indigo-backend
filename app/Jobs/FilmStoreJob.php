@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class FilmStoreJob implements ShouldQueue
 {
@@ -48,11 +49,21 @@ class FilmStoreJob implements ShouldQueue
 
         dump($this->imdbId);
 
-        $rating = $imdbData->rating() ?: null;
-        $posterUrl = $imdbData->photo(false) ?: null;
-        $runtime = $imdbData->runtime() ?: null;
-        $overview = $imdbData->plotoutline() ?: null;
-        $year = $imdbData->year() ?: null;
+        try {
+            $rating = $imdbData->rating() ?: null;
+            $posterUrl = $imdbData->photo(false) ?: null;
+            $runtime = $imdbData->runtime() ?: null;
+            $overview = $imdbData->plotoutline() ?: null;
+            $year = $imdbData->year() ?: null;
+        } catch (\Throwable $e) {
+            if (Str::contains($e->getMessage(), 'Status code [404]')) {
+                dump('not found');
+
+                return;
+            }
+
+            throw $e;
+        }
 
         // TODO: actors, directors
 //         dd(
