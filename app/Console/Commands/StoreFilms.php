@@ -49,7 +49,7 @@ class StoreFilms extends Command
             }
 
             dump('ok');
-            sleep(20);
+            sleep(10);
         }
     }
 
@@ -83,7 +83,7 @@ class StoreFilms extends Command
                     Film::CATEGORY_ANIME => dispatch(new AnimeStoreJob($item->$idField)),
                 };
 
-                sleep(10);
+                sleep(5);
             }
         }
     }
@@ -92,7 +92,7 @@ class StoreFilms extends Command
     {
         $url = env('VIDEOCDN_API') . 'movies'
             . '?api_token=' . env('VIDEOCDN_TOKEN')
-            . '&ordering=released&direction=desc'
+//            . '&ordering=released&direction=desc'
             . '&limit=100&page=' . $this->page;
 
         $data = (new GetFromUrlService())->get($url, true);
