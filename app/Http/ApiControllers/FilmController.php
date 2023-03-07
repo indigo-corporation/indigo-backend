@@ -14,39 +14,38 @@ use Illuminate\Http\Request;
 class FilmController extends Controller
 {
     public const FILMS_PER_PAGE = 48;
-    public const FILMS_LIMIT_MAIN = 12;
+    public const FILMS_LIMIT_MAIN = 18;
 
     public function main()
     {
-        $new = Film::orderBy('release_date', 'DESC')->limit(self::FILMS_LIMIT_MAIN)->get();
-        $film = Film::orderBy('imdb_id', 'DESC')
-            ->where('category', Film::CATEGORY_FILM)
-            ->where('year', 2023)
-            ->limit(self::FILMS_LIMIT_MAIN)
-            ->get();
-        $serial = Film::orderBy('imdb_id', 'DESC')
-            ->where('category', Film::CATEGORY_SERIAL)
-            ->where('year', 2023)
-            ->limit(self::FILMS_LIMIT_MAIN)
-            ->get();
-        $anime = Film::orderBy('imdb_id', 'DESC')
-            ->where('category', Film::CATEGORY_ANIME)
-            ->where('year', 2023)
-            ->limit(self::FILMS_LIMIT_MAIN)
-            ->get();
-        $cartoon = Film::orderBy('imdb_id', 'DESC')
-            ->where('category', Film::CATEGORY_CARTOON)
-            ->where('year', 2023)
-            ->limit(self::FILMS_LIMIT_MAIN)
-            ->get();
+        foreach (Film::CATEGORIES as $category) {
+            $$category = Film::where('category', $category)
+                ->whereNotNull('imdb_id')
+                ->where('year', 2023)
+                ->limit(self::FILMS_LIMIT_MAIN)
+                ->orderBy('imdb_id', 'DESC')
+                ->get();
+        }
 
-        return response()->success([
-            'new' => FilmShortResource::collection($new),
-            'films' => FilmShortResource::collection($film),
-            'serials' => FilmShortResource::collection($serial),
-            'anime' => FilmShortResource::collection($anime),
-            'cartoons' => FilmShortResource::collection($cartoon),
-        ]);
+        $new = [];
+        $iCount = round(self::FILMS_LIMIT_MAIN / count(Film::CATEGORIES));
+        for ($i = 0; $i <= $iCount; $i++) {
+            foreach (Film::CATEGORIES as $category) {
+                if (isset($$category[$i])) {
+                    $new[] = $$category[$i];
+                }
+            }
+        }
+        $new = collect($new)->shuffle();
+
+        $response = [
+            'new' => FilmShortResource::collection($new)
+        ];
+        foreach (Film::CATEGORIES as $category) {
+            $response[$category] = FilmShortResource::collection($$category);
+        }
+
+        return response()->success($response);
     }
 
     public function index(CategoryRequest $request)
