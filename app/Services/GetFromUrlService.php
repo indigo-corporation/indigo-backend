@@ -8,7 +8,7 @@ class GetFromUrlService
 {
     public function getTmdbFilmItems($page, $dump = false)
     {
-        $url = env('TMDB_API') . 'movies/top_rated'
+        $url = env('TMDB_API') . 'movie/top_rated'
             . '?api_key=' . env('TMDB_KEY')
             . '&page=' . $page;
 

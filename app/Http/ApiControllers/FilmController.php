@@ -19,12 +19,18 @@ class FilmController extends Controller
     public function main()
     {
         foreach (Film::CATEGORIES as $category) {
-            $$category = Film::where('category', $category)
-                ->whereNotNull('imdb_id')
-                ->where('year', 2023)
-                ->limit(self::FILMS_LIMIT_MAIN)
-                ->orderBy('imdb_id', 'DESC')
-                ->get();
+            $query = Film::where('category', $category)
+                ->where('year', 2023);
+
+            if ($category === Film::CATEGORY_ANIME) {
+                $query = $query->whereNotNull('shiki_id')
+                    ->orderBy('shiki_id', 'DESC');
+            } else {
+                $query = $query->whereNotNull('imdb_id')
+                    ->orderBy('imdb_id', 'DESC');
+            }
+
+            $$category = $query->limit(self::FILMS_LIMIT_MAIN)->get();
         }
 
         $new = [];
