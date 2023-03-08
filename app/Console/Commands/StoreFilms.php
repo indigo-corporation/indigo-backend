@@ -18,6 +18,8 @@ class StoreFilms extends Command
     private string $category;
     private int $page;
 
+    private GetFromUrlService $getService;
+
     public function handle()
     {
         $this->category = $this->argument('category');
@@ -35,6 +37,8 @@ class StoreFilms extends Command
         ) {
             throw new \Error('wrong page');
         }
+
+        $this->getService = new GetFromUrlService();
 
         for ($p = $startPage; $p <= $lastPage; $p++) {
             $this->page = $p;
@@ -56,9 +60,9 @@ class StoreFilms extends Command
     private function processPage()
     {
         $items = match ($this->category) {
-            Film::CATEGORY_FILM => $this->getFilmItems(),
-            Film::CATEGORY_SERIAL => $this->getSerialItems(),
-            Film::CATEGORY_ANIME => $this->getAnimeItems(),
+            Film::CATEGORY_FILM => $this->getService->getCdnFilmItems($this->page, true),
+            Film::CATEGORY_SERIAL => $this->getService->getCdnSerialItems($this->page, true),
+            Film::CATEGORY_ANIME => $this->getService->getShikiItems($this->page, true),
         };
 
         $idsExists = match ($this->category) {
@@ -86,37 +90,6 @@ class StoreFilms extends Command
                 sleep(5);
             }
         }
-    }
-
-    private function getFilmItems()
-    {
-        $url = env('VIDEOCDN_API') . 'movies'
-            . '?api_token=' . env('VIDEOCDN_TOKEN')
-            . '&ordering=released&direction=desc'
-            . '&limit=100&page=' . $this->page;
-
-        $data = (new GetFromUrlService())->get($url, true);
-
-        return $data->data;
-    }
-
-    private function getSerialItems()
-    {
-        $url = env('VIDEOCDN_API') . 'tv-series'
-            . '?api_token=' . env('VIDEOCDN_TOKEN')
-            . '&ordering=created&direction=desc'
-            . '&limit=100&page=' . $this->page;
-
-        $data = (new GetFromUrlService())->get($url, true);
-
-        return $data->data;
-    }
-
-    private function getAnimeItems()
-    {
-        $url = 'https://shikimori.one/api/animes' . '?limit=50&page=' . $this->page . '&order=popularity';
-
-        return (new GetFromUrlService())->get($url, true);
     }
 
     private function getImdbExists($items)

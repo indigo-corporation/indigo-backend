@@ -6,6 +6,48 @@ use Illuminate\Support\Str;
 
 class GetFromUrlService
 {
+    public function getTmdbFilmItems($page, $dump = false)
+    {
+        $url = env('TMDB_API') . 'movies/top_rated'
+            . '?api_key=' . env('TMDB_KEY')
+            . '&page=' . $page;
+
+        $data = $this->get($url, $dump);
+
+        return $data->results;
+    }
+
+    public function getCdnFilmItems($page, $dump = false)
+    {
+        $url = env('VIDEOCDN_API') . 'movies'
+            . '?api_token=' . env('VIDEOCDN_TOKEN')
+            . '&ordering=released&direction=desc'
+            . '&limit=100&page=' . $page;
+
+        $data = $this->get($url, $dump);
+
+        return $data->data;
+    }
+
+    public function getCdnSerialItems($page, $dump = false)
+    {
+        $url = env('VIDEOCDN_API') . 'tv-series'
+            . '?api_token=' . env('VIDEOCDN_TOKEN')
+            . '&ordering=created&direction=desc'
+            . '&limit=100&page=' . $page;
+
+        $data = $this->get($url, $dump);
+
+        return $data->data;
+    }
+
+    public function getShikiItems($page, $dump = false)
+    {
+        $url = 'https://shikimori.one/api/animes' . '?limit=50&page=' . $page . '&order=popularity';
+
+        return $this->get($url, $dump);
+    }
+
     public function getShiki($shikiId, $dump = false)
     {
         $url = 'https://shikimori.one/api/animes/' . $shikiId;
