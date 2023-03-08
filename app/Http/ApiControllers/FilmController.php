@@ -23,11 +23,11 @@ class FilmController extends Controller
                 ->where('year', 2023);
 
             if ($category === Film::CATEGORY_ANIME) {
-                $query = $query->whereNotNull('shiki_id')
-                    ->orderBy('shiki_id', 'DESC');
+                $query = $query->whereNotNull('shiki_rating')
+                    ->orderBy('shiki_rating', 'DESC');
             } else {
-                $query = $query->whereNotNull('imdb_id')
-                    ->orderBy('imdb_id', 'DESC');
+                $query = $query->whereNotNull('imdb_rating')
+                    ->orderBy('imdb_rating', 'DESC');
             }
 
             $$category = $query->limit(self::FILMS_LIMIT_MAIN)->get();
