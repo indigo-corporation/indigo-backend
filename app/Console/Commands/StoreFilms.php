@@ -59,19 +59,17 @@ class StoreFilms extends Command
 
     private function processPage()
     {
-        $items = $this->getService->getTmdbFilmItems($this->page, true);
+        $items = match ($this->category) {
+            Film::CATEGORY_FILM => $this->getService->getCdnFilmItems($this->page, true),
+            Film::CATEGORY_SERIAL => $this->getService->getCdnSerialItems($this->page, true),
+            Film::CATEGORY_ANIME => $this->getService->getShikiItems($this->page, true),
+        };
 
-//        $items = match ($this->category) {
-//            Film::CATEGORY_FILM => $this->getService->getCdnFilmItems($this->page, true),
-//            Film::CATEGORY_SERIAL => $this->getService->getCdnSerialItems($this->page, true),
-//            Film::CATEGORY_ANIME => $this->getService->getShikiItems($this->page, true),
-//        };
-//
-//        $idsExists = match ($this->category) {
-//            Film::CATEGORY_FILM, Film::CATEGORY_SERIAL => $this->getImdbExists($items),
-//            Film::CATEGORY_ANIME => $this->getShikiExists($items),
-//        };
-//
+        $idsExists = match ($this->category) {
+            Film::CATEGORY_FILM, Film::CATEGORY_SERIAL => $this->getImdbExists($items),
+            Film::CATEGORY_ANIME => $this->getShikiExists($items),
+        };
+
         $idField = match ($this->category) {
             Film::CATEGORY_FILM, Film::CATEGORY_SERIAL => 'imdb_id',
             Film::CATEGORY_ANIME => 'id',
@@ -80,11 +78,7 @@ class StoreFilms extends Command
         foreach ($items as $item) {
             $item = $this->getService->getTmdbFilmItem($item->id, true);
             if ($item->$idField) {
-//                if (in_array($item->$idField, $idsExists)) {
-//                    continue;
-//                }
-                $imdbIdExists = Film::where('imdb_id', $item->$idField)->exists();
-                if ($imdbIdExists) {
+                if (in_array($item->$idField, $idsExists)) {
                     continue;
                 }
 
