@@ -22,7 +22,7 @@ class UserStoreRequest extends FormRequest
                 'string',
                 'min:2',
                 'max:30',
-                Rule::unique('users')->ignore('id', Auth::id())
+                Rule::unique('users')->ignore(Auth::id())
             ],
             'birth_date' => 'date',
             'about' => 'string',
