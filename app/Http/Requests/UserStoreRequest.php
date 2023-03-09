@@ -11,9 +11,17 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:2|max:50',
+            'name' => [
+                'required',
+                'string',
+                'min:2',
+                'max:50',
+            ],
             'user_name' => [
-                'required|string|min:2',
+                'required',
+                'string',
+                'min:2',
+                'max:30',
                 Rule::unique('users')->ignore('id', Auth::id())
             ],
             'birth_date' => 'date',
