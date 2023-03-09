@@ -17,6 +17,14 @@ class GetFromUrlService
         return $data->results;
     }
 
+    public function getTmdbFilmItem($id, $dump = false)
+    {
+        $url = env('TMDB_API') . 'movie/' . $id
+            . '?api_key=' . env('TMDB_KEY');
+
+        return $this->get($url, $dump);
+    }
+
     public function getCdnFilmItems($page, $dump = false)
     {
         $url = env('VIDEOCDN_API') . 'movies'
