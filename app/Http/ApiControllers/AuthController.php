@@ -16,7 +16,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $attr = $request->validate([
-            'name' => 'required|string|max:30',
+            'name' => 'required|string|min:2|max:50',
             'email' => 'required|string|email|unique:users,email',
             'user_name' => 'string|min:2|unique:users,username',
             'password' => 'required|string|min:6'
@@ -30,6 +30,7 @@ class AuthController extends Controller
 
         if (!$user->user_name) {
             $user->user_name = 'user' . $user->id;
+            $user->save();
         }
 
         return response()->success(
