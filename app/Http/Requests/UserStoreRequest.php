@@ -25,7 +25,7 @@ class UserStoreRequest extends FormRequest
                 Rule::unique('users')->ignore(Auth::id())
             ],
             'birth_date' => 'date',
-            'about' => 'string',
+            'about' => 'string|nullable',
             'city_id' => 'integer'
         ];
     }
