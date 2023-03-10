@@ -137,7 +137,7 @@ class Film extends Model implements TranslatableContract
     {
         if (!$url) return;
 
-        $imageName = $this->id . '.jpg';
+        $imageName = $this->id . '.webp';
         $tempName = 'temp_' . $this->id;
         Storage::disk('public')->put(self::THUMB_FOLDER . '/' . $tempName, file_get_contents($url));
 
@@ -156,9 +156,9 @@ class Film extends Model implements TranslatableContract
 
         Image::configure(['driver' => 'imagick']);
 
-        Image::make($tempFile)->encode('jpg')->resize(193, 272)
+        Image::make($tempFile)->encode('webp')->resize(200, 300)
             ->save($smallPath . '/' . $imageName);
-        Image::make($tempFile)->encode('jpg')->resize(386, 544)
+        Image::make($tempFile)->encode('webp')->resize(400, 600)
             ->save($mediumPath . '/' . $imageName);
 
         Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);

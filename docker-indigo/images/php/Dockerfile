@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libpq-dev \
-    jpegoptim optipng pngquant gifsicle \
+    jpegoptim optipng pngquant gifsicle webp \
     libmagickwand-dev --no-install-recommends
 
 RUN pecl install imagick && docker-php-ext-enable imagick
