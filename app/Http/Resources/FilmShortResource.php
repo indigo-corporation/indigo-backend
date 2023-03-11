@@ -16,9 +16,7 @@ class FilmShortResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'poster' => $this->poster,
             'poster_small' => $this->poster_small,
-            'poster_medium' => $this->poster_medium,
             'year' => $this->year,
             'imdb_rating' => $this->imdb_rating,
             'shiki_rating' => $this->shiki_rating,
