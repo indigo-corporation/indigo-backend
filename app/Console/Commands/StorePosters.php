@@ -14,25 +14,29 @@ class StorePosters extends Command
 
     public function handle()
     {
-        dump(Film::whereNull('poster_medium')->count() . ' left');
+        dump(Film::whereNotNull('poster')->whereNull('poster_medium')->count() . ' left');
 
         $i = 0;
-        Film::whereNull('poster_medium')->orderBy('id')->chunk(100, function (Collection $films) use (&$i) {
-            foreach ($films as $film) {
-                try {
-                    $film->savePosterThumbs($film->poster);
-                } catch (\Throwable $e) {
-                    dump([
-                        'id' => $film->id,
-                        'error' => $e->getMessage(),
-                    ]);
+        Film::whereNotNull('poster')
+            ->whereNull('poster_medium')
+            ->orderBy('id')
+            ->chunk(100, function (Collection $films) use (&$i) {
+                foreach ($films as $film) {
+                    try {
+                        dump($film->id);
+                        $film->savePosterThumbs($film->poster);
+                    } catch (\Throwable $e) {
+                        dump([
+                            'id' => $film->id,
+                            'error' => $e->getMessage(),
+                        ]);
 
-                    sleep(10);
+                        sleep(5);
+                    }
                 }
-            }
-            dump('processed ' . ++$i * 100);
-            dump(Film::whereNull('poster_medium')->count() . ' left');
-        });
+                dump('processed ' . ++$i * 100);
+                dump(Film::whereNotNull('poster')->whereNull('poster_medium')->count() . ' left');
+            });
 
         dump('completed');
     }
