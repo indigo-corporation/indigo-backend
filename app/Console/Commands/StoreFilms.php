@@ -76,7 +76,6 @@ class StoreFilms extends Command
         };
 
         foreach ($items as $item) {
-            $item = $this->getService->getTmdbFilmItem($item->id, true);
             if ($item->$idField) {
                 if (in_array($item->$idField, $idsExists)) {
                     continue;
