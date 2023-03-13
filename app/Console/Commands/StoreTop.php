@@ -13,8 +13,6 @@ class StoreTop extends Command
 
     protected $description = 'store-top';
 
-    private int $page;
-
     private GetFromUrlService $getService;
 
     public function handle()
@@ -33,13 +31,25 @@ class StoreTop extends Command
         $this->getService = new GetFromUrlService();
 
         for ($p = $startPage; $p <= $lastPage; $p++) {
-            $this->page = $p;
             dump('=== page ===');
-            dump($this->page);
+            dump($p);
             dump('============');
 
             try {
-                $this->processPage();
+                $items = $this->getService->getTmdbFilmItems($p, true);
+
+                foreach ($items as $item) {
+                    $item = $this->getService->getTmdbFilmItem($item->id, true);
+                    if ($item->imdb_id) {
+                        if (Film::where('imdb_id', $item->imdb_id)->exists()) {
+                            continue;
+                        }
+
+                        dispatch(new FilmStoreJob($item->imdb_id));
+
+                        sleep(5);
+                    }
+                }
             } catch (\Throwable $e) {
                 dd($e->getMessage());
             }
@@ -47,34 +57,5 @@ class StoreTop extends Command
             dump('ok');
             sleep(10);
         }
-    }
-
-    private function processPage()
-    {
-        $items = $this->getService->getTmdbFilmItems($this->page, true);
-
-        $idsExists = $this->getImdbExists($items);
-
-        $idField = 'imdb_id';
-
-        foreach ($items as $item) {
-            $item = $this->getService->getTmdbFilmItem($item->id, true);
-            if ($item->$idField) {
-                if (in_array($item->$idField, $idsExists)) {
-                    continue;
-                }
-
-                dispatch(new FilmStoreJob($item->$idField));
-
-                sleep(5);
-            }
-        }
-    }
-
-    private function getImdbExists($items)
-    {
-        $imdbIds = collect($items)->pluck('imdb_id')->toArray();
-
-        return Film::whereIn('imdb_id', $imdbIds)->pluck('imdb_id')->toArray();
     }
 }
