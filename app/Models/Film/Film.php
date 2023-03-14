@@ -67,7 +67,7 @@ class Film extends Model implements TranslatableContract
     ];
 
     public const SORT_FIELDS = [
-        'release_date',
+        'year',
         'imdb_rating',
         'shiki_rating'
     ];
