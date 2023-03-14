@@ -60,7 +60,7 @@ class FilmController extends Controller
         $sortField = $request->get('sort_field', 'release_date');
         $sortDirection = $request->get('sort_direction', 'desc');
 
-        $query = Film::orderByRaw("$sortField $sortDirection nulls last");
+        $query = Film::orderByRaw("$sortField $sortDirection nulls first");
 
         if ($category) {
             $query = $query->where('category', $category);
@@ -133,7 +133,7 @@ class FilmController extends Controller
         ->whereHas('genres', function ($query) use ($genre_id) {
             $query->where('genres.id', $genre_id);
         })
-        ->orderByRaw("$sortField $sortDirection nulls last");
+        ->orderByRaw("$sortField $sortDirection nulls first");
 
         if ($category) {
             $query = $query->where('category', $category);
