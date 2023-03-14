@@ -2,7 +2,7 @@
 
 namespace App\Http\ApiControllers;
 
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\FilmIndexRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\FilmResource;
@@ -54,11 +54,13 @@ class FilmController extends Controller
         return response()->success($response);
     }
 
-    public function index(CategoryRequest $request)
+    public function index(FilmIndexRequest $request)
     {
         $category = $request->get('category');
+        $sortField = $request->get('sort_field', 'date');
+        $sortDirection = $request->get('sort_direction', 'desc');
 
-        $query = Film::orderBy('release_date', 'DESC');
+        $query = Film::orderBy($sortField, $sortDirection);
 
         if ($category) {
             $query = $query->where('category', $category);
@@ -121,13 +123,18 @@ class FilmController extends Controller
         );
     }
 
-    public function getByGenre($genre_id, CategoryRequest $request)
+    public function getByGenre($genre_id, FilmIndexRequest $request)
     {
-        $query = Film::whereHas('genres', function ($query) use ($genre_id) {
-            $query->where('genres.id', $genre_id);
-        });
-
         $category = $request->get('category');
+        $sortField = $request->get('sort_field', 'date');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        $query = Film::query()
+        ->whereHas('genres', function ($query) use ($genre_id) {
+            $query->where('genres.id', $genre_id);
+        })
+        ->orderBy($sortField, $sortDirection);
+
         if ($category) {
             $query = $query->where('category', $category);
         }

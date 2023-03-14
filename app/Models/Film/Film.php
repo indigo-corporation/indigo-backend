@@ -66,6 +66,17 @@ class Film extends Model implements TranslatableContract
         self::CATEGORY_CARTOON
     ];
 
+    public const SORT_FIELDS = [
+        'date',
+        'imdb',
+        'shiki'
+    ];
+
+    public const SORT_DIRECTIONS = [
+        'desc',
+        'asc'
+    ];
+
     public const THUMB_FOLDER = 'images/film_thumbs';
 
     public function genres(): ?BelongsToMany

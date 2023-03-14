@@ -6,7 +6,7 @@ use App\Models\Film\Film;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CategoryRequest extends FormRequest
+class FilmIndexRequest extends FormRequest
 {
     public function rules()
     {
@@ -14,6 +14,14 @@ class CategoryRequest extends FormRequest
             'category' => [
                 'string',
                 Rule::in(Film::CATEGORIES)
+            ],
+            'sort_field' => [
+                'string',
+                Rule::in(Film::SORT_FIELDS)
+            ],
+            'sort_direction' => [
+                'string',
+                Rule::in(Film::SORT_DIRECTIONS)
             ]
         ];
     }
