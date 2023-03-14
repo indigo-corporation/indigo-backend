@@ -126,7 +126,7 @@ class FilmController extends Controller
     public function getByGenre($genre_id, FilmIndexRequest $request)
     {
         $category = $request->get('category');
-        $sortField = $request->get('sort_field', 'date');
+        $sortField = $request->get('sort_field', 'release_date');
         $sortDirection = $request->get('sort_direction', 'desc');
 
         $query = Film::query()
