@@ -60,7 +60,7 @@ class FilmController extends Controller
         $sortField = $request->get('sort_field', 'release_date');
         $sortDirection = $request->get('sort_direction', 'desc');
 
-        $query = Film::orderBy($sortField, $sortDirection);
+        $query = Film::orderBy('-' . $sortField, $sortDirection);
 
         if ($category) {
             $query = $query->where('category', $category);
