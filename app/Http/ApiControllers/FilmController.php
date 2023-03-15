@@ -57,22 +57,16 @@ class FilmController extends Controller
     public function index(FilmIndexRequest $request)
     {
         $category = $request->get('category');
-        $sortField = $request->get('sort_field', 'release_date');
-        $sortDirection = $request->get('sort_direction', 'desc');
+        $sortField = $request->get('sort_field', Film::SORT_FIELD);
+        $sortDirection = $request->get('sort_direction', Film::SORT_DIRECTION);
 
-        $query = Film::query()
-            ->whereNotNull($sortField);
-
+        $query = Film::query();
 
         if ($category) {
             $query = $query->where('category', $category);
         }
 
-        if ($sortField === 'released_date') {
-            $query = $query->orderBy('year', $sortDirection);
-        }
-
-        $query = $query->orderBy($sortField, $sortDirection);
+        $query = $query->sort($sortField, $sortDirection);
 
         return response()->success_paginated(
             new PaginatedCollection($query->paginate(self::FILMS_PER_PAGE), FilmResource::class)
@@ -134,25 +128,19 @@ class FilmController extends Controller
     public function getByGenre($genre_id, FilmIndexRequest $request)
     {
         $category = $request->get('category');
-        $sortField = $request->get('sort_field', 'release_date');
-        $sortDirection = $request->get('sort_direction', 'desc');
+        $sortField = $request->get('sort_field', Film::SORT_FIELD);
+        $sortDirection = $request->get('sort_direction', Film::SORT_DIRECTION);
 
         $query = Film::query()
         ->whereHas('genres', function ($query) use ($genre_id) {
             $query->where('genres.id', $genre_id);
-        })
-        ->whereNotNull($sortField);
-
+        });
 
         if ($category) {
             $query = $query->where('category', $category);
         }
 
-        if ($sortField === 'released_date') {
-            $query = $query->orderBy('year', $sortDirection);
-        }
-
-        $query = $query->orderBy($sortField, $sortDirection);
+        $query = $query->sort($sortField, $sortDirection);
 
         return response()->success_paginated(
             new PaginatedCollection($query->paginate(self::FILMS_PER_PAGE), FilmShortResource::class)

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
@@ -66,16 +67,23 @@ class Film extends Model implements TranslatableContract
         self::CATEGORY_CARTOON
     ];
 
+    public const SORT_DATE = 'release_date';
+    public const SORT_IMDB = 'imdb_rating';
+    public const SORT_SHIKI = 'shiki_rating';
+
     public const SORT_FIELDS = [
-        'release_date',
-        'imdb_rating',
-        'shiki_rating'
+        self::SORT_DATE,
+        self::SORT_IMDB,
+        self::SORT_SHIKI
     ];
 
     public const SORT_DIRECTIONS = [
         'desc',
         'asc'
     ];
+
+    public const SORT_FIELD = self::SORT_DATE;
+    public const SORT_DIRECTION = 'desc';
 
     public const THUMB_FOLDER = 'images/film_thumbs';
 
@@ -119,6 +127,17 @@ class Film extends Model implements TranslatableContract
             get: fn($value) => $value ? url($value) : '',
             set: fn($value) => $value
         );
+    }
+
+    public function scopeSort(Builder $query, $sortField, $sortDirection = 'desc'): void
+    {
+        if ($sortField === self::SORT_DATE) {
+            $query = $query->whereNotNull('year')->orderBy('year', $sortDirection);
+        } else {
+            $query = $query->whereNotNull($sortField);
+        }
+
+        $query->orderBy($sortField, $sortDirection);
     }
 
     public function getCategoryName()
