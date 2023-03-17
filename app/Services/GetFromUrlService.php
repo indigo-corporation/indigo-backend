@@ -112,7 +112,7 @@ class GetFromUrlService
             } else {
                 if ($dump) {
                     dump($e->getMessage());
-                    dump('retry imdb' . $imdbId);
+                    dump('retry imdb ' . $imdbId);
                 }
 
                 sleep(5);
