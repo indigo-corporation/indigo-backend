@@ -20,9 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/add-film', function () {
-    $imdb_id = request()->imdb_id;
-
+Route::get('/add-film/{imdb_id}', function (string $imdb_id) {
     if ($imdb_id) {
         dispatch(new FilmStoreJob($imdb_id));
 
@@ -32,9 +30,7 @@ Route::get('/add-film', function () {
     return 'no imdb_id provided';
 });
 
-Route::get('/add-serial', function () {
-    $imdb_id = request()->imdb_id;
-
+Route::get('/add-serial/{imdb_id}', function (string $imdb_id) {
     if ($imdb_id) {
         dispatch(new SerialStoreJob($imdb_id));
 
@@ -44,9 +40,7 @@ Route::get('/add-serial', function () {
     return 'no imdb_id provided';
 });
 
-Route::get('/add-anime', function () {
-    $shiki_id = request()->shiki_id;
-
+Route::get('/add-anime/{shiki_id}', function (string $shiki_id) {
     if ($shiki_id) {
         dispatch(new AnimeStoreJob($shiki_id));
 

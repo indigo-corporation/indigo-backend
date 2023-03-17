@@ -79,7 +79,7 @@ class SerialStoreJob implements ShouldQueue
             'is_serial' => true,
             'poster' => $posterUrl,
             'runtime' => $runtime,
-            'release_date' => $videocdnData->start_date,
+            'release_date' => $videocdnData->released,
             'year' => $year,
             'ru' => [
                 'title' => $videocdnData->ru_title,
