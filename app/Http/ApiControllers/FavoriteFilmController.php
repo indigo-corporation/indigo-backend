@@ -18,13 +18,6 @@ class FavoriteFilmController extends Controller
         );
     }
 
-    public function allIDs()
-    {
-        $IDs = Auth::user()->favorite_films_films()->pluck('film_id')->toArray();
-
-        return response()->success($IDs);
-    }
-
     public function add(FavoriteFilmsRequest $request)
     {
         $user = Auth::user();
@@ -41,7 +34,9 @@ class FavoriteFilmController extends Controller
             ]);
         }
 
-        return response()->success(null, 201);
+        return response()->success([
+            'favorite_ids' => $user->favorite_film_ids
+        ]);
     }
 
     public function remove(FavoriteFilmsRequest $request)
@@ -60,6 +55,8 @@ class FavoriteFilmController extends Controller
             ])->delete();
         }
 
-        return response()->success(null, 204);
+        return response()->success([
+            'favorite_ids' => $user->favorite_film_ids
+        ]);
     }
 }

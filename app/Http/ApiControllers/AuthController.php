@@ -2,7 +2,7 @@
 
 namespace App\Http\ApiControllers;
 
-use App\Http\Resources\UserResource;
+use App\Http\Resources\MyUserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,7 +68,7 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return response()->success(new UserResource($request->user()));
+        return response()->success(new MyUserResource($request->user()));
     }
 
     public function refresh(Request $request)

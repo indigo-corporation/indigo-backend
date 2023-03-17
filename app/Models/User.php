@@ -209,4 +209,9 @@ class User extends Authenticatable
             set: fn ($value) => $value
         );
     }
+
+    public function getFavoriteFilmIdsAttribute(): array
+    {
+        return $this->favorite_films_films()->pluck('film_id')->toArray();
+    }
 }

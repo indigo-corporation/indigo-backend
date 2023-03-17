@@ -56,7 +56,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::prefix('favorite-films')->group(function () {
         Route::get('all', [FavoriteFilmController::class, 'all']);
-        Route::get('all-ids', [FavoriteFilmController::class, 'allIDs']);
         Route::post('add', [FavoriteFilmController::class, 'add']);
         Route::post('remove', [FavoriteFilmController::class, 'remove']);
     });
