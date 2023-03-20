@@ -45,6 +45,14 @@ services:
         depends_on:
             - app
 
+    redis:
+        image: redis
+        container_name: indigo-redis
+        ports:
+            - "6379:6379"
+        networks:
+            - indigo
+
 networks:
     indigo:
         driver: bridge
