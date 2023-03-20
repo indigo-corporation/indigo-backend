@@ -45,7 +45,7 @@ class StoreTop extends Command
                             continue;
                         }
 
-                        dispatch(new FilmStoreJob($item->imdb_id));
+                        FilmStoreJob::dispatchSync($item->imdb_id);
 
                         sleep(5);
                     }

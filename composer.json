@@ -20,6 +20,7 @@
         "intervention/image": "^2.7.2",
         "jenssegers/date": "^4.0",
         "laravel/framework": "^10.1.5",
+        "laravel/horizon": "^5.15",
         "laravel/sanctum": "^3.2.1",
         "laravel/socialite": "^5.6.1",
         "laravel/tinker": "^v2.8",
