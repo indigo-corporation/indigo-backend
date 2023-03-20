@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 class FilmController extends Controller
 {
     public const FILMS_PER_PAGE = 48;
+
     public const FILMS_LIMIT_MAIN = 18;
 
     public function main()

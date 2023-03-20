@@ -16,6 +16,7 @@ class StoreFilms extends Command
     protected $description = 'store-films';
 
     private string $category;
+
     private int $page;
 
     private GetFromUrlService $getService;

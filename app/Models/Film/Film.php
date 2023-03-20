@@ -10,11 +10,11 @@ use App\Models\FilmStar;
 use App\Models\Genre\Genre;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
@@ -68,7 +68,9 @@ class Film extends Model implements TranslatableContract
     ];
 
     public const SORT_DATE = 'release_date';
+
     public const SORT_IMDB = 'imdb_rating';
+
     public const SORT_SHIKI = 'shiki_rating';
 
     public const SORT_FIELDS = [
@@ -83,6 +85,7 @@ class Film extends Model implements TranslatableContract
     ];
 
     public const SORT_FIELD = self::SORT_DATE;
+
     public const SORT_DIRECTION = 'desc';
 
     public const THUMB_FOLDER = 'images/film_thumbs';
@@ -116,16 +119,16 @@ class Film extends Model implements TranslatableContract
     protected function posterSmall(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value ? url($value) : '',
-            set: fn($value) => $value
+            get: fn ($value) => $value ? url($value) : '',
+            set: fn ($value) => $value
         );
     }
 
     protected function posterMedium(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value ? url($value) : '',
-            set: fn($value) => $value
+            get: fn ($value) => $value ? url($value) : '',
+            set: fn ($value) => $value
         );
     }
 
@@ -165,7 +168,9 @@ class Film extends Model implements TranslatableContract
 
     public function savePosterThumbs($url)
     {
-        if (!$url) return;
+        if (!$url) {
+            return;
+        }
 
         $imageName = $this->id . '.webp';
         $tempName = 'temp_' . $this->id;
