@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class SerialStoreJob implements ShouldQueue
@@ -112,11 +113,20 @@ class SerialStoreJob implements ShouldQueue
 
         $film->updateCategory();
 
-        try {
-            $film->savePosterThumbs($film->poster);
-        } catch (\Throwable $e) {
-            dump('Poster error');
-            dump($e->getMessage());
+        if ($film->poster) {
+            try {
+                $tempName = 'temp_' . $film->id;
+                Storage::disk('public')->put(Film::THUMB_FOLDER . '/' . $tempName, file_get_contents($film->poster));
+
+                $tempFile = storage_path('app/public') . '/' . Film::THUMB_FOLDER . '/' . $tempName;
+
+                $film->savePosterThumbs($tempFile);
+
+                Storage::disk('public')->delete(Film::THUMB_FOLDER . '/' . $tempName);
+            } catch (\Throwable $e) {
+                dump('Poster error');
+                dump($e->getMessage());
+            }
         }
 
         dump('stored');
