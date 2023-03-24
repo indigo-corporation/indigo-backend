@@ -23,7 +23,8 @@ class UserResource extends JsonResource
             'about' => $this->about,
             //            'city' => new CityResource($this->city),
             //            'country' => new CountryResource($this->country),
-            'poster_url' => $this->poster_url
-        ];
+            'poster_small' => $this->poster_small,
+            'poster_medium' => $this->poster_medium,
+            'poster_large' => $this->poster_large        ];
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Country;
 use App\Models\FavoriteFilm;
 use App\Models\FilmStar;
 use App\Models\Genre\Genre;
+use App\Services\ImageService;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,9 +16,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Storage;
 use Image;
-use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 
 class Film extends Model implements TranslatableContract
 {
@@ -89,6 +88,7 @@ class Film extends Model implements TranslatableContract
     public const SORT_DIRECTION = 'desc';
 
     public const THUMB_FOLDER = 'images/film_thumbs';
+    public const THUMB_URL = 'storage/' . self::THUMB_FOLDER;
 
     public function genres(): ?BelongsToMany
     {
@@ -166,43 +166,16 @@ class Film extends Model implements TranslatableContract
         $this->save();
     }
 
-    public function savePosterThumbs($url)
+    public function savePosterThumbs($source)
     {
-        if (!$url) {
-            return;
-        }
-
         $imageName = $this->id . '.webp';
-        $tempName = 'temp_' . $this->id;
-        Storage::disk('public')->put(self::THUMB_FOLDER . '/' . $tempName, file_get_contents($url));
-
         $imagePath = storage_path('app/public') . '/' . self::THUMB_FOLDER;
-        $tempFile = $imagePath . '/' . $tempName;
-        $smallPath = $imagePath . '/small';
-        $mediumPath = $imagePath . '/medium';
 
-        if (!file_exists($smallPath)) {
-            mkdir($smallPath, 0775, true);
-        }
+        ImageService::processImage($source, $imagePath . '/small', $imageName, 200, 300);
+        $this->poster_small = self::THUMB_URL . '/small/' . $imageName;
 
-        if (!file_exists($mediumPath)) {
-            mkdir($mediumPath, 0775, true);
-        }
-
-        Image::configure(['driver' => 'imagick']);
-
-        Image::make($tempFile)->encode('webp')->resize(200, 300)
-            ->save($smallPath . '/' . $imageName);
-        Image::make($tempFile)->encode('webp')->resize(400, 600)
-            ->save($mediumPath . '/' . $imageName);
-
-        Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
-
-        ImageOptimizer::optimize($smallPath . '/' . $imageName);
-        ImageOptimizer::optimize($mediumPath . '/' . $imageName);
-
-        $this->poster_small = 'storage/images/film_thumbs/small/' . $imageName;
-        $this->poster_medium = 'storage/images/film_thumbs/medium/' . $imageName;
+        ImageService::processImage($source, $imagePath . '/medium', $imageName, 400, 600);
+        $this->poster_medium = self::THUMB_URL . '/medium/' . $imageName;
 
         $this->save();
     }

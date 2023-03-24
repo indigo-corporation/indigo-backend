@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Film\Film;
+use App\Services\ImageService;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
@@ -47,7 +48,11 @@ class User extends Authenticatable
         'birth_date',
         'about',
         'city_id',
-        'poster_url'
+        'poster_small',
+        'poster_medium',
+        'poster_large',
+        'telegram_id',
+        'google_id'
     ];
 
     /**
@@ -68,6 +73,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public const THUMB_FOLDER = 'images/user_thumbs';
+    public const THUMB_URL = 'storage/' . self::THUMB_FOLDER;
 
     public function comments(): HasMany
     {
@@ -202,7 +210,23 @@ class User extends Authenticatable
         );
     }
 
-    protected function posterUrl(): Attribute
+    protected function posterSmall(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? url($value) : '',
+            set: fn ($value) => $value
+        );
+    }
+
+    protected function posterMedium(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? url($value) : '',
+            set: fn ($value) => $value
+        );
+    }
+
+    protected function posterLarge(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value ? url($value) : '',
@@ -213,5 +237,22 @@ class User extends Authenticatable
     public function getFavoriteFilmIdsAttribute(): array
     {
         return $this->favorite_films_films()->pluck('film_id')->toArray();
+    }
+
+    public function savePosterThumbs($source)
+    {
+        $imageName = $this->id . '.webp';
+        $imagePath = storage_path('app/public') . '/' . self::THUMB_FOLDER;
+
+        ImageService::processImage($source, $imagePath . '/small', $imageName, 75, 75);
+        $this->poster_small = self::THUMB_URL . '/small/' . $imageName;
+
+        ImageService::processImage($source, $imagePath . '/medium', $imageName, 150, 150);
+        $this->poster_medium = self::THUMB_URL . '/medium/' . $imageName;
+
+        ImageService::processImage($source, $imagePath . '/large', $imageName, 300, 300);
+        $this->poster_large = self::THUMB_URL . '/large/' . $imageName;
+
+        $this->save();
     }
 }

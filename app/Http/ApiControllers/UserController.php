@@ -5,6 +5,7 @@ namespace App\Http\ApiControllers;
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\UserPictureStoreRequest;
 use App\Http\Requests\UserStoreRequest;
+use App\Http\Resources\MyUserResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserShortResource;
@@ -47,7 +48,7 @@ class UserController extends Controller
 
         $user->update($request->all());
 
-        return response()->success(new UserResource($user));
+        return response()->success(new MyUserResource($user));
     }
 
     public function changePicture(UserPictureStoreRequest $request)
@@ -55,13 +56,9 @@ class UserController extends Controller
         $file = $request->file('picture');
         $user = Auth::user();
 
-        $file->move(public_path() . '/images/user_posters/', $user->id . '.jpg');
+        $user->savePosterThumbs($file);
 
-        $user->poster_url = '/images/user_posters/' . $user->id . '.jpg';
-
-        return response()->success(
-            $user->save()->poster_url
-        );
+        return response()->success(new MyUserResource($user));
     }
 
     public function get($user_id)

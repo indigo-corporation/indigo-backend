@@ -29,7 +29,7 @@ class GetFromUrlService
     {
         $url = env('VIDEOCDN_API') . 'movies'
             . '?api_token=' . env('VIDEOCDN_TOKEN')
-            . '&ordering=released&direction=desc'
+            . '&ordering=created&direction=desc'
             . '&limit=100&page=' . $page;
 
         $data = $this->get($url, $dump);
