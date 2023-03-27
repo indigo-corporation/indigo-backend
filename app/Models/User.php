@@ -102,7 +102,7 @@ class User extends Authenticatable
     public function favorite_films(): HasMany
     {
         return $this->hasMany(FavoriteFilm::class)
-            ->orderBy('favorite_films.updated_at');
+            ->orderBy('favorite_films.updated_at', 'desc');
     }
 
     public function stars(): HasMany
@@ -119,7 +119,7 @@ class User extends Authenticatable
             'id',
             'id',
             'film_id'
-        )->orderBy('favorite_films.updated_at');
+        )->orderBy('favorite_films.updated_at', 'desc');
     }
 
     public function chats(): ?BelongsToMany
