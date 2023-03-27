@@ -7,6 +7,7 @@ use App\Http\Requests\FavoriteFilmsRequest;
 use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\FavoriteFilm;
+use App\Models\Film\Film;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteFilmController extends Controller
@@ -14,7 +15,7 @@ class FavoriteFilmController extends Controller
     public function all()
     {
         return response()->success_paginated(
-            new PaginatedCollection(Auth::user()->favorite_films_films()->paginate(20), FilmShortResource::class)
+            new PaginatedCollection(Auth::user()->favorite_films_films()->paginate(FilmController::FILMS_PER_PAGE), FilmShortResource::class)
         );
     }
 

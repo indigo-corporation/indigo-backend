@@ -118,7 +118,7 @@ class User extends Authenticatable
             'id',
             'id',
             'film_id'
-        );
+        )->orderBy('updated_at');
     }
 
     public function chats(): ?BelongsToMany
