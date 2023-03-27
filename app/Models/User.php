@@ -101,7 +101,8 @@ class User extends Authenticatable
 
     public function favorite_films(): HasMany
     {
-        return $this->hasMany(FavoriteFilm::class);
+        return $this->hasMany(FavoriteFilm::class)
+            ->orderBy('favorite_films.updated_at');
     }
 
     public function stars(): HasMany
