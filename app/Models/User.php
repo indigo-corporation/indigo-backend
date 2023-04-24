@@ -75,6 +75,7 @@ class User extends Authenticatable
     ];
 
     public const THUMB_FOLDER = 'images/user_thumbs';
+
     public const THUMB_URL = 'storage/' . self::THUMB_FOLDER;
 
     public function comments(): HasMany

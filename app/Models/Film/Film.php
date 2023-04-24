@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Image;
 
 class Film extends Model implements TranslatableContract
 {
@@ -88,6 +87,7 @@ class Film extends Model implements TranslatableContract
     public const SORT_DIRECTION = 'desc';
 
     public const THUMB_FOLDER = 'images/film_thumbs';
+
     public const THUMB_URL = 'storage/' . self::THUMB_FOLDER;
 
     public function genres(): ?BelongsToMany

@@ -7,7 +7,6 @@ use App\Http\Requests\FavoriteFilmsRequest;
 use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\FavoriteFilm;
-use App\Models\Film\Film;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteFilmController extends Controller
