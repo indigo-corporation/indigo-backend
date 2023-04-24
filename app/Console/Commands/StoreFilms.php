@@ -11,13 +11,15 @@ use Illuminate\Console\Command;
 
 class StoreFilms extends Command
 {
-    protected $signature = 'store-films {category=film} {start_page=1} {end_page=50}';
+    protected $signature = 'store-films {category=film} {start_page=1} {end_page?}';
 
     protected $description = 'store-films';
 
     private string $category;
 
     private int $page;
+
+    private bool $onlyNew = false;
 
     private GetFromUrlService $getService;
 
@@ -26,6 +28,11 @@ class StoreFilms extends Command
         $this->category = $this->argument('category');
         $startPage = (int)$this->argument('start_page');
         $lastPage = (int)$this->argument('end_page');
+
+        if (!$lastPage) {
+            $this->onlyNew = true;
+            $lastPage = 50;
+        }
 
         if (!in_array($this->category, Film::CATEGORIES)) {
             throw new \Error('wrong category');
@@ -48,7 +55,9 @@ class StoreFilms extends Command
             dump('============');
 
             try {
-                $this->processPage();
+                if ($this->processPage() === false) {
+                    return;
+                }
             } catch (\Throwable $e) {
                 dd($e->getMessage());
             }
@@ -58,7 +67,7 @@ class StoreFilms extends Command
         }
     }
 
-    private function processPage()
+    private function processPage(): bool
     {
         $items = match ($this->category) {
             Film::CATEGORY_FILM => $this->getService->getCdnFilmItems($this->page, true),
@@ -79,7 +88,11 @@ class StoreFilms extends Command
         foreach ($items as $item) {
             if ($item->$idField) {
                 if (in_array($item->$idField, $idsExists)) {
-                    continue;
+                    if ($this->onlyNew) {
+                        return false;
+                    } else {
+                        continue;
+                    }
                 }
 
                 match ($this->category) {
@@ -91,6 +104,8 @@ class StoreFilms extends Command
                 sleep(5);
             }
         }
+
+        return true;
     }
 
     private function getImdbExists($items)
