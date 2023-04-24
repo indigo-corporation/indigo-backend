@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('backup:clean --disable-notifications')->daily()->at('01:00');
-        $schedule->command('backup:run --disable-notifications')->daily()->at('01:02');
+        $schedule->command('backup:run --only-db --disable-notifications')->daily()->at('01:02');
 
         $schedule->command('store-films film')->hourly();
         $schedule->command('store-films serial')->hourly();
