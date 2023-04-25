@@ -13,6 +13,7 @@
     "require": {
         "php": "^8.2",
         "ext-gd": "*",
+        "arcanedev/log-viewer": "^10.0",
         "astrotomic/laravel-translatable": "^11.12.1",
         "cviebrock/eloquent-sluggable": "^10.0",
         "guzzlehttp/guzzle": "^7.5",
