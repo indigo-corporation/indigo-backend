@@ -19,7 +19,7 @@ class FilmResource extends JsonResource
             'original_title' => $this->original_title,
             'original_language' => $this->original_language,
             'poster' => $this->poster_medium,
-            'poster_small' => $this->poster_medium,
+            'poster_small' => $this->poster_small,
             'poster_medium' => $this->poster_medium,
             'runtime' => $this->runtime,
             'release_date' => $this->release_date,
