@@ -74,7 +74,7 @@ class FilmStoreJob implements ShouldQueue
 
         $film = Film::create([
             'original_title' => $videocdnData->orig_title,
-            'imdb_id' => $videocdnData->imdb_id,
+            'imdb_id' => $this->imdbId,
             'imdb_rating' => $rating,
             'is_anime' => false,
             'is_serial' => false,
