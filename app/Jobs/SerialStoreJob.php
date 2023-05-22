@@ -33,6 +33,8 @@ class SerialStoreJob implements ShouldQueue
 
     public function handle()
     {
+        if (strlen($this->imdbId) > 10) return;
+
         $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
         if ($imdbIdExists) {
             return;
@@ -74,7 +76,7 @@ class SerialStoreJob implements ShouldQueue
 
         $film = Film::create([
             'original_title' => $videocdnData->orig_title,
-            'imdb_id' => $videocdnData->imdb_id,
+            'imdb_id' => $this->imdbId,
             'imdb_rating' => $rating,
             'is_anime' => false,
             'is_serial' => true,

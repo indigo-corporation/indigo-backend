@@ -33,6 +33,8 @@ class FilmStoreJob implements ShouldQueue
 
     public function handle()
     {
+        if (strlen($this->imdbId) > 10) return;
+
         $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
         if ($imdbIdExists) {
             return;
