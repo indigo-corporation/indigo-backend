@@ -73,6 +73,7 @@ class AnimeStoreJob implements ShouldQueue
             'shiki_rating' => (float)$shikiData->score,
             'is_anime' => true,
             'is_serial' => $is_serial,
+            'is_cartoon' => true,
             'ru' => [
                 'title' => $shikiData->russian,
                 'overview' => $shikiData->description,
@@ -84,6 +85,7 @@ class AnimeStoreJob implements ShouldQueue
             $genreModel = Genre::where('name', strtolower($genre->name))
                 ->where('is_anime', true)
                 ->first();
+
             if ($genreModel) {
                 $genres[] = $genreModel->id;
             }

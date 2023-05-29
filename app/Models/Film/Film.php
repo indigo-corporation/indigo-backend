@@ -37,13 +37,14 @@ class Film extends Model implements TranslatableContract
         'shiki_rating',
         'is_anime',
         'is_serial',
-        'category',
+        'is_cartoon',
+        'category'
     ];
 
     public $translatedAttributes = [
         'title',
         'overview',
-        'slug',
+        'slug'
     ];
 
     protected $with = [
@@ -149,7 +150,7 @@ class Film extends Model implements TranslatableContract
             return self::CATEGORY_ANIME;
         }
 
-        if ($this->genres->contains('name', 'animation')) {
+        if ($this->is_cartoon) {
             return self::CATEGORY_CARTOON;
         }
 

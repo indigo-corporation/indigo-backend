@@ -92,12 +92,18 @@ class FilmStoreJob implements ShouldQueue
 
         $genres = [];
         foreach ($imdbData->genres() as $genre) {
-            $genreModel = Genre::firstOrCreate([
-                'name' => lcfirst($genre),
-                'is_anime' => false
-            ]);
+            $genre = strtolower($genre);
 
-            $genres[] = $genreModel->id;
+            if ($genre === 'animation') {
+                $film->is_cartoon = true;
+            } else {
+                $genreModel = Genre::firstOrCreate([
+                    'name' => $genre,
+                    'is_anime' => false
+                ]);
+
+                $genres[] = $genreModel->id;
+            }
         }
 
         $countries = [];
