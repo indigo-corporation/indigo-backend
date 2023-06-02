@@ -110,14 +110,7 @@ class AnimeStoreJob implements ShouldQueue
 
         if ($film->poster) {
             try {
-                $tempName = 'temp_' . $film->id;
-                Storage::disk('public')->put(Film::THUMB_FOLDER . '/' . $tempName, file_get_contents($film->poster));
-
-                $tempFile = storage_path('app/public') . '/' . Film::THUMB_FOLDER . '/' . $tempName;
-
-                $film->savePosterThumbs($tempFile);
-
-                Storage::disk('public')->delete(Film::THUMB_FOLDER . '/' . $tempName);
+                $film->savePoster();
             } catch (\Throwable $e) {
                 dump('Poster error');
                 dump($e->getMessage());

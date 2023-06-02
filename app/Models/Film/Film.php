@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Film extends Model implements TranslatableContract
 {
@@ -161,13 +162,25 @@ class Film extends Model implements TranslatableContract
         return self::CATEGORY_FILM;
     }
 
-    public function updateCategory()
+    public function updateCategory(): void
     {
         $this->category = $this->getCategoryName();
         $this->save();
     }
 
-    public function savePosterThumbs($source)
+    public function savePoster(): void
+    {
+        $tempName = 'temp_' . $this->id;
+        Storage::disk('public')->put(self::THUMB_FOLDER . '/' . $tempName, file_get_contents($this->poster));
+
+        $tempFile = storage_path('app/public') . '/' . self::THUMB_FOLDER . '/' . $tempName;
+
+        $this->savePosterThumbs($tempFile);
+
+        Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
+    }
+
+    public function savePosterThumbs($source): void
     {
         $imageName = $this->id . '.webp';
         $imagePath = storage_path('app/public') . '/' . self::THUMB_FOLDER;

@@ -168,7 +168,7 @@ class AuthController extends Controller
                     'google_id'=> $googleUser->id
                 ]);
 
-                $user->savePosterThumbs($googleUser->photoUrl);
+                $user->savePoster($googleUser->photoUrl);
             }
 
             return response()->success([

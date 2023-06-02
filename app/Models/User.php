@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Nnjeim\World\Models\City;
 
@@ -241,7 +242,19 @@ class User extends Authenticatable
         return $this->favorite_films_films()->pluck('film_id')->toArray();
     }
 
-    public function savePosterThumbs($source)
+    public function savePoster(string $posterUrl): void
+    {
+        $tempName = 'temp_' . $this->id;
+        Storage::disk('public')->put(self::THUMB_FOLDER . '/' . $tempName, file_get_contents($posterUrl));
+
+        $tempFile = storage_path('app/public') . '/' . self::THUMB_FOLDER . '/' . $tempName;
+
+        $this->savePosterThumbs($tempFile);
+
+        Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
+    }
+
+    public function savePosterThumbs($source): void
     {
         $imageName = $this->id . '.webp';
         $imagePath = storage_path('app/public') . '/' . self::THUMB_FOLDER;
