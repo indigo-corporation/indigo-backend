@@ -156,8 +156,26 @@ class AuthController extends Controller
 
     public function googleAuth(Request $request)
     {
-        $user = Socialite::driver('google')->stateless()->userFromToken($request->access_token);
+        $googleUser = (object)$request->data;
 
-        return $user;
+        try {
+            $user = User::where('google_id', $googleUser->id)->first();
+
+            if(!$user){
+                $user = User::create([
+                    'name' => $googleUser->name,
+                    'email' => $googleUser->email,
+                    'google_id'=> $googleUser->id
+                ]);
+
+                $user->savePosterThumbs($googleUser->photoUrl);
+            }
+
+            return response()->success([
+                'access_token' => $user->createToken('api')->plainTextToken
+            ]);
+        } catch (\Throwable $e) {
+            dd($e);
+        }
     }
 }
