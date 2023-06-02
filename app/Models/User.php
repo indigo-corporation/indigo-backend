@@ -4,9 +4,7 @@ namespace App\Models;
 
 use App\Models\Film\Film;
 use App\Services\ImageService;
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,14 +19,6 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Nnjeim\World\Models\City;
 
-/**
- * @property int id
- * @property string name
- * @property string email
- *
- * @mixin Eloquent
- * @mixin Builder
- */
 class User extends Authenticatable
 {
     use HasApiTokens;

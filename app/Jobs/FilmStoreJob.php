@@ -11,7 +11,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class FilmStoreJob implements ShouldQueue
@@ -33,7 +32,9 @@ class FilmStoreJob implements ShouldQueue
 
     public function handle()
     {
-        if (strlen($this->imdbId) > 10) return;
+        if (strlen($this->imdbId) > 10) {
+            return;
+        }
 
         $imdbIdExists = Film::where('imdb_id', $this->imdbId)->exists();
         if ($imdbIdExists) {

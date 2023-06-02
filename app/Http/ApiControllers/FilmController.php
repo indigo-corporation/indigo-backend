@@ -133,9 +133,9 @@ class FilmController extends Controller
         $sortDirection = $request->get('sort_direction', Film::SORT_DIRECTION);
 
         $query = Film::query()
-        ->whereHas('genres', function ($query) use ($genre_id) {
-            $query->where('genres.id', $genre_id);
-        });
+            ->whereHas('genres', function ($query) use ($genre_id) {
+                $query->where('genres.id', $genre_id);
+            });
 
         if ($category) {
             $query = $query->where('category', $category);

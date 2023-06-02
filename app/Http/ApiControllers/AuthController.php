@@ -7,8 +7,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
-use Laravel\Socialite\Facades\Socialite;
 use function response;
 
 class AuthController extends Controller
@@ -153,7 +151,7 @@ class AuthController extends Controller
 
         $user = User::where('google_id', $googleUser->id)->first();
 
-        if(!$user){
+        if (!$user) {
             $user = User::where('email', $googleUser->email)
                 ->first();
 

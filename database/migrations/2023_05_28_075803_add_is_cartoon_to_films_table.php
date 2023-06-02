@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\Film\Film;
+use App\Models\Genre\Genre;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Film\Film;
-use App\Models\Genre\Genre;
 
 return new class extends Migration
 {

@@ -57,6 +57,7 @@ class StoreFilms extends Command
             try {
                 if ($this->processPage() === false) {
                     dump('New films are out');
+
                     return;
                 }
             } catch (\Throwable $e) {
