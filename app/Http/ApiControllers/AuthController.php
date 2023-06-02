@@ -154,13 +154,20 @@ class AuthController extends Controller
         $user = User::where('google_id', $googleUser->id)->first();
 
         if(!$user){
-            $user = User::create([
-                'name' => $googleUser->name,
-                'email' => $googleUser->email,
-                'google_id'=> $googleUser->id
-            ]);
+            $user = User::where('email', $googleUser->email)
+                ->first();
 
-            $user->savePoster($googleUser->photoUrl);
+            if (!$user) {
+                User::create([
+                    'name' => $googleUser->name,
+                    'email' => $googleUser->email
+                ]);
+
+                $user->savePoster($googleUser->photoUrl);
+            }
+
+            $user->google_id = $googleUser->id;
+            $user->save();
         }
 
         if (!$user->user_name) {
