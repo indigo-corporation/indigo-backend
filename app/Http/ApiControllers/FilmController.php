@@ -20,7 +20,8 @@ class FilmController extends Controller
     public function main()
     {
         foreach (Film::CATEGORIES as $category) {
-            $query = Film::where('is_hidden', false)
+            $query = Film::with(['translations'])
+                ->where('is_hidden', false)
                 ->where('category', $category)
                 ->where('year', 2023);
 
@@ -62,7 +63,8 @@ class FilmController extends Controller
         $sortField = $request->get('sort_field', Film::SORT_FIELD);
         $sortDirection = $request->get('sort_direction', Film::SORT_DIRECTION);
 
-        $query = Film::where('is_hidden', false);
+        $query = Film::with(['translations', 'countries'])
+            ->where('is_hidden', false);
 
         if ($category) {
             $query = $query->where('category', $category);
@@ -108,7 +110,8 @@ class FilmController extends Controller
 
     public function search(SearchRequest $request)
     {
-        $films = Film::where('is_hidden', false)
+        $films = Film::with(['translations'])
+            ->where('is_hidden', false)
             ->whereTranslationIlike('title', '%' . $request->find . '%');
 
         return response()->success_paginated(
@@ -134,7 +137,8 @@ class FilmController extends Controller
         $sortField = $request->get('sort_field', Film::SORT_FIELD);
         $sortDirection = $request->get('sort_direction', Film::SORT_DIRECTION);
 
-        $query = Film::where('is_hidden', false)
+        $query = Film::with(['translations'])
+            ->where('is_hidden', false)
             ->whereHas('genres', function ($query) use ($genre_id) {
                 $query->where('genres.id', $genre_id);
             });

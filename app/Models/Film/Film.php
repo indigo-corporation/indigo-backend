@@ -192,7 +192,7 @@ class Film extends Model implements TranslatableContract
             $query = $query->whereNotNull($sortField);
         }
 
-        $query->orderBy($sortField, $sortDirection);
+        $query->orderBy($sortField, $sortDirection)->orderBy('id', 'desc');
     }
 
     public function getCategoryName()
