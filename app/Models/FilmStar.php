@@ -19,7 +19,7 @@ class FilmStar extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function films(): BelongsToMany
+    public function film(): BelongsTo
     {
         return $this->belongsTo(Film::class);
     }

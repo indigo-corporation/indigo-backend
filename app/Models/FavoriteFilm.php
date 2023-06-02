@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Film\Film;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class FavoriteFilm extends Model
 {
@@ -19,8 +18,8 @@ class FavoriteFilm extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function films(): BelongsToMany
+    public function films(): BelongsTo
     {
-        return $this->belongsToMany(Film::class);
+        return $this->belongsTo(Film::class);
     }
 }
