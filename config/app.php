@@ -188,6 +188,7 @@ return [
         App\Providers\HorizonServiceProvider::class,
         \Intervention\Image\ImageServiceProvider::class,
         \Arcanedev\LogViewer\LogViewerServiceProvider::class,
+        \Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         /*
          * Application Service Providers...

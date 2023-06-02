@@ -18,6 +18,54 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * App\Models\Film\Film
+ *
+ * @property int $id
+ * @property string|null $original_title
+ * @property string|null $original_language
+ * @property int|null $runtime
+ * @property string|null $release_date
+ * @property int|null $year
+ * @property string|null $imdb_id
+ * @property string|null $imdb_rating
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $shiki_id
+ * @property string|null $shiki_rating
+ * @property bool $is_anime
+ * @property bool $is_serial
+ * @property string|null $category
+ * @property string|null $poster
+ * @property string|null $poster_small
+ * @property string|null $poster_medium
+ * @property bool $is_cartoon
+ * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|Country[] $countries
+ * @property-read \Illuminate\Database\Eloquent\Collection|FavoriteFilm[] $favorite_films
+ * @property-read \Illuminate\Database\Eloquent\Collection|Genre[] $genres
+ * @property-read \Illuminate\Database\Eloquent\Collection|FilmStar[] $stars
+ * @property-read \App\Models\Film\FilmTranslation|null $translation
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Film\FilmTranslation[] $translations
+ * @method static Builder|Film listsTranslations(string $translationField)
+ * @method static Builder|Film newModelQuery()
+ * @method static Builder|Film newQuery()
+ * @method static Builder|Film notTranslatedIn(?string $locale = null)
+ * @method static Builder|Film orWhereTranslation(string $translationField, $value, ?string $locale = null)
+ * @method static Builder|Film orWhereTranslationIlike($key, $value, $locale = null)
+ * @method static Builder|Film orWhereTranslationLike(string $translationField, $value, ?string $locale = null)
+ * @method static Builder|Film orderByTranslation(string $translationField, string $sortMethod = 'asc')
+ * @method static Builder|Film query()
+ * @method static Builder|Film sort($sortField, $sortDirection = 'desc')
+ * @method static Builder|Film translated()
+ * @method static Builder|Film translatedIn(?string $locale = null)
+ * @method static Builder|Film whereTranslation(string $translationField, $value, ?string $locale = null, string $method = 'whereHas', string $operator = '=')
+ * @method static Builder|Film whereTranslationIlike($key, $value, $locale = null)
+ * @method static Builder|Film whereTranslationLike(string $translationField, $value, ?string $locale = null)
+ * @method static Builder|Film whereTranslationNotIlike($key, $value, $locale = null)
+ * @method static Builder|Film withTranslation()
+ * @mixin \Eloquent
+ */
 class Film extends Model implements TranslatableContract
 {
     use Translatable;

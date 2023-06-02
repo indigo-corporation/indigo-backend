@@ -19,6 +19,49 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Nnjeim\World\Models\City;
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string|null $password
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $birth_date
+ * @property string|null $about
+ * @property int|null $city_id
+ * @property string|null $user_name
+ * @property int|null $telegram_id
+ * @property string|null $google_id
+ * @property string|null $poster_small
+ * @property string|null $poster_medium
+ * @property string|null $poster_large
+ * @property-read \Illuminate\Database\Eloquent\Collection|User[] $banned_users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Chat[] $chats
+ * @property-read City|null $city
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|User[] $contact_requests_incomes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserContactRequest[] $contact_requests_incomes_pivot
+ * @property-read \Illuminate\Database\Eloquent\Collection|User[] $contact_requests_outcomes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserContactRequest[] $contact_requests_outcomes_pivot
+ * @property-read \Illuminate\Database\Eloquent\Collection|User[] $contact_users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserContact[] $contacts
+ * @property-read \App\Models\Country|null $country
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FavoriteFilm[] $favorite_films
+ * @property-read \Illuminate\Database\Eloquent\Collection|Film[] $favorite_films_films
+ * @property-read array $favorite_film_ids
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FilmStar[] $stars
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable
 {
     use HasApiTokens;

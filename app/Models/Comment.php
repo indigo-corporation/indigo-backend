@@ -8,6 +8,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * App\Models\Comment
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $film_id
+ * @property string $body
+ * @property string $type
+ * @property int|null $parent_comment_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Film|null $films
+ * @property-read mixed $dislikes_count
+ * @property-read mixed $likes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Like[] $likes
+ * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $parent_comments
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment query()
+ * @mixin \Eloquent
+ */
 class Comment extends Model
 {
     use HasFactory;
