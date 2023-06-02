@@ -107,14 +107,7 @@ class AuthController extends Controller
             $user->save();
 
             if ($photo_url) {
-                try {
-                    $posterUrl = '/images/user_posters/' . $user->id . '.jpg';
-                    Image::make($photo_url)->save(public_path($posterUrl));
-
-                    $user->poster_url = $posterUrl;
-                    $user->save();
-                } catch (\Throwable $e) {
-                }
+                $user->savePoster($photo_url);
             }
         }
 
@@ -158,24 +151,25 @@ class AuthController extends Controller
     {
         $googleUser = (object)$request->data;
 
-        try {
-            $user = User::where('google_id', $googleUser->id)->first();
+        $user = User::where('google_id', $googleUser->id)->first();
 
-            if(!$user){
-                $user = User::create([
-                    'name' => $googleUser->name,
-                    'email' => $googleUser->email,
-                    'google_id'=> $googleUser->id
-                ]);
-
-                $user->savePoster($googleUser->photoUrl);
-            }
-
-            return response()->success([
-                'access_token' => $user->createToken('api')->plainTextToken
+        if(!$user){
+            $user = User::create([
+                'name' => $googleUser->name,
+                'email' => $googleUser->email,
+                'google_id'=> $googleUser->id
             ]);
-        } catch (\Throwable $e) {
-            dd($e);
+
+            $user->savePoster($googleUser->photoUrl);
         }
+
+        if (!$user->user_name) {
+            $user->user_name = 'user' . $user->id;
+            $user->save();
+        }
+
+        return response()->success([
+            'access_token' => $user->createToken('api')->plainTextToken
+        ]);
     }
 }
