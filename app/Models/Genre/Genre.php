@@ -66,7 +66,7 @@ class Genre extends Model implements TranslatableContract
     {
         return [
             'slug' => [
-                'source' => ['name'],
+                'source' => ['name', 'id'],
                 'separator' => '-',
                 'unique' => true
             ],
