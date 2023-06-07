@@ -282,7 +282,13 @@ class User extends Authenticatable
 
         $tempFile = storage_path('app/public') . '/' . self::THUMB_FOLDER . '/' . $tempName;
 
-        $this->savePosterThumbs($tempFile);
+        try {
+            $this->savePosterThumbs($tempFile);
+        } catch (\Throwable $e) {
+            Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
+
+            throw $e;
+        }
 
         Storage::disk('public')->delete(self::THUMB_FOLDER . '/' . $tempName);
     }
