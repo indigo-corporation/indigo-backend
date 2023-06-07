@@ -24,7 +24,7 @@ class StorePosters extends Command
                 foreach ($films as $film) {
                     try {
                         dump($film->id);
-                        $film->savePosterThumbs($film->poster);
+                        $film->savePoster();
                     } catch (\Throwable $e) {
                         dump([
                             'id' => $film->id,
