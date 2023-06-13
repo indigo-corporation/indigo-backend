@@ -61,7 +61,6 @@ class AnimeStoreJob implements ShouldQueue
 
         $film = Film::create([
             'original_title' => $shikiData->name,
-            'original_language' => 'ja',
             'poster' => $poster_url,
             'release_date' => $shikiData->aired_on,
             'year' => (new Carbon($shikiData->aired_on))?->year,

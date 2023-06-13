@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\Storage;
  *
  * @property int $id
  * @property string|null $original_title
- * @property string|null $original_language
  * @property int|null $runtime
  * @property string|null $release_date
  * @property int|null $year
@@ -74,7 +73,6 @@ class Film extends Model implements TranslatableContract
 
     protected $fillable = [
         'original_title',
-        'original_language',
         'release_date',
         'year',
         'runtime',
