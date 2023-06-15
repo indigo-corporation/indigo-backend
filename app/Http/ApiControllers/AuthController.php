@@ -7,10 +7,44 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use function response;
 
 class AuthController extends Controller
 {
+    public function sendResetPass(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:users,email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return response()->success($status === Password::RESET_LINK_SENT);
+    }
+
+    public function resetPass(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|string|min:6'
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ]);
+
+                $user->save();
+            }
+        );
+
+        return response()->success($status === Password::PASSWORD_RESET);
+    }
+
     public function register(Request $request)
     {
         $attr = $request->validate([
@@ -31,17 +65,15 @@ class AuthController extends Controller
             $user->save();
         }
 
-        return response()->success(
-            [
-                'access_token' => $user->createToken('API Token')->plainTextToken
-            ]
-        );
+        return response()->success([
+            'access_token' => $user->createToken('api')->plainTextToken
+        ]);
     }
 
     public function login(Request $request)
     {
         $attr = $request->validate([
-            'email' => 'required|string|email|',
+            'email' => 'required|string|email',
             'password' => 'required|string|min:6'
         ]);
 
@@ -73,7 +105,7 @@ class AuthController extends Controller
     {
         $request->user()->tokens()->delete();
 
-        return response()->json([
+        return response()->success([
             'access_token' => $request->user()->createToken('api')->plainTextToken,
         ]);
     }

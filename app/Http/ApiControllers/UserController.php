@@ -13,21 +13,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use function response;
 
 class UserController extends Controller
 {
-    public function sendResetPass(Request $request)
-    {
-        $request->validate(['email' => 'required|email']);
-
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-
-        return response()->success($status === Password::RESET_LINK_SENT);
-    }
 
     public function changePass(Request $request)
     {

@@ -25,11 +25,16 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
-Route::post('/auth/telegram', [AuthController::class, 'telegramAuth']);
-Route::post('/auth/google', [AuthController::class, 'googleAuth']);
+Route::group(['middleware' => ['guest']], function () {
+    Route::prefix('auth')->group(function () {
+        Route::post('/send-reset-password', [AuthController::class, 'sendResetPass']);
+        Route::post('/reset-password', [AuthController::class, 'resetPass']);
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/telegram', [AuthController::class, 'telegramAuth']);
+        Route::post('/google', [AuthController::class, 'googleAuth']);
+    });
+});
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('auth')->group(function () {
