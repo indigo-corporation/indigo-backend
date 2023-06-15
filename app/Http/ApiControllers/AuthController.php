@@ -44,9 +44,15 @@ class AuthController extends Controller
             }
         );
 
-        return $status === Password::PASSWORD_RESET
-            ? response()->success()
-            : response()->error();
+        if ($status !== Password::PASSWORD_RESET) {
+            return response()->error();
+        }
+
+        $user = User::where('email', $request->get('email'))->first();
+
+        return response()->success([
+            'access_token' => $user->createToken('api')->plainTextToken
+        ]);
     }
 
     public function register(Request $request)
