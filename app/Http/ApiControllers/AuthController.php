@@ -20,7 +20,9 @@ class AuthController extends Controller
             $request->only('email')
         );
 
-        return response()->success($status === Password::RESET_LINK_SENT);
+        return $status === Password::RESET_LINK_SENT
+            ? response()->success()
+            : response()->error();
     }
 
     public function resetPass(Request $request)
@@ -42,7 +44,9 @@ class AuthController extends Controller
             }
         );
 
-        return response()->success($status === Password::PASSWORD_RESET);
+        return $status === Password::PASSWORD_RESET
+            ? response()->success()
+            : response()->error();
     }
 
     public function register(Request $request)
