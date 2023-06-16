@@ -55,6 +55,7 @@ class SerialStoreJob implements ShouldQueue
 
         try {
             $rating = $imdbData->rating() ?: null;
+            $votes = $imdbData->votes();
             $posterUrl = $imdbData->photo(false) ?: null;
             $runtime = $imdbData->runtime() ?: null;
             $overview = $imdbData->plotoutline() ?: null;
@@ -79,6 +80,7 @@ class SerialStoreJob implements ShouldQueue
             'original_title' => $videocdnData->orig_title,
             'imdb_id' => $this->imdbId,
             'imdb_rating' => $rating,
+            'imdb_votes' => $votes,
             'is_anime' => false,
             'is_serial' => true,
             'poster' => $posterUrl,

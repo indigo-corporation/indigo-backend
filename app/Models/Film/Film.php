@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\Storage;
  * @property string|null $poster_medium
  * @property bool $is_cartoon
  * @property bool $is_hidden
+ * @property bool $imdb_votes
  * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $comments
  * @property-read \Illuminate\Database\Eloquent\Collection|Country[] $countries
  * @property-read \Illuminate\Database\Eloquent\Collection|FavoriteFilm[] $favorite_films
@@ -88,6 +89,7 @@ class Film extends Model implements TranslatableContract
         'is_cartoon',
         'category',
         'is_hidden',
+        'imdb_votes'
     ];
 
     public $translatedAttributes = [
