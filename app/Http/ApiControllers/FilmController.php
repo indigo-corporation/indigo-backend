@@ -23,16 +23,16 @@ class FilmController extends Controller
             $query = Film::with(['translations'])
                 ->where('is_hidden', false)
                 ->where('category', $category)
-                ->where('year', 2023)
-                ->whereHas('countries', function ($q) {
-                    $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR']);
-                });
+                ->where('year', 2023);
 
             if ($category === Film::CATEGORY_ANIME) {
                 $query = $query->whereNotNull('shiki_rating')
                     ->orderBy('shiki_rating', 'DESC');
             } else {
                 $query = $query->whereNotNull('imdb_rating')
+                    ->whereHas('countries', function ($q) {
+                        $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
+                    })
                     ->orderBy('imdb_rating', 'DESC');
             }
 
@@ -54,7 +54,7 @@ class FilmController extends Controller
             'new' => FilmShortResource::collection($new)
         ];
         foreach (Film::CATEGORIES as $category) {
-            $response[$category] = FilmShortResource::collection($$category);
+            $response[$category] = FilmShortResource::collection($$category->shuffle());
         }
 
         return response()->success($response);
