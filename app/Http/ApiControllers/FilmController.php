@@ -23,7 +23,10 @@ class FilmController extends Controller
             $query = Film::with(['translations'])
                 ->where('is_hidden', false)
                 ->where('category', $category)
-                ->where('year', 2023);
+                ->where('year', 2023)
+                ->whereHas('countries', function ($q) {
+                    $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR']);
+                });
 
             if ($category === Film::CATEGORY_ANIME) {
                 $query = $query->whereNotNull('shiki_rating')
