@@ -19,8 +19,16 @@ class UpdateImdb extends Command
     {
         $getService = new GetFromUrlService();
 
+        dump(
+            Film::whereNotNull('imdb_id')
+                ->whereNull('imdb_votes')
+                ->orderBy('id', 'desc')
+                ->count() . ' left'
+        );
+
         $i = 0;
         Film::whereNotNull('imdb_id')
+            ->whereNull('imdb_votes')
             ->orderBy('id', 'desc')
             ->chunk(100, function (Collection $films) use (&$i, $getService) {
                 foreach ($films as $film) {
@@ -49,11 +57,11 @@ class UpdateImdb extends Command
                     $film->imdb_votes = $votes;
                     $film->save();
 
-                    sleep(3);
+                    sleep(4);
                 }
 
                 dump('processed ' . ++$i * 100);
-                sleep(15);
+                sleep(16);
             });
     }
 }
