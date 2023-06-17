@@ -27,13 +27,13 @@ class UpdateImdb extends Command
         Film::whereNotNull('imdb_id')
             ->whereNull('imdb_votes')
             ->orderBy('id', 'desc')
-            ->chunk(100, function (Collection $films) use (&$i) {
+            ->chunk(5, function (Collection $films) use (&$i) {
                 foreach ($films as $film) {
                     UpdateImdbJob::dispatch($film);
                 }
 
                 dump('processed ' . ++$i * 100);
-                sleep(100);
+                sleep(4);
             });
     }
 }
