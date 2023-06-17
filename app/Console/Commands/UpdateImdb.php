@@ -32,7 +32,7 @@ class UpdateImdb extends Command
                     UpdateImdbJob::dispatch($film);
                 }
 
-                dump('processed ' . ++$i * 100);
+                dump('processed ' . ++$i * 4);
                 sleep(1);
             });
     }
