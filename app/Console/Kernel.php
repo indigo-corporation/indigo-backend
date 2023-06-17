@@ -15,8 +15,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('backup:clean --disable-notifications')->daily()->at('01:00');
         $schedule->command('backup:run --only-db --disable-notifications')->daily()->at('01:02');
 
-        $schedule->command('store-films film')->hourly();
-        $schedule->command('store-films serial')->hourly();
+        $schedule->command('store-films film 1 3')->hourly();
+        $schedule->command('store-films serial 1 3')->hourly();
+
+        $schedule->command('horizon:snapshot')->everyFiveMinutes();
     }
 
     /**
