@@ -27,13 +27,13 @@ class UpdateDescription extends Command
         Film::where('category', '<>', 'anime')
             ->whereNotNull('imdb_id')
             ->orderBy('id', 'desc')
-            ->chunk(5, function (Collection $films) use (&$i) {
+            ->chunk(4, function (Collection $films) use (&$i) {
                 foreach ($films as $film) {
                     UpdateDescriptionJob::dispatch($film);
                 }
 
                 dump('processed ' . ++$i * 100);
-                sleep(4);
+                sleep(1);
             });
     }
 }
