@@ -49,7 +49,7 @@ class UpdateDescriptionJob implements ShouldQueue
                 ]
             ]);
 
-            sleep(1);
+            sleep(2);
         } catch (\Throwable $e) {
             throw $e;
         }
