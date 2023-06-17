@@ -17,11 +17,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
         parent::boot();
 
         Horizon::auth(function ($request) {
-            if (isset($request->let_me_go) && $request->let_me_go == 'ok'){
-                return true;
-            }else{
-                throw new UnauthorizedHttpException('Unauthorized');
-            }
+            return true;
         });
 
         // Horizon::routeSmsNotificationsTo('15556667777');
