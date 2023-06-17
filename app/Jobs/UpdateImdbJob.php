@@ -22,7 +22,7 @@ class UpdateImdbJob implements ShouldQueue
 
     private GetFromUrlService $getService;
 
-    public function __construct(string $film)
+    public function __construct(Film $film)
     {
         $this->film = $film;
         $this->getService = new GetFromUrlService();
