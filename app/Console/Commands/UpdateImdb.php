@@ -33,7 +33,7 @@ class UpdateImdb extends Command
                 }
 
                 dump('processed ' . ++$i * 100);
-                sleep(5);
+                sleep(60);
             });
     }
 }
