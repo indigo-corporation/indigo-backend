@@ -54,5 +54,7 @@ class UpdateImdbJob implements ShouldQueue
         $this->film->imdb_rating = $rating;
         $this->film->imdb_votes = $votes;
         $this->film->save();
+
+        sleep(5);
     }
 }
