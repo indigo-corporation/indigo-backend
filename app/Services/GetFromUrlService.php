@@ -25,6 +25,15 @@ class GetFromUrlService
         return $this->get($url, $dump);
     }
 
+    public function getTmdbFilmItemByImdbId($imdbId, $dump = false)
+    {
+        $url = env('TMDB_API') . 'find/' . $imdbId
+            . '?external_source=imdb_id&language=ru'
+            . '&api_key=' . env('TMDB_KEY');
+
+        return $this->get($url, $dump);
+    }
+
     public function getCdnFilmItems($page, $dump = false)
     {
         $url = env('VIDEOCDN_API') . 'movies'
