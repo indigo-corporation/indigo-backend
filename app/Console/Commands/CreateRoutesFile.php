@@ -20,7 +20,7 @@ class CreateRoutesFile extends Command
         file_put_contents($fileName, '');
 
         $fp = fopen($fileName, 'a+');
-        fwrite($fp, implode('\r\n', [
+        fwrite($fp, implode("\r\n", [
             '/',
             '/film',
             '/anime',
@@ -41,7 +41,7 @@ class CreateRoutesFile extends Command
                 $data = '';
 
                 foreach ($films as $film) {
-                    $data .= '/' . $film->category . '/' . $film->slug . '\r\n';
+                    $data .= '/' . $film->category . '/' . $film->slug . "\r\n";
                 }
 
                 $fp = fopen($fileName, 'a+');
