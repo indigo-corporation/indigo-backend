@@ -55,4 +55,9 @@ class UpdateImdbJob implements ShouldQueue
         $this->film->imdb_votes = $votes;
         $this->film->save();
     }
+
+    public function failed(\Exception $exception): void
+    {
+        sleep(60 * 10);
+    }
 }
