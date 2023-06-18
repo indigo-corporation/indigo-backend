@@ -19,6 +19,21 @@ class CreateRoutesFile extends Command
 
         file_put_contents($fileName, '');
 
+        $fp = fopen($fileName, 'a+');
+        fwrite($fp, implode('\r\n', [
+            '/',
+            '/film',
+            '/anime',
+            '/serial',
+            '/cartoon',
+            '/search-page',
+            '/support',
+            '/copyright',
+            '/send-reset-password',
+            '/404'
+        ]));
+        fclose($fp);
+
         $i = 0;
         Film::with(['translations'])
             ->orderBy('id', 'desc')
@@ -26,7 +41,7 @@ class CreateRoutesFile extends Command
                 $data = '';
 
                 foreach ($films as $film) {
-                    $data .= '/' . $film->category . '/' . $film->slug . "\r\n";
+                    $data .= '/' . $film->category . '/' . $film->slug . '\r\n';
                 }
 
                 $fp = fopen($fileName, 'a+');
