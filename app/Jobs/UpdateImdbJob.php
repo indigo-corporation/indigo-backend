@@ -30,15 +30,13 @@ class UpdateImdbJob implements ShouldQueue
 
     public function handle()
     {
-        $imdbData = $this->getService->getImdb($this->film->imdb_id, true);
-
-        if (!$imdbData) {
-            return;
-        }
-
-        dump($this->film->imdb_id);
-
         try {
+            $imdbData = $this->getService->getImdb($this->film->imdb_id, true);
+
+            if (!$imdbData) {
+                return;
+            }
+
             $rating = $imdbData->rating() ?: null;
             $votes = $imdbData->votes();
         } catch (\Throwable $e) {
@@ -51,10 +49,10 @@ class UpdateImdbJob implements ShouldQueue
             throw $e;
         }
 
+        dump($this->film->imdb_id);
+
         $this->film->imdb_rating = $rating;
         $this->film->imdb_votes = $votes;
         $this->film->save();
-
-        sleep(3);
     }
 }

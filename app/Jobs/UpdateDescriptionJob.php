@@ -9,7 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Str;
 
 class UpdateDescriptionJob implements ShouldQueue
 {
@@ -32,26 +31,24 @@ class UpdateDescriptionJob implements ShouldQueue
     {
         try {
             $tmdbData = $this->getService->getTmdbFilmItemByImdbId($this->film->imdb_id);
-
-            if (!isset($tmdbData->movie_results) || !$tmdbData->movie_results) {
-                return;
-            }
-
-            $tmdbFilm = ($tmdbData->movie_results)[0];
-
-            if (!$tmdbFilm->overview) return;
-
-            dump($this->film->imdb_id);
-
-            $this->film->update([
-                'ru' => [
-                    'overview' => $tmdbFilm->overview
-                ]
-            ]);
-
-            sleep(2);
         } catch (\Throwable $e) {
             throw $e;
         }
+
+        if (!isset($tmdbData->movie_results) || !$tmdbData->movie_results) {
+            return;
+        }
+
+        $tmdbFilm = ($tmdbData->movie_results)[0];
+
+        if (!$tmdbFilm->overview) return;
+
+        dump($this->film->imdb_id);
+
+        $this->film->update([
+            'ru' => [
+                'overview' => $tmdbFilm->overview
+            ]
+        ]);
     }
 }
