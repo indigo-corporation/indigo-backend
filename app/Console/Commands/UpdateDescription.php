@@ -43,7 +43,7 @@ class UpdateDescription extends Command
                     dump(
                         $left . ' left'
                     );
-                    sleep(60 * 2);
+                    sleep(60 * 4);
                 }
             });
     }
