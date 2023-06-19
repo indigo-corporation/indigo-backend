@@ -28,7 +28,7 @@ class UpdateDescription extends Command
         Film::where('category', '<>', 'anime')
             ->whereNotNull('imdb_id')
             ->orderBy('id', 'desc')
-            ->chunk(4, function (Collection $films) use (&$i, $chunkSize) {
+            ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize) {
                 foreach ($films as $film) {
                     UpdateDescriptionJob::dispatch($film);
                 }
@@ -37,7 +37,7 @@ class UpdateDescription extends Command
                 sleep(2);
 
                 if ($i * $chunkSize % 250 === 0) {
-                    dump(500 . ' - sleep');
+                    dump(250 . ' - sleep');
                     sleep(60 * 5);
                 }
             });
