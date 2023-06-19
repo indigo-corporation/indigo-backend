@@ -19,8 +19,6 @@ class CreateRoutesFile extends Command
         $path = '/var/www/indigofilms.online';
         $fileName = 'routes.txt';
 
-        file_put_contents($path . '/' . $fileName, '');
-
 //        $fp = fopen($path . '/' . $fileName, 'a+');
 //        fwrite($fp, implode("\r\n", [
 //            '/',
@@ -36,12 +34,14 @@ class CreateRoutesFile extends Command
 //        ]));
 //        fclose($fp);
 
-        $chunkSize = 10;
+        $chunkSize = 50;
         $i = 0;
         Film::with(['translations'])
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, $path, $fileName) {
-                dump('start processing ' . ++$i * $chunkSize);
+                file_put_contents($path . '/' . $fileName, '');
+
+                dump('start processing ' . $chunkSize);
                 $timeStart = now();
                 $data = '';
 
@@ -62,7 +62,7 @@ class CreateRoutesFile extends Command
 
                 $timeEnd = now();
                 dump('processed in ' . strtotime($timeEnd) - strtotime($timeStart));
-//                dump('processed ' . ++$i * $chunkSize);
+                dump('processed ' . ++$i * $chunkSize);
             });
 
 
