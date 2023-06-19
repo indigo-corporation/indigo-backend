@@ -23,7 +23,7 @@ class UpdateDescription extends Command
                 ->count() . ' left'
         );
 
-        $chunkSize = 5;
+        $chunkSize = 100;
         $i = 0;
         Film::where('category', '<>', 'anime')
             ->whereNotNull('imdb_id')
@@ -31,15 +31,12 @@ class UpdateDescription extends Command
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize) {
                 foreach ($films as $film) {
                     UpdateDescriptionJob::dispatchSync($film);
+                    sleep(1);
                 }
 
                 dump('processed ' . ++$i * $chunkSize);
-                sleep(3);
 
-                if ($i * $chunkSize % 250 === 0) {
-                    dump(250 . ' - sleep');
-                    sleep(60 * 5);
-                }
+                sleep(60 * 5);
             });
     }
 }
