@@ -55,12 +55,9 @@ class UpdateImdbJob implements ShouldQueue
         $this->film->imdb_rating = $rating;
         $this->film->imdb_votes = $votes;
         $this->film->save();
-    }
 
-    public function failed(\Exception $exception): void
-    {
         Process::run('php artisan horizon:pause');
-        sleep(60 * 5);
+        sleep(60);
         Process::run('php artisan horizon:continue');
     }
 }
