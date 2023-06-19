@@ -34,7 +34,7 @@ class CreateRoutesFile extends Command
 //        ]));
 //        fclose($fp);
 
-        $chunkSize = 150;
+        $chunkSize = 300;
         $i = 0;
         Film::with(['translations'])
             ->orderBy('id', 'desc')
