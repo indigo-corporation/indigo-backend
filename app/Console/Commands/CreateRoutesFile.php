@@ -34,7 +34,7 @@ class CreateRoutesFile extends Command
 //        ]));
 //        fclose($fp);
 
-        $chunkSize = 100;
+        $chunkSize = 150;
         $i = 0;
         Film::with(['translations'])
             ->orderBy('id', 'desc')
@@ -58,7 +58,7 @@ class CreateRoutesFile extends Command
                     ->start('ng run front-end:prerender --routes-file ' . $fileName);
 
                 while ($process->running()) {
-                    echo $process->latestOutput();
+//                    echo $process->latestOutput();
                     echo $process->latestErrorOutput();
                 }
 
@@ -70,8 +70,8 @@ class CreateRoutesFile extends Command
                 $timeEnd = now();
                 dump('processed in ' . strtotime($timeEnd) - strtotime($timeStart));
                 dump('processed ' . ++$i * $chunkSize);
+
+                sleep(30);
             });
-
-
     }
 }
