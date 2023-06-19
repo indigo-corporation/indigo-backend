@@ -36,7 +36,7 @@ class UpdateDescription extends Command
                 dump('processed ' . ++$i * $chunkSize);
                 sleep(1);
 
-                if ($i * $chunkSize % 500 === 0) {
+                if ($i * $chunkSize % 250 === 0) {
                     dump(500 . ' - sleep');
                     sleep(60 * 5);
                 }
