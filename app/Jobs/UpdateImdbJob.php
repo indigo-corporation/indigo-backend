@@ -55,9 +55,5 @@ class UpdateImdbJob implements ShouldQueue
         $this->film->imdb_rating = $rating;
         $this->film->imdb_votes = $votes;
         $this->film->save();
-
-        Artisan::call('horizon:pause');
-        sleep(60);
-        Artisan::call('horizon:continue');
     }
 }
