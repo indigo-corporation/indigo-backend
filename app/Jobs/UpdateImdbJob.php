@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
 class UpdateImdbJob implements ShouldQueue
@@ -56,8 +56,8 @@ class UpdateImdbJob implements ShouldQueue
         $this->film->imdb_votes = $votes;
         $this->film->save();
 
-        Process::run('php artisan horizon:pause');
+        Artisan::call('horizon:pause');
         sleep(60);
-        Process::run('php artisan horizon:continue');
+        Artisan::call('horizon:continue');
     }
 }
