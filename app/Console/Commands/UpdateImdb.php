@@ -36,7 +36,7 @@ class UpdateImdb extends Command
 
                 dump('processed ' . ++$i * $chunkSize);
 
-                sleep(60 * 5);
+                sleep(60);
             });
     }
 }
