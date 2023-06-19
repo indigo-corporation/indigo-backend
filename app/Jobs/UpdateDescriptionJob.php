@@ -51,9 +51,4 @@ class UpdateDescriptionJob implements ShouldQueue
             ]
         ]);
     }
-
-    public function failed(\Exception $exception): void
-    {
-        sleep(60 * 10);
-    }
 }
