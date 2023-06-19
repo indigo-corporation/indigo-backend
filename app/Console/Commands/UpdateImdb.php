@@ -16,11 +16,12 @@ class UpdateImdb extends Command
 
     public function handle()
     {
+        $left = Film::whereNotNull('imdb_id')
+            ->whereNull('imdb_votes')
+            ->orderBy('id', 'desc')
+            ->count();
         dump(
-            Film::whereNotNull('imdb_id')
-                ->whereNull('imdb_votes')
-                ->orderBy('id', 'desc')
-                ->count() . ' left'
+            $left . ' left'
         );
 
         $chunkSize = 100;
@@ -28,7 +29,7 @@ class UpdateImdb extends Command
         Film::whereNotNull('imdb_id')
             ->whereNull('imdb_votes')
             ->orderBy('id', 'desc')
-            ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize) {
+            ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, &$left) {
                 foreach ($films as $film) {
                     UpdateImdbJob::dispatchSync($film);
                     sleep(1);
@@ -36,7 +37,14 @@ class UpdateImdb extends Command
 
                 dump('processed ' . ++$i * $chunkSize);
 
-                sleep(60);
+                if ($i * $chunkSize % 1000 === 0) {
+                    $left -= 1000;
+
+                    dump(
+                        $left . ' left'
+                    );
+                    sleep(60);
+                }
             });
     }
 }

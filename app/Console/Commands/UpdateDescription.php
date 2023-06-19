@@ -16,11 +16,12 @@ class UpdateDescription extends Command
 
     public function handle()
     {
+        $left = Film::where('category', '<>', 'anime')
+            ->whereNotNull('imdb_id')
+            ->orderBy('id', 'desc')
+            ->count();
         dump(
-            Film::where('category', '<>', 'anime')
-                ->whereNotNull('imdb_id')
-                ->orderBy('id', 'desc')
-                ->count() . ' left'
+            $left . ' left'
         );
 
         $chunkSize = 100;
@@ -28,7 +29,7 @@ class UpdateDescription extends Command
         Film::where('category', '<>', 'anime')
             ->whereNotNull('imdb_id')
             ->orderBy('id', 'desc')
-            ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize) {
+            ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, &$left) {
                 foreach ($films as $film) {
                     UpdateDescriptionJob::dispatchSync($film);
                     sleep(1);
@@ -36,7 +37,14 @@ class UpdateDescription extends Command
 
                 dump('processed ' . ++$i * $chunkSize);
 
-                sleep(60);
+                if ($i * $chunkSize % 1000 === 0) {
+                    $left -= 1000;
+
+                    dump(
+                        $left . ' left'
+                    );
+                    sleep(60);
+                }
             });
     }
 }
