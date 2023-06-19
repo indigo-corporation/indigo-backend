@@ -60,7 +60,7 @@ class UpdateImdbJob implements ShouldQueue
     public function failed(\Exception $exception): void
     {
         Process::run('php artisan horizon:pause');
-        sleep(60 * 10);
+        sleep(60 * 5);
         Process::run('php artisan horizon:continue');
     }
 }
