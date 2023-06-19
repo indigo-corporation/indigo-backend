@@ -30,7 +30,7 @@ class UpdateImdb extends Command
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize) {
                 foreach ($films as $film) {
-                    UpdateImdbJob::dispatch($film);
+                    UpdateImdbJob::dispatchSync($film);
                 }
 
                 dump('processed ' . ++$i * $chunkSize);

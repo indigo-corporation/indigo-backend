@@ -30,7 +30,7 @@ class UpdateDescription extends Command
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize) {
                 foreach ($films as $film) {
-                    UpdateDescriptionJob::dispatch($film);
+                    UpdateDescriptionJob::dispatchSync($film);
                 }
 
                 dump('processed ' . ++$i * $chunkSize);
