@@ -41,6 +41,7 @@ class CreateRoutesFile extends Command
         Film::with(['translations'])
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, $path, $fileName) {
+                dump('start processing ' . $i * $chunkSize);
                 $timeStart = now();
                 $data = '';
 
@@ -56,12 +57,12 @@ class CreateRoutesFile extends Command
                     ->path($path)
                     ->run('ng run front-end:prerender --routes-file ' . $fileName);
 
-                echo $result->output();
-                echo $result->errorOutput();
+//                echo $result->output();
+//                echo $result->errorOutput();
 
                 $timeEnd = now();
-                dump('processed ' . $chunkSize . ' - time ' . strtotime($timeEnd) - strtotime($timeStart));
-                dump('processed ' . ++$i * $chunkSize);
+                dump('processed in ' . strtotime($timeEnd) - strtotime($timeStart));
+//                dump('processed ' . ++$i * $chunkSize);
             });
 
 
