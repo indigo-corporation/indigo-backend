@@ -34,7 +34,7 @@ class UpdateImdb extends Command
                 }
 
                 dump('processed ' . ++$i * $chunkSize);
-                sleep(2);
+                sleep(3);
 
                 if ($i * $chunkSize % 250 === 0) {
                     dump(250 . ' - sleep');
