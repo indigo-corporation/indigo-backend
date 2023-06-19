@@ -41,7 +41,7 @@ class CreateRoutesFile extends Command
         Film::with(['translations'])
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, $path, $fileName) {
-                dump('start processing ' . $i * $chunkSize);
+                dump('start processing ' . ++$i * $chunkSize);
                 $timeStart = now();
                 $data = '';
 
