@@ -35,7 +35,7 @@ class UpdateImdb extends Command
                 }
 
                 dump('processed ' . ++$i * $chunkSize);
-                sleep(2);
+                sleep(1);
 
                 if ($i * $chunkSize % 250 === 0) {
                     $left -= 250;
@@ -43,7 +43,7 @@ class UpdateImdb extends Command
                     dump(
                         $left . ' left'
                     );
-                    sleep(60 * 3);
+                    sleep(60);
                 }
             });
     }
