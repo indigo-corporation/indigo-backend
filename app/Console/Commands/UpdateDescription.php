@@ -32,10 +32,10 @@ class UpdateDescription extends Command
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, &$left) {
                 foreach ($films as $film) {
                     UpdateDescriptionJob::dispatch($film);
-                    sleep(1);
                 }
 
                 dump('processed ' . ++$i * $chunkSize);
+                sleep(2);
 
                 if ($i * $chunkSize % 250 === 0) {
                     $left -= 250;
@@ -43,7 +43,7 @@ class UpdateDescription extends Command
                     dump(
                         $left . ' left'
                     );
-                    sleep(60 * 5);
+                    sleep(60 * 2);
                 }
             });
     }
