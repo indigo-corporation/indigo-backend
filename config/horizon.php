@@ -190,7 +190,7 @@ return [
             'maxJobs' => 0,
             'memory' => 128,
             'tries' => 3,
-            'timeout' => 60*5,
+            'timeout' => 60*2,
             'nice' => 0,
         ],
     ],
