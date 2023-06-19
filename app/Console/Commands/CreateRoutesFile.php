@@ -36,10 +36,12 @@ class CreateRoutesFile extends Command
 //        ]));
 //        fclose($fp);
 
+        $chunkSize = 10;
         $i = 0;
         Film::with(['translations'])
             ->orderBy('id', 'desc')
-            ->chunk(10, function (Collection $films) use (&$i, $path, $fileName) {
+            ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, $path, $fileName) {
+                $timeStart = now();
                 $data = '';
 
                 foreach ($films as $film) {
@@ -57,7 +59,9 @@ class CreateRoutesFile extends Command
                 echo $result->output();
                 echo $result->errorOutput();
 
-                dump('processed ' . ++$i * 100);
+                $timeEnd = now();
+                dump('processed ' . $chunkSize . ' - time ' . strtotime($timeEnd) - strtotime($timeStart));
+                dump('processed ' . ++$i * $chunkSize);
             });
 
 
