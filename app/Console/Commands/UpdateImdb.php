@@ -23,7 +23,7 @@ class UpdateImdb extends Command
                 ->count() . ' left'
         );
 
-        $chunkSize = 4;
+        $chunkSize = 5;
         $i = 0;
         Film::whereNotNull('imdb_id')
             ->whereNull('imdb_votes')

@@ -23,7 +23,7 @@ class UpdateDescription extends Command
                 ->count() . ' left'
         );
 
-        $chunkSize = 4;
+        $chunkSize = 5;
         $i = 0;
         Film::where('category', '<>', 'anime')
             ->whereNotNull('imdb_id')
