@@ -24,26 +24,26 @@ class UpdateDescription extends Command
             $left . ' left'
         );
 
-        $chunkSize = 100;
+        $chunkSize = 5;
         $i = 0;
         Film::where('category', '<>', 'anime')
             ->whereNotNull('imdb_id')
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, &$left) {
                 foreach ($films as $film) {
-                    UpdateDescriptionJob::dispatchSync($film);
+                    UpdateDescriptionJob::dispatch($film);
                     sleep(1);
                 }
 
                 dump('processed ' . ++$i * $chunkSize);
 
-                if ($i * $chunkSize % 1000 === 0) {
-                    $left -= 1000;
+                if ($i * $chunkSize % 250 === 0) {
+                    $left -= 250;
 
                     dump(
                         $left . ' left'
                     );
-                    sleep(60);
+                    sleep(60 * 5);
                 }
             });
     }
