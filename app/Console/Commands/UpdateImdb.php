@@ -24,7 +24,7 @@ class UpdateImdb extends Command
             $left . ' left'
         );
 
-        $chunkSize = 5;
+        $chunkSize = 10;
         $i = 0;
         Film::whereNotNull('imdb_id')
             ->whereNull('imdb_votes')
@@ -37,8 +37,8 @@ class UpdateImdb extends Command
                 dump('processed ' . ++$i * $chunkSize);
                 sleep(1);
 
-                if ($i * $chunkSize % 250 === 0) {
-                    $left -= 250;
+                if ($i * $chunkSize % 500 === 0) {
+                    $left -= 500;
 
                     dump(
                         $left . ' left'
