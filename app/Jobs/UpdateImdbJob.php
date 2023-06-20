@@ -38,7 +38,7 @@ class UpdateImdbJob implements ShouldQueue
                 return;
             }
 
-            $rating = $imdbData->rating() ?: null;
+            $rating = $imdbData->rating() ? (float)$imdbData->rating() : null;
             $votes = $imdbData->votes();
         } catch (\Throwable $e) {
             if (Str::contains($e->getMessage(), 'Status code [404]')) {
