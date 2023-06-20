@@ -30,6 +30,7 @@ class FilmController extends Controller
                     ->orderBy('shiki_rating', 'DESC');
             } else {
                 $query = $query->whereNotNull('imdb_rating')
+                    ->where('imdb_votes', '>=', 1000)
                     ->whereHas('countries', function ($q) {
                         $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
                     })
