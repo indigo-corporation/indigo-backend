@@ -138,6 +138,8 @@ class Film extends Model implements TranslatableContract
 
     public const SORT_DIRECTION = 'desc';
 
+    public const IMDB_VOTES_MIN = 1000;
+
     public const THUMB_FOLDER = 'images/film_thumbs';
 
     public const THUMB_URL = 'storage/' . self::THUMB_FOLDER;

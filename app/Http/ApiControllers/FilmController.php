@@ -23,14 +23,14 @@ class FilmController extends Controller
             $query = Film::with(['translations'])
                 ->where('is_hidden', false)
                 ->where('category', $category)
-                ->where('year', 2023);
+                ->where('year', date("Y"));
 
             if ($category === Film::CATEGORY_ANIME) {
                 $query = $query->whereNotNull('shiki_rating')
                     ->orderBy('shiki_rating', 'DESC');
             } else {
                 $query = $query->whereNotNull('imdb_rating')
-                    ->where('imdb_votes', '>=', 1000)
+                    ->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN)
                     ->whereHas('countries', function ($q) {
                         $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
                     })
@@ -74,7 +74,7 @@ class FilmController extends Controller
             $query = $query->where('category', $category);
 
             if ($category !== Film::CATEGORY_ANIME) {
-                $query = $query->where('imdb_votes', '>=', 1000);
+                $query = $query->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN);
             }
         }
 
@@ -155,7 +155,7 @@ class FilmController extends Controller
             $query = $query->where('category', $category);
 
             if ($category !== Film::CATEGORY_ANIME) {
-                $query = $query->where('imdb_votes', '>=', 1000);
+                $query = $query->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN);
             }
         }
 
