@@ -51,11 +51,13 @@ class FilmStoreJob implements ShouldQueue
             return;
         }
 
-        dump($this->imdbId);
-
         try {
-            $rating = $imdbData->rating() ?: null;
+            $rating = $imdbData->rating() ? (float)$imdbData->rating() : null;
             $votes = $imdbData->votes();
+
+            if ($rating && $rating < 5) return;
+            if ($votes < 500) return;
+
             $posterUrl = $imdbData->photo(false) ?: null;
             $runtime = $imdbData->runtime() ?: null;
             $overview = $imdbData->plotoutline() ?: null;
@@ -75,6 +77,8 @@ class FilmStoreJob implements ShouldQueue
 //             $imdbData->actor_stars(),
 //             $imdbData->director(), // режиссеры
 //         );
+
+        dump($this->imdbId);
 
         $film = Film::create([
             'original_title' => $videocdnData->orig_title,
