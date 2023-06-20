@@ -72,6 +72,10 @@ class FilmController extends Controller
 
         if ($category) {
             $query = $query->where('category', $category);
+
+            if ($category !== Film::CATEGORY_ANIME) {
+                $query = $query->where('imdb_votes', '>=', 1000);
+            }
         }
 
         $query = $query->sort($sortField, $sortDirection);
@@ -149,6 +153,10 @@ class FilmController extends Controller
 
         if ($category) {
             $query = $query->where('category', $category);
+
+            if ($category !== Film::CATEGORY_ANIME) {
+                $query = $query->where('imdb_votes', '>=', 1000);
+            }
         }
 
         $query = $query->sort($sortField, $sortDirection);
