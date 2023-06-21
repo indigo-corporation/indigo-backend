@@ -136,6 +136,8 @@ class SerialStoreJob implements ShouldQueue
             }
         }
 
+        UpdateDescriptionJob::dispatch($film);
+
         dump('stored');
     }
 }

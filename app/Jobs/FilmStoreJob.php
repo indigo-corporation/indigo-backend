@@ -136,6 +136,8 @@ class FilmStoreJob implements ShouldQueue
             }
         }
 
+        UpdateDescriptionJob::dispatch($film);
+
         dump('stored');
     }
 }
