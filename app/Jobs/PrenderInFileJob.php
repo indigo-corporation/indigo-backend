@@ -41,7 +41,7 @@ class PrenderInFileJob implements ShouldQueue
 
         $process = Process::forever()
             ->path($path)
-            ->start('ng run front-end:prerender --routes-file ' . $fileName);
+            ->start('ng run front-end:prerender --no-guess-routes --routes-file ' . $fileName);
 
         while ($process->running()) {
             echo $process->latestOutput();
