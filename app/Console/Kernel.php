@@ -12,16 +12,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('store-films film 1 2')->hourly();
+        $schedule->command('store-films serial 1 2')->hourly();
+
         $schedule->command('store-films film 1 10')->daily()->at('00:40');
         $schedule->command('store-films serial 1 10')->daily()->at('00:45');
 
         $schedule->command('backup:clean --disable-notifications')->daily()->at('01:00');
         $schedule->command('backup:run --only-db --disable-notifications')->daily()->at('01:02');
-
-        $schedule->command('store-films film 1 2')->hourly();
-        $schedule->command('store-films serial 1 2')->hourly();
-
-        $schedule->command('prerender-route 29154')->everyFiveMinutes();
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
     }
