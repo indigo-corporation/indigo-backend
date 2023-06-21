@@ -31,7 +31,7 @@ class UpdateAnimeDescription extends Command
                     $film->save();
                 }
 
-                if ($i * $chunkSize % 500 === 0) {
+                if (++$i * $chunkSize % 500 === 0) {
                     $left -= 500;
 
                     dump(
