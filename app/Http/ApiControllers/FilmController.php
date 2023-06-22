@@ -10,6 +10,7 @@ use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\Film\Film;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class FilmController extends Controller
 {
@@ -19,44 +20,48 @@ class FilmController extends Controller
 
     public function main()
     {
-        foreach (Film::CATEGORIES as $category) {
-            $query = Film::with(['translations'])
-                ->where('is_hidden', false)
-                ->where('category', $category)
-                ->where('year', date("Y"));
+        $response = Cache::remember('main', now()->addMinutes(10), function () {
+            foreach (Film::CATEGORIES as $category) {
+                $query = Film::with(['translations'])
+                    ->where('is_hidden', false)
+                    ->where('category', $category)
+                    ->where('year', date("Y"));
 
-            if ($category === Film::CATEGORY_ANIME) {
-                $query = $query->whereNotNull('shiki_rating')
-                    ->orderBy('shiki_rating', 'DESC');
-            } else {
-                $query = $query->whereNotNull('imdb_rating')
-                    ->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN)
-                    ->whereHas('countries', function ($q) {
-                        $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
-                    })
-                    ->orderBy('imdb_rating', 'DESC');
+                if ($category === Film::CATEGORY_ANIME) {
+                    $query = $query->whereNotNull('shiki_rating')
+                        ->orderBy('shiki_rating', 'DESC');
+                } else {
+                    $query = $query->whereNotNull('imdb_rating')
+                        ->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN)
+                        ->whereHas('countries', function ($q) {
+                            $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
+                        })
+                        ->orderBy('imdb_rating', 'DESC');
+                }
+
+                $$category = $query->limit(self::FILMS_LIMIT_MAIN)->get();
             }
 
-            $$category = $query->limit(self::FILMS_LIMIT_MAIN)->get();
-        }
-
-        $new = [];
-        $iCount = round(self::FILMS_LIMIT_MAIN / count(Film::CATEGORIES));
-        for ($i = 0; $i <= $iCount; $i++) {
-            foreach (Film::CATEGORIES as $category) {
-                if (isset($$category[$i])) {
-                    $new[] = $$category[$i];
+            $new = [];
+            $iCount = round(self::FILMS_LIMIT_MAIN / count(Film::CATEGORIES));
+            for ($i = 0; $i <= $iCount; $i++) {
+                foreach (Film::CATEGORIES as $category) {
+                    if (isset($$category[$i])) {
+                        $new[] = $$category[$i];
+                    }
                 }
             }
-        }
-        $new = collect($new)->shuffle();
+            $new = collect($new)->shuffle();
 
-        $response = [
-            'new' => FilmShortResource::collection($new)
-        ];
-        foreach (Film::CATEGORIES as $category) {
-            $response[$category] = FilmShortResource::collection($$category->shuffle());
-        }
+            $response = [
+                'new' => FilmShortResource::collection($new)
+            ];
+            foreach (Film::CATEGORIES as $category) {
+                $response[$category] = FilmShortResource::collection($$category->shuffle());
+            }
+
+            return $response;
+        });
 
         return response()->success($response);
     }
