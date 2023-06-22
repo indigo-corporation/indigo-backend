@@ -92,7 +92,10 @@ class FilmController extends Controller
 
     public function show($filmId)
     {
-        $film = Film::where('is_hidden', false)->find((int)$filmId);
+        $film = Cache::remember('film:' . $filmId, now()->addHours(12), function () use ($filmId) {
+            return Film::where('is_hidden', false)->find((int)$filmId);
+        });
+
         if (!$film) {
             abort(404);
         }
