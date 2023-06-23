@@ -6,6 +6,7 @@ use App\Jobs\PrenderInFileJob;
 use App\Models\Film\Film;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Process;
 
 class PrerenderRoutes extends Command
 {
@@ -16,29 +17,35 @@ class PrerenderRoutes extends Command
 
     public function handle()
     {
-        $chunkSize = 250;
-        $i = 0;
+        $path = '/var/www/indigofilms.online';
+        $fileName = 'routes.txt';
+        $data = '';
 
+        file_put_contents($path . '/' . $fileName, $data);
+
+        $chunkSize = 250;
         Film::with(['translations'])
             ->orderBy('id', 'desc')
-            ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize) {
-                $data = [];
+            ->chunk($chunkSize, function (Collection $films) use ($path, $fileName) {
+                $data = '';
                 foreach ($films as $film) {
-                    $data[] = '/' . $film->category . '/' . $film->slug;
+                    $data = '/' . $film->category . '/' . $film->slug . "\r\n";
                 }
 
-                if ($data) {
-                    dump('start processing ' . $chunkSize);
-                    $timeStart = now();
-
-                    PrenderInFileJob::dispatchSync($data);
-
-                    $timeEnd = now();
-                    dump('processed in ' . strtotime($timeEnd) - strtotime($timeStart));
-
-                    dump('processed ' . ++$i * $chunkSize);
-                    sleep(30);
-                }
+                $fp = fopen($path . '/' . $fileName, 'a+');
+                fwrite($fp, $data);
+                fclose($fp);
             });
+
+        $process = Process::forever()
+            ->path($path)
+            ->start('ng run front-end:prerender --no-guess-routes --routes-file ' . $fileName);
+
+        while ($process->running()) {
+            echo $process->latestOutput();
+            echo $process->latestErrorOutput();
+        }
+
+        $result = $process->wait();
     }
 }
