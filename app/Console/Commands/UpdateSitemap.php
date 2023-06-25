@@ -2,13 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\PrenderInFileJob;
 use App\Models\Film\Film;
 use App\Models\Genre\Genre;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Process;
 
 class UpdateSitemap extends Command
 {
@@ -16,55 +14,74 @@ class UpdateSitemap extends Command
 
     protected $description = 'update-sitemap';
 
+    private $sitemapsCount;
     const DOMEN = 'https://indigofilms.online';
 
+    const PATH = '/var/www/indigofilms.online';
+
+    const PER_FILE = 25000;
 
     public function handle(): void
     {
-        $path = '/var/www/indigofilms.online';
-        $fileName = 'sitemap.xml';
-
-        $data = '<?xml version="1.0" encoding="UTF-8"?>
-                <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-                <sitemap>
-                <loc>' . self::DOMEN . '/sitemap1.xml</loc>
-                <lastmod>' . Carbon::now()->toDateString() . '</lastmod>
-                </sitemap>
-                <sitemap>
-                <loc>' . self::DOMEN . '/sitemap2.xml</loc>
-                <lastmod>' . Carbon::now()->toDateString() . '</lastmod>
-                </sitemap>
-                <sitemap>
-                <loc>' . self::DOMEN . '/sitemap3.xml</loc>
-                <lastmod>' . Carbon::now()->toDateString() . '</lastmod>
-                </sitemap>
-                </sitemapindex>';
-
-        file_put_contents($path . '/' . $fileName, $data);
-
         $this->siteMap1();
+
+        $filmsCount = Film::count();
+        $needFiles = (int)ceil($filmsCount / self::PER_FILE);
+
+        for ($i = 1; $i <= $needFiles; $i++) {
+            $this->siteMapFilms($i);
+        }
+
+        $this->siteMapMain($needFiles);
     }
 
+    private function siteMapMain(int $filmFilesCount): void
+    {
+        $fileName = 'sitemap.xml';
+        file_put_contents(self::PATH . '/' . $fileName, '');
+
+        $data = '<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<sitemap>
+<loc>' . self::DOMEN . '/sitemap1.xml</loc>
+<lastmod>' . Carbon::now()->toDateString() . '</lastmod>
+</sitemap>';
+
+        for ($i = 1; $i <= $filmFilesCount; $i++) {
+            $data .= '<sitemap>
+<loc>' . self::DOMEN . '/sitemap' . $i + 1 . '.xml</loc>
+<lastmod>' . Carbon::now()->toDateString() . '</lastmod>
+</sitemap>';
+        }
+
+        $data .= '</sitemapindex>';
+        file_put_contents(self::PATH . '/' . $fileName, $data);
+    }
 
     private function siteMap1(): void
     {
-        $path = '/var/www/indigofilms.online';
         $fileName = 'sitemap1.xml';
+        file_put_contents(self::PATH . '/' . $fileName, '');
 
-        $fp = fopen($path . '/' . $fileName, 'a+');
+        $fp = fopen(self::PATH . '/' . $fileName, 'a+');
 
-        $data = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        $data = '<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+        $data .= $this->getXml(self::DOMEN, 1);
 
         foreach (Film::CATEGORIES as $category) {
-            $url = self::DOMEN . '/' . $category;
-            $data .= $this->getXml($url, 0.7);
+            $url = $this->getCategoryUrl($category);
+            $data .= $this->getXml($url, 0.8);
+        }
 
-            $genres = Genre::where('is_anime', $category === Film::CATEGORY_ANIME)
+        foreach (Film::CATEGORIES as $category) {
+            $genreSlugs = Genre::where('is_anime', $category === Film::CATEGORY_ANIME)
                 ->pluck('slug')
                 ->toArray();
 
-            foreach ($genres as $genre) {
-                $url = self::DOMEN . '/' . $category . '/genre/' . $genre;
+            foreach ($genreSlugs as $slug) {
+                $url = $this->getGenreUrl($category, $slug);
                 $data .= $this->getXml($url, 0.7);
             }
         }
@@ -75,8 +92,69 @@ class UpdateSitemap extends Command
         fclose($fp);
     }
 
-    private function getXml(string $url, float $priority): string
+    private function siteMapFilms(int $number): void
     {
-        return '<url><loc>' . $url . '</loc><lastmod>' . Carbon::now()->toDateString() . '</lastmod><priority>' . $priority . '</priority></url>';
+        $fileName = 'sitemap' . $number + 1 . '.xml';
+        file_put_contents(self::PATH . '/' . $fileName, '');
+
+        $fp = fopen(self::PATH . '/' . $fileName, 'a+');
+
+        $data = '<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        fwrite($fp, $data);
+
+        $filmIds = Film::orderBy('id', 'desc')
+            ->offset(self::PER_FILE * ($number - 1))
+            ->limit(self::PER_FILE)
+            ->pluck('id');
+
+        $chunkSize = 250;
+        $i = 0;
+        Film::with(['translations'])
+            ->where('id', '>=', $filmIds->last())
+            ->where('id', '<=', $filmIds->first())
+            ->orderBy('id', 'desc')
+            ->chunk($chunkSize, function (Collection $films) use (&$fp, &$i, $chunkSize) {
+                $data = '';
+                foreach ($films as $film) {
+                    $url = $this->getFilmUrl($film->category, $film->slug);
+                    $data .= $this->getXml($url, 0.5);
+                }
+
+                dump(
+                    $chunkSize * ++$i
+                );
+
+                fwrite($fp, $data);
+            });
+
+        $data = '</urlset>';
+        fwrite($fp, $data);
+
+        fclose($fp);
+    }
+
+    private function getXml(string $url, float $priority = 0.5): string
+    {
+        return '<url>
+<loc>' . $url . '</loc>
+<lastmod>' . Carbon::now()->toDateString() . '</lastmod>
+<priority>' . $priority . '</priority>
+</url>';
+    }
+
+    private function getCategoryUrl(string $category): string
+    {
+        return self::DOMEN . '/' . $category;
+    }
+
+    private function getGenreUrl(string $category, string $slug): string
+    {
+        return self::DOMEN . '/' . $category . '/genre/' . $slug;
+    }
+
+    private function getFilmUrl(string $category, string $slug): string
+    {
+        return self::DOMEN . '/' . $category . '/' . $slug;
     }
 }
