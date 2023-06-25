@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\PrenderInFileJob;
 use App\Models\Film\Film;
+use App\Models\Genre\Genre;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Process;
@@ -23,6 +23,24 @@ class PrerenderRoutes extends Command
         file_put_contents($path . '/' . $fileName, '');
 
         $fp = fopen($path . '/' . $fileName, 'a+');
+
+        $data = '/' . "\r\n";
+
+        foreach (Film::CATEGORIES as $category) {
+            $data .= '/' . $category . "\r\n";
+        }
+
+        foreach (Film::CATEGORIES as $category) {
+            $genreSlugs = Genre::where('is_anime', $category === Film::CATEGORY_ANIME)
+                ->pluck('slug')
+                ->toArray();
+
+            foreach ($genreSlugs as $slug) {
+                $data .= '/' . $category . '/' . $slug . "\r\n";
+            }
+        }
+
+        fwrite($fp, $data);
 
         $chunkSize = 250;
         $i = 0;
