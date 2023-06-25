@@ -110,6 +110,7 @@ Route::prefix('films')->group(function () {
     Route::get('main', [FilmController::class, 'main']);
     Route::get('search', [FilmController::class, 'search']);
     Route::get('{film}/get_comments', [FilmController::class, 'getComments']);
+    Route::get('{film}/recommendations', [FilmController::class, 'recommendations']);
     Route::get('genre/{id}', [FilmController::class, 'getByGenre']);
 });
 Route::resource('films', FilmController::class);

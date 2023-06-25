@@ -33,9 +33,6 @@ class FilmController extends Controller
                 } else {
                     $query = $query->whereNotNull('imdb_rating')
                         ->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN)
-                        ->whereHas('countries', function ($q) {
-                            $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
-                        })
                         ->orderBy('imdb_rating', 'DESC');
                 }
 
@@ -90,7 +87,7 @@ class FilmController extends Controller
         );
     }
 
-    public function show($filmId)
+    public function show(string $filmId)
     {
         $film = Cache::remember('film:' . $filmId, now()->addHours(12), function () use ($filmId) {
             return Film::where('is_hidden', false)->find((int)$filmId);
@@ -172,5 +169,53 @@ class FilmController extends Controller
         return response()->success_paginated(
             new PaginatedCollection($query->paginate(self::FILMS_PER_PAGE), FilmShortResource::class)
         );
+    }
+
+    public function recommendations(string $filmId)
+    {
+        $recommendations = Cache::remember('film_recommendations:' . $filmId, now()->addHours(6), function () use ($filmId) {
+            $recommendations = [];
+            $film = Film::with(['genres'])->find((int)$filmId);
+
+            if($film) {
+                $query = Film::with(['translations'])
+                    ->where('category', $film->category)
+                    ->where('is_hidden', false);
+
+                if ($film->genres->isNotEmpty()) {
+                    $genre = $film->genres->first();
+
+                    $query = $query
+                        ->whereHas('genres', function ($query) use ($genre) {
+                            $query->where('genres.id', $genre->id);
+                        });
+                }
+
+                if ($film->year) {
+                    $query = $query
+                        ->where('year', '>=', $film->year - 5)
+                        ->where('year', '<=', $film->year + 5);
+                }
+
+                if ($film->category === Film::CATEGORY_ANIME) {
+                    $query = $query->whereNotNull('shiki_rating')
+                        ->orderBy('shiki_rating', 'DESC');
+                } else {
+                    $query = $query->whereNotNull('imdb_rating')
+                        ->where('imdb_votes', '>=', 10000)
+                        ->orderBy('imdb_rating', 'DESC');
+                }
+
+                $recommendations = $query
+                    ->limit(20)
+                    ->get();
+            }
+
+            return $recommendations
+                ? collect($recommendations)->shuffle()->take(6)
+                : collect();
+        });
+
+        return response()->success(FilmShortResource::collection($recommendations));
     }
 }
