@@ -24,12 +24,6 @@ class PrerenderRoutes extends Command
 
         $fp = fopen($path . '/' . $fileName, 'a+');
 
-        $data = '/' . "\r\n";
-
-        foreach (Film::CATEGORIES as $category) {
-            $data .= '/' . $category . "\r\n";
-        }
-
         foreach (Film::CATEGORIES as $category) {
             $genreSlugs = Genre::where('is_anime', $category === Film::CATEGORY_ANIME)
                 ->pluck('slug')
