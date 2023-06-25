@@ -74,7 +74,7 @@ class StoreFilms extends Command
         $items = match ($this->category) {
             Film::CATEGORY_FILM => $this->getService->getCdnFilmItems($this->page, true),
             Film::CATEGORY_SERIAL => $this->getService->getCdnSerialItems($this->page, true),
-            Film::CATEGORY_ANIME => $this->getService->getShikiItems($this->page, true),
+            Film::CATEGORY_ANIME => $this->getService->getKodikList(),
         };
 
         $idsExists = match ($this->category) {
@@ -84,11 +84,11 @@ class StoreFilms extends Command
 
         $idField = match ($this->category) {
             Film::CATEGORY_FILM, Film::CATEGORY_SERIAL => 'imdb_id',
-            Film::CATEGORY_ANIME => 'id',
+            Film::CATEGORY_ANIME => 'shikimori_id',
         };
 
         foreach ($items as $item) {
-            if ($item->$idField) {
+            if (isset($item->$idField) && $item->$idField) {
                 if (in_array($item->$idField, $idsExists)) {
                     if ($this->onlyNew) {
                         return false;
@@ -119,7 +119,11 @@ class StoreFilms extends Command
 
     private function getShikiExists($items)
     {
-        $shikiIds = collect($items)->pluck('id')->toArray();
+        $shikiIds = collect($items)->pluck('shikimori_id')->toArray();
+
+        $shikiIds = array_filter($shikiIds, function ($value) {
+            return $value !== null;
+        });
 
         return Film::whereIn('shiki_id', $shikiIds)->pluck('shiki_id')->toArray();
     }

@@ -74,6 +74,18 @@ class GetFromUrlService
         return isset($shikiResponse->id) ? $shikiResponse : null;
     }
 
+    public function getKodikList($sort = 'updated_at', $dump = false)
+    {
+        $url = env('KODIK_API') . 'list'
+            . '?token=' . env('KODIK_TOKEN')
+            . '&limit=' . 100
+            . '&sort=' . $sort;
+
+        $kodikResponse = $this->get($url, $dump);
+
+        return $kodikResponse->results;
+    }
+
     public function getKodik($shikiId, $dump = false)
     {
         $url = env('KODIK_API') . 'search'
