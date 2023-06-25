@@ -19,23 +19,29 @@ class PrerenderRoutes extends Command
     {
         $path = '/var/www/indigofilms.online';
         $fileName = 'routes.txt';
-        $data = '';
 
-        file_put_contents($path . '/' . $fileName, $data);
+        file_put_contents($path . '/' . $fileName, '');
+
+        $fp = fopen($path . '/' . $fileName, 'a+');
 
         $chunkSize = 250;
+        $i = 0;
         Film::with(['translations'])
             ->orderBy('id', 'desc')
-            ->chunk($chunkSize, function (Collection $films) use ($path, $fileName) {
+            ->chunk($chunkSize, function (Collection $films) use (&$fp, &$i, $chunkSize) {
                 $data = '';
                 foreach ($films as $film) {
-                    $data = '/' . $film->category . '/' . $film->slug . "\r\n";
+                    $data .= '/' . $film->category . '/' . $film->slug . "\r\n";
                 }
 
-                $fp = fopen($path . '/' . $fileName, 'a+');
+                dump(
+                    $chunkSize * ++$i
+                );
+
                 fwrite($fp, $data);
-                fclose($fp);
             });
+
+        fclose($fp);
 
         $process = Process::forever()
             ->path($path)
