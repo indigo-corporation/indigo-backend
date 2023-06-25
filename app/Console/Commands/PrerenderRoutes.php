@@ -36,7 +36,7 @@ class PrerenderRoutes extends Command
                 ->toArray();
 
             foreach ($genreSlugs as $slug) {
-                $data .= '/' . $category . '/' . $slug . "\r\n";
+                $data .= '/' . $category . '/genre/' . $slug . "\r\n";
             }
         }
 
