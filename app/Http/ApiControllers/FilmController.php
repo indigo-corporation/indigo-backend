@@ -33,6 +33,9 @@ class FilmController extends Controller
                 } else {
                     $query = $query->whereNotNull('imdb_rating')
                         ->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN)
+                        ->whereHas('countries', function ($q) {
+                            $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
+                        })
                         ->orderBy('imdb_rating', 'DESC');
                 }
 
