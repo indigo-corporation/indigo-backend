@@ -24,19 +24,19 @@ class PrerenderRoutes extends Command
 
         $fp = fopen($path . '/' . $fileName, 'a+');
 
-        $data = '';
-
-        foreach (Film::CATEGORIES as $category) {
-            $genreSlugs = Genre::where('is_anime', $category === Film::CATEGORY_ANIME)
-                ->pluck('slug')
-                ->toArray();
-
-            foreach ($genreSlugs as $slug) {
-                $data .= '/' . $category . '/genre/' . $slug . "\r\n";
-            }
-        }
-
-        fwrite($fp, $data);
+//        $data = '';
+//
+//        foreach (Film::CATEGORIES as $category) {
+//            $genreSlugs = Genre::where('is_anime', $category === Film::CATEGORY_ANIME)
+//                ->pluck('slug')
+//                ->toArray();
+//
+//            foreach ($genreSlugs as $slug) {
+//                $data .= '/' . $category . '/genre/' . $slug . "\r\n";
+//            }
+//        }
+//
+//        fwrite($fp, $data);
 
         $chunkSize = 250;
         $i = 0;
