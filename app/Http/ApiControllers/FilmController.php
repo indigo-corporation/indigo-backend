@@ -201,29 +201,29 @@ class FilmController extends Controller
                         ->where('year', '<=', $film->year + 5);
                 }
 
-                $countryCode = '';
-                foreach ($film->countries as $country) {
-                    if (in_array($country->iso2, ['IN', 'RU', 'CN', 'KR', 'JP', 'TR'])) {
-                        $countryCode = $country->iso2;
-
-                        break;
-                    }
-                }
-
-                if ($countryCode) {
-                    $query = $query->whereHas('countries', function ($q) use ($countryCode) {
-                        $q->where('iso2', $countryCode);
-                    });
-                } else {
-                    $query = $query->whereHas('countries', function ($q) {
-                        $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
-                    });
-                }
-
                 if ($film->category === Film::CATEGORY_ANIME) {
                     $query = $query->whereNotNull('shiki_rating')
                         ->orderBy('shiki_rating', 'DESC');
                 } else {
+                    $countryCode = '';
+                    foreach ($film->countries as $country) {
+                        if (in_array($country->iso2, ['IN', 'RU', 'CN', 'KR', 'JP', 'TR'])) {
+                            $countryCode = $country->iso2;
+
+                            break;
+                        }
+                    }
+
+                    if ($countryCode) {
+                        $query = $query->whereHas('countries', function ($q) use ($countryCode) {
+                            $q->where('iso2', $countryCode);
+                        });
+                    } else {
+                        $query = $query->whereHas('countries', function ($q) {
+                            $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
+                        });
+                    }
+
                     $query = $query->whereNotNull('imdb_rating')
                         ->where('imdb_votes', '>=', 10000)
                         ->orderBy('imdb_rating', 'DESC');
