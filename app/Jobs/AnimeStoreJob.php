@@ -57,6 +57,9 @@ class AnimeStoreJob implements ShouldQueue
             }
         }
 
+        $re = '/(\[.*?\])/m';
+        $description = preg_replace($re, '', $shikiData->description);
+
         dump($this->shikiId);
 
         $film = Film::create([
@@ -74,7 +77,7 @@ class AnimeStoreJob implements ShouldQueue
             'is_cartoon' => true,
             'ru' => [
                 'title' => $shikiData->russian,
-                'overview' => $shikiData->description,
+                'overview' => $description,
             ]
         ]);
 
