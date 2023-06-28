@@ -102,8 +102,6 @@ class StoreFilms extends Command
                     Film::CATEGORY_SERIAL => SerialStoreJob::dispatch($item->$idField),
                     Film::CATEGORY_ANIME => AnimeStoreJob::dispatch($item->$idField)
                 };
-
-                sleep(5);
             }
         }
 
