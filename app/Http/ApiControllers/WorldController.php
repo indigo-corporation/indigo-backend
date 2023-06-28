@@ -2,11 +2,20 @@
 
 namespace App\Http\ApiControllers;
 
+use App\Http\Resources\CountryResource;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class WorldController extends Controller
 {
+    public function filmCountries(Request $request)
+    {
+        $countries = Country::whereHas('films')->get();
+
+        return response()->success(CountryResource::collection($countries));
+    }
+
     public function countriesForSelect(Request $request)
     {
         $query = DB::table('countries')->select(['id', 'name']);

@@ -118,6 +118,7 @@ Route::resource('films', FilmController::class);
 Route::resource('genres', GenreController::class);
 
 Route::prefix('world')->group(function () {
+    Route::get('film-countries', [WorldController::class, 'filmCountries']);
     Route::get('countries-for-select', [WorldController::class, 'countriesForSelect']);
     Route::get('cities-for-select', [WorldController::class, 'citiesForSelect']);
 });
