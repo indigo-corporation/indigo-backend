@@ -98,9 +98,9 @@ class StoreFilms extends Command
                 }
 
                 match ($this->category) {
-                    Film::CATEGORY_FILM => FilmStoreJob::dispatchSync($item->$idField),
-                    Film::CATEGORY_SERIAL => SerialStoreJob::dispatchSync($item->$idField),
-                    Film::CATEGORY_ANIME => AnimeStoreJob::dispatchSync($item->$idField)
+                    Film::CATEGORY_FILM => FilmStoreJob::dispatch($item->$idField),
+                    Film::CATEGORY_SERIAL => SerialStoreJob::dispatch($item->$idField),
+                    Film::CATEGORY_ANIME => AnimeStoreJob::dispatch($item->$idField)
                 };
 
                 sleep(5);
