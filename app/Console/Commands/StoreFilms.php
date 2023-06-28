@@ -65,7 +65,7 @@ class StoreFilms extends Command
             }
 
             dump('ok');
-            sleep(10);
+            sleep(30);
         }
     }
 
