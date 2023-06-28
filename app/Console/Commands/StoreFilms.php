@@ -65,7 +65,10 @@ class StoreFilms extends Command
             }
 
             dump('ok');
-            sleep(30);
+
+            if ($p != $lastPage) {
+                sleep(30);
+            }
         }
     }
 
