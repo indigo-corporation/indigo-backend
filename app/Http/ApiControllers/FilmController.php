@@ -176,12 +176,13 @@ class FilmController extends Controller
 
     public function recommendations(string $filmId)
     {
-        $recommendations = Cache::remember('film_recommendations:' . $filmId, now()->addHours(6), function () use ($filmId) {
+        $recommendations = Cache::remember('film_recommendations:' . $filmId, now()->addHours(3), function () use ($filmId) {
             $recommendations = [];
             $film = Film::with(['genres'])->find((int)$filmId);
 
             if($film) {
                 $query = Film::with(['translations'])
+                    ->where('id', '<>', $film->id)
                     ->where('category', $film->category)
                     ->where('is_hidden', false);
 
@@ -198,6 +199,25 @@ class FilmController extends Controller
                     $query = $query
                         ->where('year', '>=', $film->year - 5)
                         ->where('year', '<=', $film->year + 5);
+                }
+
+                $countryCode = '';
+                foreach ($film->countries as $country) {
+                    if (in_array($country->iso2, ['IN', 'RU', 'CN', 'KR', 'JP', 'TR'])) {
+                        $countryCode = $country->iso2;
+
+                        break;
+                    }
+                }
+
+                if ($countryCode) {
+                    $query = $query->whereHas('countries', function ($q) use ($countryCode) {
+                        $q->where('iso2', $countryCode);
+                    });
+                } else {
+                    $query = $query->whereHas('countries', function ($q) {
+                        $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
+                    });
                 }
 
                 if ($film->category === Film::CATEGORY_ANIME) {
