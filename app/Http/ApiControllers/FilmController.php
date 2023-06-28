@@ -69,24 +69,25 @@ class FilmController extends Controller
     public function index(FilmIndexRequest $request)
     {
         $category = $request->get('category');
+        $genreId = $request->get('genre_id');
+        $year = $request->get('year');
+        $countryId = $request->get('country_id');
+
         $sortField = $request->get('sort_field', Film::SORT_FIELD);
         $sortDirection = $request->get('sort_direction', Film::SORT_DIRECTION);
 
-        $query = Film::with(['translations', 'countries'])
-            ->where('is_hidden', false);
-
-        if ($category) {
-            $query = $query->where('category', $category);
-
-            if ($category !== Film::CATEGORY_ANIME) {
-                $query = $query->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN);
-            }
-        }
-
-        $query = $query->sort($sortField, $sortDirection);
+        $films = Film::getList(
+            $category,
+            $genreId,
+            $year,
+            $countryId,
+            $sortField,
+            $sortDirection,
+            self::FILMS_PER_PAGE
+        );
 
         return response()->success_paginated(
-            new PaginatedCollection($query->paginate(self::FILMS_PER_PAGE), FilmResource::class)
+            new PaginatedCollection($films, FilmResource::class)
         );
     }
 

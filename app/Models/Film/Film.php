@@ -251,4 +251,46 @@ class Film extends Model implements TranslatableContract
 
         $this->save();
     }
+
+    public static function getList(
+        ?string $category,
+        ?int $genreId,
+        ?int $year,
+        ?int $countryId,
+        string $sortField,
+        string $sortDirection,
+        int $perPage
+    )
+    {
+        $query = Film::with(['translations', 'countries'])
+            ->where('films.is_hidden', false);
+
+        if ($category) {
+            $query = $query->where('films.category', $category);
+
+            if ($category !== Film::CATEGORY_ANIME) {
+                $query = $query->where('films.imdb_votes', '>=', Film::IMDB_VOTES_MIN);
+            }
+        }
+
+        if ($genreId) {
+            $query = $query->whereHas('genres', function ($query) use ($genreId) {
+                $query->where('genres.id', $genreId);
+            });
+        }
+
+        if ($year) {
+            $query = $query->where('films.year', $year);
+        }
+
+        if ($countryId) {
+            $query = $query->whereHas('countries', function ($q) use ($countryId) {
+                $q->where('countries.id', $countryId);
+            });
+        }
+
+        $query = $query->sort($sortField, $sortDirection);
+
+        return $query->paginate($perPage);
+    }
 }
