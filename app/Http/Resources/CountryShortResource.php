@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CountryResource extends JsonResource
+class CountryShortResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,7 @@ class CountryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => trans('country.' . $this->iso2, [], 'ru'),
-            'slug' => $this->slug
+            'title' => trans('country.' . $this->iso2, [], 'ru')
         ];
     }
 }

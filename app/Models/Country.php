@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Film\Film;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 /**
  * App\Models\Country
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $iso3
  * @property string $region
  * @property string $subregion
+ * @property string $slug
  * @property-read \Illuminate\Database\Eloquent\Collection|Film[] $films
  * @method static \Illuminate\Database\Eloquent\Builder|Country newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Country newQuery()
@@ -25,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Country extends Model
 {
+    use Sluggable;
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -34,11 +38,25 @@ class Country extends Model
         'phone_code',
         'iso3',
         'region',
-        'subregion'
+        'subregion',
+        'slug'
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => ['name', 'id'],
+                'separator' => '-',
+                'unique' => false
+            ],
+        ];
+    }
 
     public function films(): ?BelongsToMany
     {
         return $this->belongsToMany(Film::class);
     }
+
+
 }
