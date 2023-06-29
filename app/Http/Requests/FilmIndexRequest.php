@@ -12,24 +12,30 @@ class FilmIndexRequest extends FormRequest
     {
         return [
             'category' => [
+                'nullable',
                 'string',
                 Rule::in(Film::CATEGORIES)
             ],
             'sort_field' => [
+                'nullable',
                 'string',
                 Rule::in(Film::SORT_FIELDS)
             ],
             'sort_direction' => [
+                'nullable',
                 'string',
                 Rule::in(Film::SORT_DIRECTIONS)
             ],
             'genre_id' => [
+                'nullable',
                 'int'
             ],
             'year' => [
+                'nullable',
                 'int'
             ],
             'country_id' => [
+                'nullable',
                 'int'
             ]
         ];
