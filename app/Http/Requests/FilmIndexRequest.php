@@ -22,6 +22,15 @@ class FilmIndexRequest extends FormRequest
             'sort_direction' => [
                 'string',
                 Rule::in(Film::SORT_DIRECTIONS)
+            ],
+            'genre_id' => [
+                'int'
+            ],
+            'year' => [
+                'int'
+            ],
+            'country_id' => [
+                'int'
             ]
         ];
     }
