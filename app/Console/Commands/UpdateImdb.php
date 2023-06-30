@@ -17,7 +17,6 @@ class UpdateImdb extends Command
     public function handle()
     {
         $left = Film::whereNotNull('imdb_id')
-            ->whereNull('imdb_votes')
             ->orderBy('id', 'desc')
             ->count();
         dump(
@@ -27,7 +26,6 @@ class UpdateImdb extends Command
         $chunkSize = 10;
         $i = 0;
         Film::whereNotNull('imdb_id')
-            ->whereNull('imdb_votes')
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, &$left) {
                 foreach ($films as $film) {
