@@ -4,6 +4,7 @@ namespace App\Http\ApiControllers;
 
 use App\Http\Resources\CountryShortResource;
 use App\Models\Country;
+use App\Models\Film\Film;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,7 +12,9 @@ class WorldController extends Controller
 {
     public function filmCountries(Request $request)
     {
-        $countries = Country::has('films')->get();
+        $countries = Country::whereHas('films', function ($q) {
+            $q->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN);
+        })->get();
 
         return response()->success(CountryShortResource::collection($countries));
     }
