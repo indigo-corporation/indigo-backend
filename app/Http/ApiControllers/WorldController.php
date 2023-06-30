@@ -11,7 +11,7 @@ class WorldController extends Controller
 {
     public function filmCountries(Request $request)
     {
-        $countries = Country::whereHas('films')->get();
+        $countries = Country::has('films')->get();
 
         return response()->success(CountryShortResource::collection($countries));
     }
