@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 Route::get('/add-film/{imdb_id}', function (string $imdb_id) {
     if ($imdb_id) {
-        dispatch_sync(new FilmStoreJob($imdb_id, true));
+        dispatch(new FilmStoreJob($imdb_id, true));
 
         return 'ok';
     }
@@ -32,7 +32,7 @@ Route::get('/add-film/{imdb_id}', function (string $imdb_id) {
 
 Route::get('/add-serial/{imdb_id}', function (string $imdb_id) {
     if ($imdb_id) {
-        dispatch_sync(new SerialStoreJob($imdb_id, true));
+        dispatch(new SerialStoreJob($imdb_id, true));
 
         return 'ok';
     }
