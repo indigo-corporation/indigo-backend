@@ -21,12 +21,14 @@ class FilmStoreJob implements ShouldQueue
     use SerializesModels;
 
     private string $imdbId;
+    private bool $force;
 
     private GetFromUrlService $getService;
 
-    public function __construct(string $imdbId)
+    public function __construct(string $imdbId, $force = false)
     {
         $this->imdbId = $imdbId;
+        $this->force = $force;
         $this->getService = new GetFromUrlService();
     }
 
@@ -55,8 +57,10 @@ class FilmStoreJob implements ShouldQueue
             $rating = $imdbData->rating() ? (float)$imdbData->rating() : null;
             $votes = $imdbData->votes();
 
-            if ($rating && $rating < 5) return;
-            if ($votes < 500) return;
+            if (!$this->force) {
+                if ($rating && $rating < 5) return;
+                if ($votes < 500) return;
+            }
 
             $posterUrl = $imdbData->photo(false) ?: null;
             $runtime = $imdbData->runtime() ?: null;
