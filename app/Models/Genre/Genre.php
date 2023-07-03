@@ -9,6 +9,7 @@ use Astrotomic\Translatable\Translatable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Models\Genre\Genre
@@ -76,5 +77,16 @@ class Genre extends Model implements TranslatableContract
     public function films(): ?BelongsToMany
     {
         return $this->belongsToMany(Film::class);
+    }
+
+    public static function getList(bool $is_anime)
+    {
+        $key = 'genre-list:' . $is_anime ? 'anime' : 'not_anime';
+
+        return Cache::remember($key, now()->addHours(6), function () use ($is_anime) {
+            return Genre::where('is_anime', $is_anime)
+                ->where('is_hidden', false)
+                ->get();
+        });
     }
 }

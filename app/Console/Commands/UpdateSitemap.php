@@ -78,6 +78,7 @@ class UpdateSitemap extends Command
 
         foreach (Film::CATEGORIES as $category) {
             $genreSlugs = Genre::where('is_anime', $category === Film::CATEGORY_ANIME)
+                ->where('is_hidden', false)
                 ->pluck('slug')
                 ->toArray();
 

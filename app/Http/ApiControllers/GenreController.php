@@ -12,9 +12,7 @@ class GenreController extends Controller
     public function index(GenresGetRequest $request)
     {
         $is_anime = (bool)$request->get('is_anime', false);
-        $genres = Genre::where('is_anime', $is_anime)
-            ->where('is_hidden', false)
-            ->get();
+        $genres = Genre::getList($is_anime);
 
         return response()->success(
             GenreResource::collection($genres)
