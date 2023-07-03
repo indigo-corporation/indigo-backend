@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Country;
 use App\Models\Film\Film;
 use App\Models\Genre\Genre;
 use Carbon\Carbon;
@@ -86,6 +87,23 @@ class UpdateSitemap extends Command
             }
         }
 
+        $countries = Country::getList();
+        foreach (Film::CATEGORIES as $category) {
+            if ($category === Film::CATEGORY_ANIME) continue;
+
+            foreach ($countries as $country) {
+                $url = $this->getCountryUrl($category, $country->slug);
+                $data .= $this->getXml($url, 0.7);
+            }
+        }
+
+        foreach (Film::CATEGORIES as $category) {
+            for ($year = 1910; $year <= date("Y"); $year++) {
+                $url = $this->getYearUrl($category, $year);
+                $data .= $this->getXml($url, 0.7);
+            }
+        }
+
         $data .= '</urlset>';
 
         fwrite($fp, $data);
@@ -153,6 +171,16 @@ class UpdateSitemap extends Command
     private function getGenreUrl(string $category, string $slug): string
     {
         return self::DOMEN . '/' . $category . '/genre/' . $slug;
+    }
+
+    private function getCountryUrl(string $category, string $slug): string
+    {
+        return self::DOMEN . '/' . $category . '/country/' . $slug;
+    }
+
+    private function getYearUrl(string $category, int $year): string
+    {
+        return self::DOMEN . '/' . $category . '/year/' . $year;
     }
 
     private function getFilmUrl(string $category, string $slug): string

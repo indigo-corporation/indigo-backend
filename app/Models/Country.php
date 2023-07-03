@@ -6,6 +6,7 @@ use App\Models\Film\Film;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Models\Country
@@ -58,5 +59,13 @@ class Country extends Model
         return $this->belongsToMany(Film::class);
     }
 
+    public static function getList()
+    {
+        return Cache::remember('country-list', now()->addHours(6), function () {
+            return self::whereHas('films', function ($q) {
+                $q->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN);
+            })->get();
+        });
+    }
 
 }

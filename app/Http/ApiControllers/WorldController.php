@@ -12,9 +12,7 @@ class WorldController extends Controller
 {
     public function filmCountries(Request $request)
     {
-        $countries = Country::whereHas('films', function ($q) {
-            $q->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN);
-        })->get();
+        $countries = Country::getList();
 
         return response()->success(CountryShortResource::collection($countries));
     }
