@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Country;
 use App\Models\Film\Film;
 use App\Models\Genre\Genre;
 use Illuminate\Console\Command;
@@ -24,19 +25,32 @@ class PrerenderRoutes extends Command
 
         $fp = fopen($path . '/' . $fileName, 'a+');
 
-//        $data = '';
-//
-//        foreach (Film::CATEGORIES as $category) {
-//            $genreSlugs = Genre::where('is_anime', $category === Film::CATEGORY_ANIME)
-//                ->pluck('slug')
-//                ->toArray();
-//
-//            foreach ($genreSlugs as $slug) {
-//                $data .= '/' . $category . '/genre/' . $slug . "\r\n";
-//            }
-//        }
-//
-//        fwrite($fp, $data);
+        $data = '';
+
+        foreach (Film::CATEGORIES as $category) {
+            $genres = Genre::getList($category === Film::CATEGORY_ANIME);
+
+            foreach ($genres as $genre) {
+                $data .= '/' . $category . '/genre/' . $genre->slug . "\r\n";
+            }
+        }
+
+        $countries = Country::getList();
+        foreach (Film::CATEGORIES as $category) {
+            if ($category === Film::CATEGORY_ANIME) continue;
+
+            foreach ($countries as $country) {
+                $data .= '/' . $category . '/country/' . $country->slug . "\r\n";
+            }
+        }
+
+        foreach (Film::CATEGORIES as $category) {
+            for ($year = 1910; $year <= date("Y"); $year++) {
+                $data .= '/' . $category . '/year/' . $year . "\r\n";
+            }
+        }
+
+        fwrite($fp, $data);
 
         $chunkSize = 250;
         $i = 0;
@@ -58,15 +72,15 @@ class PrerenderRoutes extends Command
 
         fclose($fp);
 
-        $process = Process::forever()
-            ->path($path)
-            ->start('ng run front-end:prerender --no-guess-routes --routes-file ' . $fileName);
-
-        while ($process->running()) {
-            echo $process->latestOutput();
-            echo $process->latestErrorOutput();
-        }
-
-        $result = $process->wait();
+//        $process = Process::forever()
+//            ->path($path)
+//            ->start('ng run front-end:prerender --no-guess-routes --routes-file ' . $fileName);
+//
+//        while ($process->running()) {
+//            echo $process->latestOutput();
+//            echo $process->latestErrorOutput();
+//        }
+//
+//        $process->wait();
     }
 }
