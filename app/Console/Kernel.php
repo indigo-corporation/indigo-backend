@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('backup:run --only-db --disable-notifications')->daily()->at('01:02');
 
         $schedule->command('update-sitemap')->daily()->at('01:05');
-//        $schedule->command('prerender-routes')->daily()->at('01:07');
+        $schedule->command('prerender-routes')->daily()->at('01:07');
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
     }
