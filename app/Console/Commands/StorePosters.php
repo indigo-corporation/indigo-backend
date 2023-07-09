@@ -8,12 +8,20 @@ use Illuminate\Support\Collection;
 
 class StorePosters extends Command
 {
-    protected $signature = 'store-posters';
+    protected $signature = 'store-posters {film_id?}';
 
     protected $description = 'store-posters';
 
     public function handle()
     {
+        $filmId = (int)$this->argument('film_id');
+        if ($filmId) {
+            $film = Film::find($filmId);
+            $film->savePoster();
+
+            return;
+        }
+
         dump(Film::whereNotNull('poster')->whereNull('poster_medium')->count() . ' left');
 
         $i = 0;
