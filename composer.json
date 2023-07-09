@@ -16,6 +16,7 @@
         "arcanedev/log-viewer": "^10.0",
         "astrotomic/laravel-translatable": "^11.12.1",
         "cviebrock/eloquent-sluggable": "^10.0",
+        "elasticsearch/elasticsearch": "^8.8",
         "guzzlehttp/guzzle": "^7.7",
         "imdbphp/imdbphp": "dev-fix",
         "intervention/image": "^2.7.2",
