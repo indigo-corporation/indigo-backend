@@ -32,6 +32,7 @@ class UpdateElastic extends Command
         $chunkSize = 50;
         $i = 0;
         Film::with('translations')
+            ->where('is_hidden', false)
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, &$left) {
                 foreach ($films as $film) {
