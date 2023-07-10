@@ -109,6 +109,7 @@ Route::prefix('users')->group(function () {
 Route::prefix('films')->group(function () {
     Route::get('main', [FilmController::class, 'main']);
     Route::get('search', [FilmController::class, 'search']);
+    Route::get('search2', [FilmController::class, 'search2']);
     Route::get('{film}/get_comments', [FilmController::class, 'getComments']);
     Route::get('{film}/recommendations', [FilmController::class, 'recommendations']);
     Route::get('genre/{id}', [FilmController::class, 'getByGenre']);

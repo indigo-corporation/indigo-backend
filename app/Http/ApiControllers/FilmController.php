@@ -129,6 +129,17 @@ class FilmController extends Controller
 
     public function search(SearchRequest $request)
     {
+        $films = Film::with(['translations'])
+            ->where('is_hidden', false)
+            ->whereTranslationIlike('title', '%' . $request->find . '%');
+
+        return response()->success_paginated(
+            new PaginatedCollection($films->paginate(self::FILMS_PER_PAGE), FilmShortResource::class)
+        );
+    }
+
+    public function search2(SearchRequest $request)
+    {
         $page = $request->get('page', 1);
 
         $client = (new ElasticService())->getClient();
@@ -166,14 +177,6 @@ class FilmController extends Controller
 
         return response()->success_paginated(
             new PaginatedCollection($pagination, FilmShortResource::class)
-        );
-
-        $films = Film::with(['translations'])
-            ->where('is_hidden', false)
-            ->whereTranslationIlike('title', '%' . $request->find . '%');
-
-        return response()->success_paginated(
-            new PaginatedCollection($films->paginate(self::FILMS_PER_PAGE), FilmShortResource::class)
         );
     }
 
