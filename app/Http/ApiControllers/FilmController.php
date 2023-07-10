@@ -131,7 +131,7 @@ class FilmController extends Controller
     {
         $page = $request->get('page', 1);
 
-        $client = ElasticService::getClient();
+        $client = (new ElasticService())->getClient();
 
         $response = $client->search([
             'index' => 'films',

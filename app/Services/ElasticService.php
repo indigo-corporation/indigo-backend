@@ -7,7 +7,25 @@ use Elastic\Elasticsearch\ClientBuilder;
 
 class ElasticService
 {
-    public static function getClient(): Client
+    private Client $client;
+
+    /**
+     * @return Client
+     */
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param Client $client
+     */
+    public function setClient(Client $client): void
+    {
+        $this->client = $client;
+    }
+
+    public function __construct()
     {
         $clientBuilder = ClientBuilder::create()
             ->setHosts([env('ES_HOST')]);
@@ -18,6 +36,6 @@ class ElasticService
                 ->setCABundle(env('ES_CERT'));
         }
 
-        return $clientBuilder->build();
+        $this->client = $clientBuilder->build();
     }
 }

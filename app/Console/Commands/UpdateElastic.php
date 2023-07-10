@@ -20,7 +20,7 @@ class UpdateElastic extends Command
     {
         parent::__construct();
 
-        $this->client = ElasticService::getClient();
+        $this->client = (new ElasticService())->getClient();
     }
 
     public function handle()
