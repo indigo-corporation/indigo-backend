@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Film\Film;
+use App\Services\ElasticService;
 use Elastic\Elasticsearch\Client;
-use Elastic\Elasticsearch\ClientBuilder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
@@ -20,9 +20,7 @@ class UpdateElastic extends Command
     {
         parent::__construct();
 
-        $this->client = ClientBuilder::create()
-            ->setHosts([env('ES_HOST')])
-            ->build();
+        $this->client = ElasticService::getClient();
     }
 
     public function handle()

@@ -9,7 +9,7 @@ use App\Http\Resources\FilmResource;
 use App\Http\Resources\FilmShortResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Models\Film\Film;
-use Elastic\Elasticsearch\ClientBuilder;
+use App\Services\ElasticService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
@@ -129,46 +129,44 @@ class FilmController extends Controller
 
     public function search(SearchRequest $request)
     {
-//        $page = $request->get('page', 1);
-//
-//        $client = ClientBuilder::create()
-//            ->setHosts([env('ES_HOST')])
-//            ->build();
-//
-//        $response = $client->search([
-//            'index' => 'films',
-//            'type' => 'anime',
-//            'body' => [
-//                'query' => [
-//                    'multi_match' => [
-//                        'query' => $request->find,
-//                        'fields' => ['original_title', 'translations.title'],
-//                        'fuzziness' => 'auto:4,6'
-//                    ]
-//                ],
-//                'min_score' => 6
-//            ],
-//            'from' => ($page - 1) * self::FILMS_PER_PAGE,
-//            'size' => self::FILMS_PER_PAGE
-//        ]);
-//
-//        $filmIds = collect($response['hits']['hits'])->pluck(['_id'])->toArray();
-//
-//        $films = Film::with(['translations'])
-//            ->whereIn('id', $filmIds)
-//            ->orderByRaw("array_position('{" . implode(',', $filmIds) . "}'::int[], id)")
-//            ->get();
-//
-//        $pagination = new LengthAwarePaginator(
-//            $films,
-//            $response['hits']['total']['value'],
-//            self::FILMS_PER_PAGE,
-//            $page
-//        );
-//
-//        return response()->success_paginated(
-//            new PaginatedCollection($pagination, FilmShortResource::class)
-//        );
+        $page = $request->get('page', 1);
+
+        $client = ElasticService::getClient();
+
+        $response = $client->search([
+            'index' => 'films',
+            'type' => 'anime',
+            'body' => [
+                'query' => [
+                    'multi_match' => [
+                        'query' => $request->find,
+                        'fields' => ['original_title', 'translations.title'],
+                        'fuzziness' => 'auto:4,6'
+                    ]
+                ],
+                'min_score' => 6
+            ],
+            'from' => ($page - 1) * self::FILMS_PER_PAGE,
+            'size' => self::FILMS_PER_PAGE
+        ]);
+
+        $filmIds = collect($response['hits']['hits'])->pluck(['_id'])->toArray();
+
+        $films = Film::with(['translations'])
+            ->whereIn('id', $filmIds)
+            ->orderByRaw("array_position('{" . implode(',', $filmIds) . "}'::int[], id)")
+            ->get();
+
+        $pagination = new LengthAwarePaginator(
+            $films,
+            $response['hits']['total']['value'],
+            self::FILMS_PER_PAGE,
+            $page
+        );
+
+        return response()->success_paginated(
+            new PaginatedCollection($pagination, FilmShortResource::class)
+        );
 
         $films = Film::with(['translations'])
             ->where('is_hidden', false)
