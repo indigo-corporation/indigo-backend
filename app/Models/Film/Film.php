@@ -144,7 +144,7 @@ class Film extends Model implements TranslatableContract
 
     public const THUMB_URL = 'storage/' . self::THUMB_FOLDER;
 
-    public const HIDDEN_COUNTRIES = ['IN', 'RU', 'CN', 'KR', 'JP', 'TR'];
+    public const HIDDEN_COUNTRIES = ['IN', 'RU', 'TR'];
 
     public function genres(): ?BelongsToMany
     {
