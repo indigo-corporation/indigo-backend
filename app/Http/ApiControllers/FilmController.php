@@ -22,7 +22,7 @@ class FilmController extends Controller
 
     public function main()
     {
-        $response = Cache::remember('main', now()->addMinutes(10), function () {
+        $response = Cache::remember('main', now()->addMinutes(15), function () {
             foreach (Film::CATEGORIES as $category) {
                 $query = Film::with(['translations'])
                     ->where('is_hidden', false)
@@ -36,7 +36,7 @@ class FilmController extends Controller
                     $query = $query->whereNotNull('imdb_rating')
                         ->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN)
                         ->whereHas('countries', function ($q) {
-                            $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
+                            $q->whereNotIn('iso2', Film::HIDDEN_COUNTRIES);
                         })
                         ->orderBy('imdb_rating', 'DESC');
                 }
@@ -78,15 +78,39 @@ class FilmController extends Controller
         $sortField = $request->get('sort_field', Film::SORT_FIELD);
         $sortDirection = $request->get('sort_direction', Film::SORT_DIRECTION);
 
-        $films = Film::getList(
+        $perPage = self::FILMS_PER_PAGE;
+        $page = $request->get('page', 1);
+
+        $key = 'films-list:' . implode('_', [
             $category,
             $genreId,
             $year,
             $countryId,
             $sortField,
             $sortDirection,
-            self::FILMS_PER_PAGE
-        );
+            $perPage,
+            $page
+        ]);
+
+        $films = Cache::remember($key, now()->addMinutes(15), function () use (
+            $category,
+            $genreId,
+            $year,
+            $countryId,
+            $sortField,
+            $sortDirection,
+            $perPage,
+            $page
+        ) {
+            return Film::getListQuery(
+                $category,
+                $genreId,
+                $year,
+                $countryId,
+                $sortField,
+                $sortDirection
+            )->paginate($perPage, ['*'], 'page', $page);
+        });
 
         return response()->success_paginated(
             new PaginatedCollection($films, FilmResource::class)
@@ -95,7 +119,7 @@ class FilmController extends Controller
 
     public function show(string $filmId)
     {
-        $film = Cache::remember('film:' . $filmId, now()->addHours(12), function () use ($filmId) {
+        $film = Cache::remember('film:' . $filmId, now()->addHour(), function () use ($filmId) {
             return Film::where('is_hidden', false)->find((int)$filmId);
         });
 
@@ -192,36 +216,9 @@ class FilmController extends Controller
         );
     }
 
-    public function getByGenre($genre_id, FilmIndexRequest $request)
-    {
-        $category = $request->get('category');
-        $sortField = $request->get('sort_field', Film::SORT_FIELD);
-        $sortDirection = $request->get('sort_direction', Film::SORT_DIRECTION);
-
-        $query = Film::with(['translations'])
-            ->where('is_hidden', false)
-            ->whereHas('genres', function ($query) use ($genre_id) {
-                $query->where('genres.id', $genre_id);
-            });
-
-        if ($category) {
-            $query = $query->where('category', $category);
-
-            if ($category !== Film::CATEGORY_ANIME) {
-                $query = $query->where('imdb_votes', '>=', Film::IMDB_VOTES_MIN);
-            }
-        }
-
-        $query = $query->sort($sortField, $sortDirection);
-
-        return response()->success_paginated(
-            new PaginatedCollection($query->paginate(self::FILMS_PER_PAGE), FilmShortResource::class)
-        );
-    }
-
     public function recommendations(string $filmId)
     {
-        $recommendations = Cache::remember('film_recommendations:' . $filmId, now()->addHours(3), function () use ($filmId) {
+        $recommendations = Cache::remember('film_recommendations:' . $filmId, now()->addHour(), function () use ($filmId) {
             $recommendations = [];
             $film = Film::with(['genres'])->find((int)$filmId);
 
@@ -252,7 +249,7 @@ class FilmController extends Controller
                 } else {
                     $countryCode = '';
                     foreach ($film->countries as $country) {
-                        if (in_array($country->iso2, ['IN', 'RU', 'CN', 'KR', 'JP', 'TR'])) {
+                        if (in_array($country->iso2, Film::HIDDEN_COUNTRIES)) {
                             $countryCode = $country->iso2;
 
                             break;
@@ -265,7 +262,7 @@ class FilmController extends Controller
                         });
                     } else {
                         $query = $query->whereHas('countries', function ($q) {
-                            $q->whereNotIn('iso2', ['IN', 'RU', 'CN', 'KR', 'JP', 'TR']);
+                            $q->whereNotIn('iso2', Film::HIDDEN_COUNTRIES);
                         });
                     }
 

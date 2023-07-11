@@ -144,6 +144,8 @@ class Film extends Model implements TranslatableContract
 
     public const THUMB_URL = 'storage/' . self::THUMB_FOLDER;
 
+    public const HIDDEN_COUNTRIES = ['IN', 'RU', 'CN', 'KR', 'JP', 'TR'];
+
     public function genres(): ?BelongsToMany
     {
         return $this->belongsToMany(Genre::class)
@@ -252,14 +254,13 @@ class Film extends Model implements TranslatableContract
         $this->save();
     }
 
-    public static function getList(
+    public static function getListQuery(
         ?string $category,
         ?int $genreId,
         ?int $year,
         ?int $countryId,
         string $sortField,
-        string $sortDirection,
-        int $perPage
+        string $sortDirection
     )
     {
         $query = Film::with(['translations', 'countries'])
@@ -287,10 +288,12 @@ class Film extends Model implements TranslatableContract
             $query = $query->whereHas('countries', function ($q) use ($countryId) {
                 $q->where('countries.id', $countryId);
             });
+        } else {
+            $query = $query->whereHas('countries', function ($q) {
+                $q->whereNotIn('iso2', self::HIDDEN_COUNTRIES);
+            });
         }
 
-        $query = $query->sort($sortField, $sortDirection);
-
-        return $query->paginate($perPage);
+        return $query->sort($sortField, $sortDirection);
     }
 }

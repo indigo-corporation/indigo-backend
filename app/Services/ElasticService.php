@@ -32,8 +32,8 @@ class ElasticService
 
         if (app()->isProduction()) {
             $clientBuilder = $clientBuilder
-                ->setSSLVerification(true)
-                ->setCABundle(env('ES_CERT'))
+                ->setSSLVerification(false)
+//                ->setCABundle(env('ES_CERT'))
                 ->setBasicAuthentication(env('ES_USER'), env('ES_PASS'));
         }
 
