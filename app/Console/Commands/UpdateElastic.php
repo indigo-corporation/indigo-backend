@@ -25,6 +25,15 @@ class UpdateElastic extends Command
 
     public function handle()
     {
+        $this->client->deleteByQuery([
+            'index' => 'films',
+            'body' => [
+                'query' => [
+                    'match_all' => (object)[]
+                ]
+            ]
+        ]);
+
         $left = Film::with('translations')->count();
 
         $chunkSize = 50;
