@@ -9,13 +9,21 @@ use Illuminate\Support\Collection;
 
 class UpdateDescription extends Command
 {
-    protected $signature = 'update-description';
+    protected $signature = 'update-description {film_id?}';
 
     protected $description = 'update-description';
 
 
     public function handle()
     {
+        $filmId = (int)$this->argument('film_id');
+        if ($filmId) {
+            $film = Film::find($filmId);
+            UpdateDescriptionJob::dispatch($film);
+
+            return;
+        }
+
         $left = Film::where('category', '<>', 'anime')
             ->whereNotNull('imdb_id')
             ->orderBy('id', 'desc')
