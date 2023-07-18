@@ -35,11 +35,15 @@ class UpdateDescriptionJob implements ShouldQueue
             throw $e;
         }
 
-        if (!isset($tmdbData->movie_results) || !$tmdbData->movie_results) {
+        $resultField = $this->film->category === Film::CATEGORY_FILM
+            ? 'movie_results'
+            : 'tv_results';
+
+        if (!isset($tmdbData->$resultField) || !$tmdbData->$resultField) {
             return;
         }
 
-        $tmdbFilm = ($tmdbData->movie_results)[0];
+        $tmdbFilm = ($tmdbData->$resultField)[0];
 
         if (!$tmdbFilm->overview) return;
 
