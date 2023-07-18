@@ -199,7 +199,7 @@ class Film extends Model implements TranslatableContract
         $query->orderBy($sortField, $sortDirection)->orderBy('id', 'desc');
     }
 
-    public function getCategoryName()
+    public function getCategoryName(): string
     {
         if ($this->is_anime) {
             return self::CATEGORY_ANIME;
@@ -258,10 +258,8 @@ class Film extends Model implements TranslatableContract
         ?string $category,
         ?int $genreId,
         ?int $year,
-        ?int $countryId,
-        string $sortField,
-        string $sortDirection
-    )
+        ?int $countryId
+    ): Builder
     {
         $query = Film::with(['translations', 'countries'])
             ->where('films.is_hidden', false);
@@ -294,6 +292,6 @@ class Film extends Model implements TranslatableContract
             });
         }
 
-        return $query->sort($sortField, $sortDirection);
+        return $query;
     }
 }
