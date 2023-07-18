@@ -19,7 +19,7 @@ class UpdateDescription extends Command
         $filmId = (int)$this->argument('film_id');
         if ($filmId) {
             $film = Film::find($filmId);
-            UpdateDescriptionJob::dispatch($film);
+            UpdateDescriptionJob::dispatchSync($film);
 
             return;
         }
