@@ -12,19 +12,21 @@ class FilmObserver
      */
     public function created(Film $film): void
     {
-        (new ElasticService())->getClient()->index(
-            [
-                'body' => [
-                    'original_title' => $film->original_title,
-                    'translations' => [
-                        'title' => $film->title
-                    ]
-                ],
-                'index' => 'films',
-                'type' => $film->category,
-                'id' => $film->id
-            ]
-        );
+        if ((bool)env('ES_ON')) {
+            (new ElasticService())->getClient()->index(
+                [
+                    'body' => [
+                        'original_title' => $film->original_title,
+                        'translations' => [
+                            'title' => $film->title
+                        ]
+                    ],
+                    'index' => 'films',
+                    'type' => $film->category,
+                    'id' => $film->id
+                ]
+            );
+        }
     }
 
     /**
@@ -40,10 +42,12 @@ class FilmObserver
      */
     public function deleted(Film $film): void
     {
-        (new ElasticService())->getClient()->delete([
-            'index' => 'films',
-            'type' => $film->category,
-            'id' => $film->id
-        ]);
+        if ((bool)env('ES_ON')) {
+            (new ElasticService())->getClient()->delete([
+                'index' => 'films',
+                'type' => $film->category,
+                'id' => $film->id
+            ]);
+        }
     }
 }
