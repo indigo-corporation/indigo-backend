@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\StorePosterJob;
 use App\Models\Film\Film;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -17,7 +18,7 @@ class StorePosters extends Command
         $filmId = (int)$this->argument('film_id');
         if ($filmId) {
             $film = Film::find($filmId);
-            $film->savePoster();
+            StorePosterJob::dispatchSync($film);
 
             return;
         }
@@ -32,7 +33,7 @@ class StorePosters extends Command
                 foreach ($films as $film) {
                     try {
                         dump($film->id);
-                        $film->savePoster();
+                        StorePosterJob::dispatch($film);
                     } catch (\Throwable $e) {
                         dump([
                             'id' => $film->id,

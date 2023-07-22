@@ -1,8 +1,5 @@
 <?php
 
-use App\Jobs\AnimeStoreJob;
-use App\Jobs\FilmStoreJob;
-use App\Jobs\SerialStoreJob;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,32 +17,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/add-film/{imdb_id}', function (string $imdb_id) {
-    if ($imdb_id) {
-        dispatch(new FilmStoreJob($imdb_id, true));
-
-        return 'ok';
-    }
-
-    return 'no imdb_id provided';
+Route::prefix('webhooks')->group(function () {
+    Route::post('telegram', [\App\Http\Controllers\Webhook\TelegramBotController::class, 'webhook']);
 });
 
-Route::get('/add-serial/{imdb_id}', function (string $imdb_id) {
-    if ($imdb_id) {
-        dispatch(new SerialStoreJob($imdb_id, true));
+Route::prefix('admin')->group(function () {
 
-        return 'ok';
-    }
-
-    return 'no imdb_id provided';
-});
-
-Route::get('/add-anime/{shiki_id}', function (string $shiki_id) {
-    if ($shiki_id) {
-        dispatch(new AnimeStoreJob($shiki_id));
-
-        return 'ok';
-    }
-
-    return 'no shiki_id provided';
+    Route::prefix('films')->group(function () {
+        Route::post('add-film', [\App\Http\Controllers\Admin\FilmController::class, 'addFilm']);
+        Route::post('add-serial', [\App\Http\Controllers\Admin\FilmController::class, 'addSerial']);
+        Route::post('add-anime', [\App\Http\Controllers\Admin\FilmController::class, 'addAnime']);
+        Route::post('store-poster', [\App\Http\Controllers\Admin\FilmController::class, 'storePoster']);
+    });
 });

@@ -132,12 +132,7 @@ class FilmStoreJob implements ShouldQueue
         $film->updateCategory();
 
         if ($film->poster) {
-            try {
-                $film->savePoster();
-            } catch (\Throwable $e) {
-                dump('Poster error');
-                dump($e->getMessage());
-            }
+            StorePosterJob::dispatch($film);
         }
 
         UpdateDescriptionJob::dispatch($film);

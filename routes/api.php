@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\ApiControllers\AuthController;
-use App\Http\ApiControllers\BannedUserController;
-use App\Http\ApiControllers\ChatController;
-use App\Http\ApiControllers\CommentController;
-use App\Http\ApiControllers\FavoriteFilmController;
-use App\Http\ApiControllers\FilmController;
-use App\Http\ApiControllers\FilmStarController;
-use App\Http\ApiControllers\GenreController;
-use App\Http\ApiControllers\MessageController;
-use App\Http\ApiControllers\UserContactController;
-use App\Http\ApiControllers\UserContactRequestController;
-use App\Http\ApiControllers\UserController;
-use App\Http\ApiControllers\WorldController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BannedUserController;
+use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\FavoriteFilmController;
+use App\Http\Controllers\Api\FilmController;
+use App\Http\Controllers\Api\FilmStarController;
+use App\Http\Controllers\Api\GenreController;
+use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\UserContactController;
+use App\Http\Controllers\Api\UserContactRequestController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WorldController;
 use Illuminate\Support\Facades\Route;
 
 /*
