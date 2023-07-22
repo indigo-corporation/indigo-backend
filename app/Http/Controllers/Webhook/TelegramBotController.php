@@ -14,25 +14,27 @@ class TelegramBotController extends Controller
     public function webhook(Request $request)
     {
         $json = file_get_contents('php://input');
+
+        $data = json_decode($json);
         \Log::info('telegram', [
-            'data' => $json
+            'data' => $data
         ]);
 
-        $data = json_decode($json, true);
+        $message = $data->message;
+        $from_id = $message->from->id;
+        $text = $message->text;
 
-        $message = $data['message'];
-        $from_id = $message['from']['id'];
-
-        if ($message === '/start') {
+        if ($text === '/start') {
             $this->telegramManager->sendHello($from_id);
             return;
         }
 
-        if (is_int($message)) {
-            $film = Film::find($message);
+        if (filter_var($text, FILTER_VALIDATE_INT)) {
+            $film = Film::find($text);
 
             if ($film) {
                 $this->telegramManager->sendFilmLink($film, $from_id);
+                return;
             }
         }
 
