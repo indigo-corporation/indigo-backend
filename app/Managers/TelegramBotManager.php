@@ -20,7 +20,25 @@ class TelegramBotManager
     {
         $link = 'https://indigofilms.online/' . $film->category . '/' . $film->slug;
 
-        $this->bot->sendMessage($chatId, $link);
+//        $this->bot->sendMessage($chatId, $link);
+
+        $keyboard = array(
+            'inline_keyboard' => array(
+                array(
+                    array('text' => 'Смотреть', 'url' => $link)
+                )
+            )
+        );
+
+        $replyMarkup = urlencode(json_encode($keyboard));
+
+        $overview = strlen($film->overview) < 250
+            ? $film->overview
+            : mb_substr($film->overview, 0, 250) . '...';
+
+        $caption = $film->title . PHP_EOL . PHP_EOL . $overview;
+
+        $this->bot->send($chatId, $film->poster_medium, 'photo', $caption, $replyMarkup);
     }
 
     public function sendErrorIdMessage(int $chatId): void
