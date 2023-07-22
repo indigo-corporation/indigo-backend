@@ -14,6 +14,7 @@ class TelegramBotController extends Controller
     public function webhook(Request $request)
     {
         $json = file_get_contents('php://input');
+        $this->telegramManager->sendTest($json);
 
         $data = json_decode($json, true);
 

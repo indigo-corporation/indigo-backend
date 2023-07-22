@@ -6,7 +6,8 @@ namespace App\Managers;
 use App\Models\Film\Film;
 use App\Services\TelegramBot;
 
-class TelegramBotManager {
+class TelegramBotManager
+{
 
     private TelegramBot $bot;
 
@@ -20,13 +21,18 @@ class TelegramBotManager {
         $this->bot->sendMessage($chatId, $film->slug);
     }
 
-    public function sendErrorIdMessage(int $chatId) :void
+    public function sendErrorIdMessage(int $chatId): void
     {
         $this->bot->sendMessage($chatId, 'Неккоректный код фильма, проверьте ещё раз');
     }
 
-    public function sendHello(int $chatId) :void
+    public function sendHello(int $chatId): void
     {
         $this->bot->sendMessage($chatId, 'Здравствуйте! Можете отправить мне код фильма и я кину вам ссылку)');
+    }
+
+    public function sendTest(string $message): void
+    {
+        $this->bot->sendMessage(null, $message);
     }
 }
