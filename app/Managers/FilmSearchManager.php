@@ -58,7 +58,7 @@ class FilmSearchManager
                         'fuzziness' => 'auto:4,6'
                     ]
                 ],
-                'min_score' => 6
+                'min_score' => 5
             ]
         ]);
 
