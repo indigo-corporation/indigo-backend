@@ -18,7 +18,8 @@ class TelegramBotManager
 
     public function sendFilmLink(Film $film, int $chatId): void
     {
-        $link = 'https://indigofilms.online/' . $film->category . '/' . $film->slug;
+        $link = 'https://indigofilms.online/' . $film->category . '/' . $film->slug
+            . '?utm_source=social&utm_medium=tg_bot&utm_campaign=indigofilms';
 
 //        $this->bot->sendMessage($chatId, $link);
 
