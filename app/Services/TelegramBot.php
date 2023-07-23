@@ -53,6 +53,7 @@ class TelegramBot
         $url = $action . "?chat_id=" . $chatID;
         $url .= "&" . $type . "=" . $content;
         $url .= ($caption) ? "&caption=" . urlencode($caption) : '';
+        $url .= "&parse_mode=markdown";
 
         if ($reply_markup) {
             $url = $url . "&reply_markup=" . $reply_markup;
