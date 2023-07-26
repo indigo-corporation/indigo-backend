@@ -101,12 +101,27 @@ class FilmController extends Controller
             $perPage,
             $page
         ) {
-            return Film::getListQuery(
+            $query =  Film::getListQuery(
                 $category,
                 $genreId,
                 $year,
                 $countryId
-            )
+            );
+
+            if ($category) {
+                if ($category !== Film::CATEGORY_ANIME) {
+                    $query = $query->where('films.imdb_votes', '>=', Film::IMDB_VOTES_MIN);
+
+                    $query = $query->where(function($q) {
+                        $q->doesntHave('countries')
+                            ->orWhereHas('countries', function ($q) {
+                                $q->whereNotIn('iso2', Film::HIDDEN_COUNTRIES);
+                            });
+                    });
+                }
+            }
+
+            return $query
                 ->sort($sortField, $sortDirection)
                 ->paginate($perPage, ['*'], 'page', $page);
         });

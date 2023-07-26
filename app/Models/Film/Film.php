@@ -262,14 +262,10 @@ class Film extends Model implements TranslatableContract
     ): Builder
     {
         $query = Film::with(['translations', 'countries'])
-            ->where('films.is_hidden', false);
+            ->where('films.is_hidden', '=' ,false);
 
         if ($category) {
             $query = $query->where('films.category', $category);
-
-            if ($category !== Film::CATEGORY_ANIME) {
-                $query = $query->where('films.imdb_votes', '>=', Film::IMDB_VOTES_MIN);
-            }
         }
 
         if ($genreId) {
@@ -285,13 +281,6 @@ class Film extends Model implements TranslatableContract
         if ($countryId) {
             $query = $query->whereHas('countries', function ($q) use ($countryId) {
                 $q->where('countries.id', $countryId);
-            });
-        } else {
-            $query = $query->where(function($q) {
-                $q->doesntHave('countries')
-                    ->orWhereHas('countries', function ($q) {
-                        $q->whereNotIn('iso2', self::HIDDEN_COUNTRIES);
-                    });
             });
         }
 
