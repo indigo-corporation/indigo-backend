@@ -287,8 +287,11 @@ class Film extends Model implements TranslatableContract
                 $q->where('countries.id', $countryId);
             });
         } else {
-            $query = $query->whereHas('countries', function ($q) {
-                $q->whereNotIn('iso2', self::HIDDEN_COUNTRIES);
+            $query = $query->where(function($q) {
+                $q->doesntHave('countries')
+                    ->orWhereHas('countries', function ($q) {
+                        $q->whereNotIn('iso2', self::HIDDEN_COUNTRIES);
+                    });
             });
         }
 

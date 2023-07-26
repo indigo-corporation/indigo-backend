@@ -57,8 +57,7 @@ class FilmSearchManager
                         'fields' => ['original_title', 'translations.title'],
                         'fuzziness' => 'auto:4,6'
                     ]
-                ],
-                'min_score' => 3
+                ]
             ]
         ]);
 
