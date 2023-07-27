@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 
 class TelegramBotController extends Controller
 {
-    public function __construct(private TelegramBotManager $telegramManager) {}
+    public function __construct(private TelegramBotManager $telegramManager)
+    {
+    }
 
     public function webhook(Request $request)
     {
@@ -20,7 +22,12 @@ class TelegramBotController extends Controller
             'data' => $data
         ]);
 
-        $message = $data->message;
+        $message = $data->message ?? null;
+
+        if (!$message) {
+            return;
+        }
+
         $from_id = $message->from->id;
         $text = $message->text;
 
