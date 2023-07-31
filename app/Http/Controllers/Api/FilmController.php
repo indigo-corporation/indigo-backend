@@ -12,6 +12,7 @@ use App\Managers\FilmSearchManager;
 use App\Models\Film\Film;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
 {
@@ -81,15 +82,15 @@ class FilmController extends Controller
         $page = $request->get('page', 1);
 
         $key = 'films-list:' . implode('_', [
-            $category,
-            $genreId,
-            $year,
-            $countryId,
-            $sortField,
-            $sortDirection,
-            $perPage,
-            $page
-        ]);
+                $category,
+                $genreId,
+                $year,
+                $countryId,
+                $sortField,
+                $sortDirection,
+                $perPage,
+                $page
+            ]);
 
         $films = Cache::remember($key, now()->addMinutes(15), function () use (
             $category,
@@ -101,7 +102,7 @@ class FilmController extends Controller
             $perPage,
             $page
         ) {
-            $query =  Film::getListQuery(
+            $query = Film::getListQuery(
                 $category,
                 $genreId,
                 $year,
@@ -112,7 +113,7 @@ class FilmController extends Controller
                 if ($category !== Film::CATEGORY_ANIME) {
                     $query = $query->where('films.imdb_votes', '>=', Film::IMDB_VOTES_MIN);
 
-                    $query = $query->where(function($q) {
+                    $query = $query->where(function ($q) {
                         $q->doesntHave('countries')
                             ->orWhereHas('countries', function ($q) {
                                 $q->whereNotIn('iso2', Film::HIDDEN_COUNTRIES);
@@ -210,7 +211,7 @@ class FilmController extends Controller
             $recommendations = [];
             $film = Film::with(['genres'])->find((int)$filmId);
 
-            if($film) {
+            if ($film) {
                 $query = Film::with(['translations'])
                     ->where('id', '<>', $film->id)
                     ->where('category', $film->category)
@@ -270,5 +271,45 @@ class FilmController extends Controller
         });
 
         return response()->success(FilmShortResource::collection($recommendations));
+    }
+
+    public function getDataForPlayer(string $filmId)
+    {
+        $data = Cache::remember('film_data_player:' . $filmId, now()->addHour(), function () use ($filmId) {
+
+            $film = Film::find((int)$filmId);
+            if (!$film) {
+                abort(404);
+            }
+
+            $data = [];
+
+            $seasonFolders = Storage::disk('public')->directories('videos/' . $film->id);
+
+            foreach ($seasonFolders as $key => $folder) {
+                $season = last(explode('/', $folder));
+
+                $data[$key] = [
+                    'title' => 'Сезон ' . $season,
+                    'folder' => []
+                ];
+
+                $urls = Storage::disk('public')->files($folder);
+
+                foreach ($urls as $i => $url) {
+                    $episode = last(explode('/', $url));
+                    $episode = explode('.', $episode)[0];
+
+                    $data[$key]['folder'][$i] = [
+                        'title' => 'Серия ' . $episode,
+                        'file' => url('storage/' . $url)
+                    ];
+                }
+            }
+
+            return $data;
+        });
+
+        return response()->success($data);
     }
 }
