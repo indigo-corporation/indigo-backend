@@ -16,6 +16,7 @@ class UpdateSitemap extends Command
     protected $description = 'update-sitemap';
 
     private $sitemapsCount;
+
     const DOMEN = 'https://indigofilms.online';
 
     const PATH = '/var/www/indigofilms.online';
@@ -90,7 +91,9 @@ class UpdateSitemap extends Command
 
         $countries = Country::getList();
         foreach (Film::CATEGORIES as $category) {
-            if ($category === Film::CATEGORY_ANIME) continue;
+            if ($category === Film::CATEGORY_ANIME) {
+                continue;
+            }
 
             foreach ($countries as $country) {
                 $url = $this->getCountryUrl($category, $country->slug);
@@ -99,7 +102,7 @@ class UpdateSitemap extends Command
         }
 
         foreach (Film::CATEGORIES as $category) {
-            for ($year = 1910; $year <= date("Y"); $year++) {
+            for ($year = 1910; $year <= date('Y'); $year++) {
                 $url = $this->getYearUrl($category, $year);
                 $data .= $this->getXml($url, 0.7);
             }

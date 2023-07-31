@@ -16,7 +16,9 @@ class StorePosterJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(private Film $film) {}
+    public function __construct(private Film $film)
+    {
+    }
 
     public function handle()
     {

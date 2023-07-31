@@ -33,6 +33,7 @@ class TelegramBotController extends Controller
 
         if ($text === '/start') {
             $this->telegramManager->sendHello($from_id);
+
             return;
         }
 
@@ -41,6 +42,7 @@ class TelegramBotController extends Controller
 
             if ($film) {
                 $this->telegramManager->sendFilmLink($film, $from_id);
+
                 return;
             }
         }

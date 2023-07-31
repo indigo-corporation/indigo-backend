@@ -49,6 +49,7 @@ use Illuminate\Support\Facades\Storage;
  * @property-read \Illuminate\Database\Eloquent\Collection|FilmStar[] $stars
  * @property-read \App\Models\Film\FilmTranslation|null $translation
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Film\FilmTranslation[] $translations
+ *
  * @method static Builder|Film listsTranslations(string $translationField)
  * @method static Builder|Film newModelQuery()
  * @method static Builder|Film newQuery()
@@ -66,6 +67,7 @@ use Illuminate\Support\Facades\Storage;
  * @method static Builder|Film whereTranslationLike(string $translationField, $value, ?string $locale = null)
  * @method static Builder|Film whereTranslationNotIlike($key, $value, $locale = null)
  * @method static Builder|Film withTranslation()
+ *
  * @mixin \Eloquent
  */
 class Film extends Model implements TranslatableContract
@@ -261,10 +263,9 @@ class Film extends Model implements TranslatableContract
         ?int $genreId,
         ?int $year,
         ?int $countryId
-    ): Builder
-    {
+    ): Builder {
         $query = Film::with(['translations', 'countries'])
-            ->where('films.is_hidden', '=' ,false);
+            ->where('films.is_hidden', '=', false);
 
         if ($category) {
             $query = $query->where('films.category', $category);

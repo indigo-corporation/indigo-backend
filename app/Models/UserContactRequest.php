@@ -15,9 +15,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $contact
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|UserContactRequest newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserContactRequest newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserContactRequest query()
+ *
  * @mixin \Eloquent
  */
 class UserContactRequest extends Model

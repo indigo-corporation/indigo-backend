@@ -12,7 +12,6 @@ class UpdateAnimeDescription extends Command
 
     protected $description = 'update-anime-description';
 
-
     public function handle()
     {
         $re = '/(\[.*?\])/m';
@@ -25,7 +24,9 @@ class UpdateAnimeDescription extends Command
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$i, $chunkSize, $re, &$left) {
                 foreach ($films as $film) {
-                    if (!$film->overview) continue;
+                    if (!$film->overview) {
+                        continue;
+                    }
                     $film->overview = preg_replace($re, '', $film->overview);
 
                     $film->save();

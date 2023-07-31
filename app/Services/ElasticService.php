@@ -9,17 +9,11 @@ class ElasticService
 {
     private Client $client;
 
-    /**
-     * @return Client
-     */
     public function getClient(): Client
     {
         return $this->client;
     }
 
-    /**
-     * @param Client $client
-     */
     public function setClient(Client $client): void
     {
         $this->client = $client;

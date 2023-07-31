@@ -15,9 +15,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Message[] $messages
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Chat newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Chat newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Chat query()
+ *
  * @mixin \Eloquent
  */
 class Chat extends Model

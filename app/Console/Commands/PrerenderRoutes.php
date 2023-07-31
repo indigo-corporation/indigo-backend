@@ -15,7 +15,6 @@ class PrerenderRoutes extends Command
 
     protected $description = 'prerender-routes';
 
-
     public function handle()
     {
         $path = '/var/www/indigofilms.online';
@@ -37,7 +36,9 @@ class PrerenderRoutes extends Command
 
         $countries = Country::getList();
         foreach (Film::CATEGORIES as $category) {
-            if ($category === Film::CATEGORY_ANIME) continue;
+            if ($category === Film::CATEGORY_ANIME) {
+                continue;
+            }
 
             foreach ($countries as $country) {
                 $data .= '/' . $category . '/country/' . $country->slug . "\r\n";
@@ -45,7 +46,7 @@ class PrerenderRoutes extends Command
         }
 
         foreach (Film::CATEGORIES as $category) {
-            for ($year = 1910; $year <= date("Y"); $year++) {
+            for ($year = 1910; $year <= date('Y'); $year++) {
                 $data .= '/' . $category . '/year/' . $year . "\r\n";
             }
         }
@@ -72,15 +73,15 @@ class PrerenderRoutes extends Command
 
         fclose($fp);
 
-//        $process = Process::forever()
-//            ->path($path)
-//            ->start('ng run front-end:prerender --no-guess-routes --routes-file ' . $fileName);
-//
-//        while ($process->running()) {
-//            echo $process->latestOutput();
-//            echo $process->latestErrorOutput();
-//        }
-//
-//        $process->wait();
+        //        $process = Process::forever()
+        //            ->path($path)
+        //            ->start('ng run front-end:prerender --no-guess-routes --routes-file ' . $fileName);
+        //
+        //        while ($process->running()) {
+        //            echo $process->latestOutput();
+        //            echo $process->latestErrorOutput();
+        //        }
+        //
+        //        $process->wait();
     }
 }

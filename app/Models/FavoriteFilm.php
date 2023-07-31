@@ -16,9 +16,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Film|null $films
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|FavoriteFilm newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FavoriteFilm newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FavoriteFilm query()
+ *
  * @mixin \Eloquent
  */
 class FavoriteFilm extends Model

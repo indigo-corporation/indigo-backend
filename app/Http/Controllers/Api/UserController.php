@@ -17,7 +17,6 @@ use function response;
 
 class UserController extends Controller
 {
-
     public function changePass(Request $request)
     {
         $attr = $request->validate([

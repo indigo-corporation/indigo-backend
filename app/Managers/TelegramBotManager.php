@@ -2,13 +2,11 @@
 
 namespace App\Managers;
 
-
 use App\Models\Film\Film;
 use App\Services\TelegramBot;
 
 class TelegramBotManager
 {
-
     private TelegramBot $bot;
 
     public function __construct()
@@ -21,15 +19,15 @@ class TelegramBotManager
         $link = 'https://indigofilms.online/' . $film->category . '/' . $film->slug
             . '?utm_source=social&utm_medium=tg_bot&utm_campaign=indigofilms';
 
-//        $this->bot->sendMessage($chatId, $link);
+        //        $this->bot->sendMessage($chatId, $link);
 
-        $keyboard = array(
-            'inline_keyboard' => array(
-                array(
-                    array('text' => '▶️ Смотреть', 'url' => $link)
-                )
-            )
-        );
+        $keyboard = [
+            'inline_keyboard' => [
+                [
+                    ['text' => '▶️ Смотреть', 'url' => $link]
+                ]
+            ]
+        ];
 
         $replyMarkup = urlencode(json_encode($keyboard));
 

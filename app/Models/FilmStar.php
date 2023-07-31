@@ -17,9 +17,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Film $film
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|FilmStar newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FilmStar newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FilmStar query()
+ *
  * @mixin \Eloquent
  */
 class FilmStar extends Model

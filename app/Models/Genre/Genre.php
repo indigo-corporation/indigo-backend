@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Cache;
  * @property-read \Illuminate\Database\Eloquent\Collection|Film[] $films
  * @property-read \App\Models\Genre\GenreTranslation|null $translation
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Genre\GenreTranslation[] $translations
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Genre findSimilarSlugs(string $attribute, array $config, string $slug)
  * @method static \Illuminate\Database\Eloquent\Builder|Genre listsTranslations(string $translationField)
  * @method static \Illuminate\Database\Eloquent\Builder|Genre newModelQuery()
@@ -42,6 +43,7 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|Genre whereTranslationNotIlike($key, $value, $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Genre withTranslation()
  * @method static \Illuminate\Database\Eloquent\Builder|Genre withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
+ *
  * @mixin \Eloquent
  */
 class Genre extends Model implements TranslatableContract

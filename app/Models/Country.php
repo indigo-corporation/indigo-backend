@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Models\Film\Film;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -21,11 +21,13 @@ use Illuminate\Support\Facades\Cache;
  * @property string $subregion
  * @property string $slug
  * @property-read \Illuminate\Database\Eloquent\Collection|Film[] $films
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Country newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Country newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Country query()
  * @method static \Illuminate\Database\Eloquent\Builder|Country findSimilarSlugs(string $attribute, array $config, string $slug)
  * @method static \Illuminate\Database\Eloquent\Builder|Country withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
+ *
  * @mixin \Eloquent
  */
 class Country extends Model
@@ -69,5 +71,4 @@ class Country extends Model
             })->get();
         });
     }
-
 }

@@ -13,7 +13,6 @@ class UpdateImdb extends Command
 
     protected $description = 'update-imdb';
 
-
     public function handle()
     {
         $left = Film::whereNotNull('imdb_id')

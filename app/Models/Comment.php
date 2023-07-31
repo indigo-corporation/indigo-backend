@@ -25,9 +25,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Like[] $likes
  * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $parent_comments
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comment query()
+ *
  * @mixin \Eloquent
  */
 class Comment extends Model

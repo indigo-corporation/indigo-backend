@@ -13,7 +13,6 @@ class UpdateDescription extends Command
 
     protected $description = 'update-description';
 
-
     public function handle()
     {
         $filmId = (int)$this->argument('film_id');

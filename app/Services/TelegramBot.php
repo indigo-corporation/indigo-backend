@@ -4,15 +4,17 @@ namespace App\Services;
 
 class TelegramBot
 {
-    public function __construct(private string $token) {}
+    public function __construct(private string $token)
+    {
+    }
 
     public function sendMessage($chatID = 244260227, $message = 'test', $reply_markup = [])
     {
-        $url = "sendMessage?chat_id=" . $chatID;
-        $url .= "&text=" . urlencode($message);
+        $url = 'sendMessage?chat_id=' . $chatID;
+        $url .= '&text=' . urlencode($message);
 
         if ($reply_markup) {
-            $url = $url . "&reply_markup=" . $reply_markup;
+            $url = $url . '&reply_markup=' . $reply_markup;
         }
 
         return $this->curl($url);
@@ -20,7 +22,7 @@ class TelegramBot
 
     public function send($chatID, $content, $type, $caption = null, $reply_markup = [])
     {
-        switch ($type):
+        switch ($type) {
             case 'text':
                 $action = 'sendMessage';
                 break;
@@ -43,20 +45,20 @@ class TelegramBot
                 $action = 'sendMediaGroup';
                 break;
             default:
-                die();
-        endswitch;
+                exit();
+        }
 
         $content = (is_string($content))
             ? urlencode($content)
             : json_encode($content);
 
-        $url = $action . "?chat_id=" . $chatID;
-        $url .= "&" . $type . "=" . $content;
-        $url .= ($caption) ? "&caption=" . urlencode($caption) : '';
-        $url .= "&parse_mode=markdown";
+        $url = $action . '?chat_id=' . $chatID;
+        $url .= '&' . $type . '=' . $content;
+        $url .= ($caption) ? '&caption=' . urlencode($caption) : '';
+        $url .= '&parse_mode=markdown';
 
         if ($reply_markup) {
-            $url = $url . "&reply_markup=" . $reply_markup;
+            $url = $url . '&reply_markup=' . $reply_markup;
         }
 
         return $this->curl($url);
@@ -64,20 +66,20 @@ class TelegramBot
 
     public function deleteMessage($chat_id, $mess_id)
     {
-        $url = "deleteMessage?chat_id=" . $chat_id
-            . "&message_id=" . $mess_id;
+        $url = 'deleteMessage?chat_id=' . $chat_id
+            . '&message_id=' . $mess_id;
 
         return $this->curl($url);
     }
 
     public function editMessageCaption($chat_id, $mess_id, $text, $reply_markup = [])
     {
-        $url = "editMessageCaption?chat_id=" . $chat_id
-            . "&message_id=" . $mess_id
-            . "&caption=" . urlencode($text);
+        $url = 'editMessageCaption?chat_id=' . $chat_id
+            . '&message_id=' . $mess_id
+            . '&caption=' . urlencode($text);
 
         if ($reply_markup) {
-            $url = $url . "&reply_markup=" . $reply_markup;
+            $url = $url . '&reply_markup=' . $reply_markup;
         }
 
         return $this->curl($url);
@@ -85,12 +87,12 @@ class TelegramBot
 
     public function editMessage($chat_id, $mess_id, $text, $reply_markup = [], $type = 'caption')
     {
-        $url = "editMessage" . ucfirst($type) . "?chat_id=" . $chat_id
-            . "&message_id=" . $mess_id
-            . "&" . $type . "=" . urlencode($text);
+        $url = 'editMessage' . ucfirst($type) . '?chat_id=' . $chat_id
+            . '&message_id=' . $mess_id
+            . '&' . $type . '=' . urlencode($text);
 
         if ($reply_markup) {
-            $url = $url . "&reply_markup=" . $reply_markup;
+            $url = $url . '&reply_markup=' . $reply_markup;
         }
 
         return $this->curl($url);
@@ -110,8 +112,8 @@ class TelegramBot
         }
 
         $keyboard = [
-            "resize_keyboard" => true,
-            "inline_keyboard" => $inline_keyboard,
+            'resize_keyboard' => true,
+            'inline_keyboard' => $inline_keyboard,
         ];
 
         return json_encode($keyboard);
@@ -120,11 +122,11 @@ class TelegramBot
     private function curl($url)
     {
         $ch = curl_init();
-        $optArray = array(
+        $optArray = [
             CURLOPT_URL => 'https://api.telegram.org/bot' . $this->token . '/' . $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => ['HTTP/1.1 200 OK']
-        );
+        ];
         curl_setopt_array($ch, $optArray);
         $result = curl_exec($ch);
         curl_close($ch);

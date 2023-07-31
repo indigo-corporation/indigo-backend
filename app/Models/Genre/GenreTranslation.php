@@ -11,9 +11,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $genre_id
  * @property string $locale
  * @property string $title
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|GenreTranslation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GenreTranslation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GenreTranslation query()
+ *
  * @mixin \Eloquent
  */
 class GenreTranslation extends Model

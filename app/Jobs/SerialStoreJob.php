@@ -21,6 +21,7 @@ class SerialStoreJob implements ShouldQueue
     use SerializesModels;
 
     private string $imdbId;
+
     private bool $force;
 
     private GetFromUrlService $getService;
@@ -58,8 +59,12 @@ class SerialStoreJob implements ShouldQueue
             $votes = $imdbData->votes();
 
             if (!$this->force) {
-                if ($rating && $rating < 5) return;
-                if ($votes < 500) return;
+                if ($rating && $rating < 5) {
+                    return;
+                }
+                if ($votes < 500) {
+                    return;
+                }
             }
 
             $posterUrl = $imdbData->photo(false) ?: null;

@@ -45,7 +45,9 @@ class UpdateDescriptionJob implements ShouldQueue
 
         $tmdbFilm = ($tmdbData->$resultField)[0];
 
-        if (!$tmdbFilm->overview) return;
+        if (!$tmdbFilm->overview) {
+            return;
+        }
 
         dump($this->film->imdb_id);
 

@@ -12,12 +12,11 @@ class UpdateGenreSlugs extends Command
 
     protected $description = 'update-genre-slugs';
 
-
     public function handle()
     {
-       foreach (Genre::all() as $genre) {
-           (new SlugService())->slug($genre, true);
-           $genre->save();
-       }
+        foreach (Genre::all() as $genre) {
+            (new SlugService())->slug($genre, true);
+            $genre->save();
+        }
     }
 }

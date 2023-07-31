@@ -16,11 +16,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Comment $comment
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Like dislikes()
  * @method static \Illuminate\Database\Eloquent\Builder|Like likes()
  * @method static \Illuminate\Database\Eloquent\Builder|Like newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Like newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Like query()
+ *
  * @mixin \Eloquent
  */
 class Like extends Model
