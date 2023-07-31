@@ -22,7 +22,7 @@ class AnimeStoreJob implements ShouldQueue
 
     private int $shikiId;
 
-    private string|null $imdbId = null;
+    private ?string $imdbId = null;
 
     private GetFromUrlService $getService;
 
