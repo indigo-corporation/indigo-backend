@@ -291,18 +291,15 @@ class FilmController extends Controller
                 $urls = Storage::disk('public')->files($filmFolder);
 
                 $files = [];
-                $qualities = [];
                 foreach ($urls as $url) {
                     $q = last(explode('/', $url));
                     $q = explode('.', $q)[0];
 
-                    $files[] = url('storage/' . $url);
-                    $qualities[] = $q . 'p';
+                    $files[] = '[' . $q . 'p]' . url('storage/' . $url);
                 }
 
                 return [
-                    'file' => implode(',', $files),
-                    'qualities' => implode(',', $qualities)
+                    'file' => implode(',', $files)
                 ];
             }
 
@@ -321,19 +318,16 @@ class FilmController extends Controller
                     $urls = Storage::disk('public')->files($episodeFolder);
 
                     $files = [];
-                    $qualities = [];
                     foreach ($urls as $url) {
                         $q = last(explode('/', $url));
                         $q = explode('.', $q)[0];
 
-                        $files[] = url('storage/' . $url);
-                        $qualities[] = $q . 'p';
+                        $files[] = '[' . $q . 'p]' . url('storage/' . $url);
                     }
 
                     $data[$key]['folder'][$i] = [
                         'title' => 'Серия ' . $episode,
-                        'file' => implode(',', $files),
-                        'qualities' => implode(',', $qualities)
+                        'file' => implode(',', $files)
                     ];
                 }
             }
