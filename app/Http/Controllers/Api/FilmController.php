@@ -284,25 +284,56 @@ class FilmController extends Controller
 
             $data = [];
 
-            $seasonFolders = Storage::disk('public')->directories('videos/' . $film->id);
+            $filmFolder = 'videos/' . $film->id;
+            $seasonFolders = Storage::disk('public')->directories($filmFolder);
 
-            foreach ($seasonFolders as $key => $folder) {
-                $season = last(explode('/', $folder));
+            if (!$seasonFolders) {
+                $urls = Storage::disk('public')->files($filmFolder);
+
+                $files = [];
+                $qualities = [];
+                foreach ($urls as $url) {
+                    $q = last(explode('/', $url));
+                    $q = explode('.', $q)[0];
+
+                    $files[] = url('storage/' . $url);
+                    $qualities[] = $q . 'p';
+                }
+
+                return [
+                    'file' => implode(',', $files),
+                    'qualities' => implode(',', $qualities)
+                ];
+            }
+
+            foreach ($seasonFolders as $key => $seasonFolder) {
+                $season = last(explode('/', $seasonFolder));
 
                 $data[$key] = [
                     'title' => 'Сезон ' . $season,
                     'folder' => []
                 ];
 
-                $urls = Storage::disk('public')->files($folder);
+                $episodeFolders = Storage::disk('public')->directories($seasonFolder);
+                foreach ($episodeFolders as $i => $episodeFolder) {
+                    $episode = last(explode('/', $episodeFolder));
 
-                foreach ($urls as $i => $url) {
-                    $episode = last(explode('/', $url));
-                    $episode = explode('.', $episode)[0];
+                    $urls = Storage::disk('public')->files($episodeFolder);
+
+                    $files = [];
+                    $qualities = [];
+                    foreach ($urls as $url) {
+                        $q = last(explode('/', $url));
+                        $q = explode('.', $q)[0];
+
+                        $files[] = url('storage/' . $url);
+                        $qualities[] = $q . 'p';
+                    }
 
                     $data[$key]['folder'][$i] = [
                         'title' => 'Серия ' . $episode,
-                        'file' => url('storage/' . $url)
+                        'file' => implode(',', $files),
+                        'qualities' => implode(',', $qualities)
                     ];
                 }
             }
