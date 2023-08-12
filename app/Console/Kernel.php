@@ -12,13 +12,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-//        $schedule->command('store-films film')->hourly();
-//        $schedule->command('store-films serial')->hourly();
-//        $schedule->command('store-films anime')->hourly();
-//
-//        $schedule->command('store-films film 1 2')->daily()->at('00:40');
-//        $schedule->command('store-films serial 1 2')->daily()->at('00:45');
-//        $schedule->command('store-films anime 1 2')->daily()->at('00:50');
+        $schedule->command('store-films film')->hourly();
+        $schedule->command('store-films serial')->hourly();
+        $schedule->command('store-films anime')->hourly();
+
+        $schedule->command('store-films film 1 2')->daily()->at('00:40');
+        $schedule->command('store-films serial 1 2')->daily()->at('00:45');
+        $schedule->command('store-films anime 1 2')->daily()->at('00:50');
 
         $schedule->command('backup:clean --disable-notifications')->daily()->at('01:00');
         $schedule->command('backup:run --only-db --disable-notifications')->daily()->at('01:02');
