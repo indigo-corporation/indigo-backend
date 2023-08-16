@@ -82,15 +82,15 @@ class FilmController extends Controller
         $page = $request->get('page', 1);
 
         $key = 'films-list:' . implode('_', [
-            $category,
-            $genreId,
-            $year,
-            $countryId,
-            $sortField,
-            $sortDirection,
-            $perPage,
-            $page
-        ]);
+                $category,
+                $genreId,
+                $year,
+                $countryId,
+                $sortField,
+                $sortDirection,
+                $perPage,
+                $page
+            ]);
 
         $films = Cache::remember($key, now()->addMinutes(15), function () use (
             $category,
@@ -291,6 +291,7 @@ class FilmController extends Controller
                 $urls = Storage::disk('public')->files($filmFolder);
 
                 $files = [];
+                sort($urls);
                 foreach ($urls as $url) {
                     $q = last(explode('/', $url));
                     $q = explode('.', $q)[0];
@@ -303,29 +304,37 @@ class FilmController extends Controller
                 ];
             }
 
-            foreach ($seasonFolders as $key => $seasonFolder) {
+            sort($seasonFolders);
+            foreach ($seasonFolders as $k => $seasonFolder) {
                 $season = last(explode('/', $seasonFolder));
 
-                $data[$key] = [
+                $data[$k] = [
                     'title' => 'Сезон ' . $season,
                     'folder' => []
                 ];
 
                 $episodeFolders = Storage::disk('public')->directories($seasonFolder);
+                sort($episodeFolders);
                 foreach ($episodeFolders as $i => $episodeFolder) {
                     $episode = last(explode('/', $episodeFolder));
 
                     $urls = Storage::disk('public')->files($episodeFolder);
 
-                    $files = [];
+                    $qs = [];
                     foreach ($urls as $url) {
                         $q = last(explode('/', $url));
                         $q = explode('.', $q)[0];
 
-                        $files[] = '[' . $q . 'p]' . url('storage/' . $url);
+                        $qs[] = $q;
                     }
 
-                    $data[$key]['folder'][$i] = [
+                    $files = [];
+                    sort($qs, SORT_NUMERIC);
+                    foreach (array_reverse($qs) as $l => $q) {
+                        $files[] = '[' . $q . 'p]' . url('storage/' . $urls[$l]);
+                    }
+
+                    $data[$k]['folder'][$i] = [
                         'title' => 'Серия ' . $episode,
                         'file' => implode(',', $files)
                     ];
