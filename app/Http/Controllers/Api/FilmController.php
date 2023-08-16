@@ -320,19 +320,14 @@ class FilmController extends Controller
 
                     $urls = Storage::disk('public')->files($episodeFolder);
 
-                    $qs = [];
+                    $files = [];
                     foreach ($urls as $url) {
                         $q = last(explode('/', $url));
                         $q = explode('.', $q)[0];
 
-                        $qs[] = $q;
+                        $files[$q] = '[' . $q . 'p]' . url('storage/' . $url);
                     }
-
-                    $files = [];
-                    sort($qs, SORT_NUMERIC);
-                    foreach (array_reverse($qs) as $l => $q) {
-                        $files[] = '[' . $q . 'p]' . url('storage/' . $urls[$l]);
-                    }
+                    ksort($files);
 
                     $data[$k]['folder'][$i] = [
                         'title' => 'Серия ' . $episode,
