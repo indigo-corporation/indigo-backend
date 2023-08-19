@@ -33,7 +33,7 @@ class StorePosters extends Command
                 foreach ($films as $film) {
                     try {
                         dump($film->id);
-                        StorePosterJob::dispatch($film);
+                        StorePosterJob::dispatchSync($film);
                     } catch (\Throwable $e) {
                         dump([
                             'id' => $film->id,
