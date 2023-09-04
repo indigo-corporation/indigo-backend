@@ -135,12 +135,7 @@ class FilmController extends Controller
 
     public function loc()
     {
-        $country = '';
-        if ($position = Location::get()) {
-            $country = $position->countryCode;
-        }
-
-        return response()->success($country);
+        return response()->success(Location::get());
     }
 
     public function show(string $filmId)
