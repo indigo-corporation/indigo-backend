@@ -13,6 +13,7 @@ use App\Models\Film\Film;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Stevebauman\Location\Facades\Location;
 
 class FilmController extends Controller
 {
@@ -132,9 +133,32 @@ class FilmController extends Controller
         );
     }
 
+    public function loc()
+    {
+        $country = '';
+        if ($position = Location::get()) {
+            $country = $position->countryCode;
+        }
+
+        return response()->success($country);
+    }
+
     public function show(string $filmId)
     {
-        $film = Cache::remember('film:' . $filmId, now()->addHour(), function () use ($filmId) {
+        $country = '';
+//        if ($position = Location::get()) {
+//            $country = $position->countryCode;
+//        }
+
+        $key = $country !== 'RU'
+            ? 'film:' . $filmId
+            : 'film:' . $filmId . '_ru';
+
+        $film = Cache::remember($key, now()->addHour(), function () use ($filmId, $country) {
+            if ($country !== 'RU') {
+                return Film::find((int)$filmId);
+            }
+
             return Film::where('is_hidden', false)->find((int)$filmId);
         });
 
