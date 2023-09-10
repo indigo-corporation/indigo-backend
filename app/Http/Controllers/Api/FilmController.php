@@ -140,20 +140,9 @@ class FilmController extends Controller
 
     public function show(string $filmId)
     {
-        $country = '';
-//        if ($position = Location::get()) {
-//            $country = $position->countryCode;
-//        }
+        $key = 'film:' . $filmId;
 
-        $key = $country !== 'RU'
-            ? 'film:' . $filmId
-            : 'film:' . $filmId . '_ru';
-
-        $film = Cache::remember($key, now()->addHour(), function () use ($filmId, $country) {
-            if ($country !== 'RU') {
-                return Film::find((int)$filmId);
-            }
-
+        $film = Cache::remember($key, now()->addHour(), function () use ($filmId) {
             return Film::where('is_hidden', false)->find((int)$filmId);
         });
 
