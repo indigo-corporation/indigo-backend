@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Api\Controller;
+use App\Http\Requests\Admin\FilmIdRequest;
 use App\Http\Requests\Admin\ImdbIdRequest;
 use App\Http\Requests\Admin\ShikiIdRequest;
 use App\Jobs\AnimeStoreJob;
@@ -10,14 +11,13 @@ use App\Jobs\FilmStoreJob;
 use App\Jobs\SerialStoreJob;
 use App\Jobs\StorePosterJob;
 use App\Models\Film\Film;
-use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
-    public function storePoster(Request $request)
+    public function storePoster(FilmIdRequest $request)
     {
         $filmId = $request->get('film_id');
-        $film = Film::findOrFail((int)$filmId);
+        $film = Film::findOrFail($filmId);
 
         StorePosterJob::dispatch($film);
 

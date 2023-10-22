@@ -4,12 +4,12 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShikiIdRequest extends FormRequest
+class FilmIdRequest extends FormRequest
 {
     public function rules()
     {
         return [
-            'shiki_id' => 'required|int'
+            'film_id' => 'required|int'
         ];
     }
 }

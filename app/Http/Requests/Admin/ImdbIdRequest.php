@@ -9,7 +9,7 @@ class ImdbIdRequest extends FormRequest
     public function rules()
     {
         return [
-            'shiki_id' => 'required|int'
+            'imdb_id' => 'required|string'
         ];
     }
 }
