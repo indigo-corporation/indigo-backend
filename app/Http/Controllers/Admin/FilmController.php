@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Api\Controller;
+use App\Http\Requests\Admin\ImdbIdRequest;
+use App\Http\Requests\Admin\ShikiIdRequest;
 use App\Jobs\AnimeStoreJob;
 use App\Jobs\FilmStoreJob;
 use App\Jobs\SerialStoreJob;
@@ -22,7 +24,7 @@ class FilmController extends Controller
         return response()->success();
     }
 
-    public function addFilm(Request $request)
+    public function addFilm(ImdbIdRequest $request)
     {
         $imdb_id = $request->get('imdb_id');
 
@@ -39,7 +41,7 @@ class FilmController extends Controller
         return response()->error(['code' => 666, 'message' => 'no imdb_id provided'], 400);
     }
 
-    public function addSerial(Request $request)
+    public function addSerial(ImdbIdRequest $request)
     {
         $imdb_id = $request->get('imdb_id');
 
@@ -56,7 +58,7 @@ class FilmController extends Controller
         return response()->error(['code' => 666, 'message' => 'no imdb_id provided'], 400);
     }
 
-    public function addAnime(Request $request)
+    public function addAnime(ShikiIdRequest $request)
     {
         $shiki_id = $request->get('shiki_id');
 
