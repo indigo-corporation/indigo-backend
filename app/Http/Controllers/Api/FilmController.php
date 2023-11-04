@@ -135,7 +135,7 @@ class FilmController extends Controller
 
     public function ourAudio()
     {
-        $films = Film::whereIn('id', [5413])->get();
+        $films = Film::whereIn('id', [5413, 16805])->orderBy('id', 'desc')->get();
 
         return FilmResource::collection($films);
     }
