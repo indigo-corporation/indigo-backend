@@ -133,6 +133,13 @@ class FilmController extends Controller
         );
     }
 
+    public function ourAudio()
+    {
+        $films = Film::whereIn('id', [5413])->get();
+
+        return FilmResource::collection($films);
+    }
+
     public function loc()
     {
         return response()->success(Location::get());
