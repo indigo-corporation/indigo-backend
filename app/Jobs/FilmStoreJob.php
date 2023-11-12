@@ -58,6 +58,19 @@ class FilmStoreJob implements ShouldQueue
             $rating = $imdbData->rating() ? (float)$imdbData->rating() : null;
             $votes = $imdbData->votes();
 
+            $countries = [];
+            foreach ($imdbData->country() as $country) {
+                $countryModel = DB::table('countries')
+                    ->where('name', $country)->first();
+                if ($countryModel) {
+                    $countries[] = $countryModel->id;
+
+                    if ($countryModel->iso2 === 'RU') {
+                        $this->force = true;
+                    }
+                }
+            }
+
             if (!$this->force) {
                 if ($rating && $rating < 5) {
                     return;
@@ -119,15 +132,6 @@ class FilmStoreJob implements ShouldQueue
                 ]);
 
                 $genres[] = $genreModel->id;
-            }
-        }
-
-        $countries = [];
-        foreach ($imdbData->country() as $country) {
-            $countryModel = DB::table('countries')
-                ->where('name', $country)->first();
-            if ($countryModel) {
-                $countries[] = $countryModel->id;
             }
         }
 
