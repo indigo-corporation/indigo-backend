@@ -110,17 +110,17 @@ class FilmController extends Controller
                 $countryId
             );
 
-            if ($category) {
-                if ($category !== Film::CATEGORY_ANIME) {
+            if (!$category || $category !== Film::CATEGORY_ANIME) {
+                if (!$genreId && !$year && !$countryId) {
                     $query = $query->where('films.imdb_votes', '>=', Film::IMDB_VOTES_MIN);
-
-                    $query = $query->where(function ($q) {
-                        $q->doesntHave('countries')
-                            ->orWhereHas('countries', function ($q) {
-                                $q->whereNotIn('iso2', Film::HIDDEN_COUNTRIES);
-                            });
-                    });
                 }
+
+                $query = $query->where(function ($q) {
+                    $q->doesntHave('countries')
+                        ->orWhereHas('countries', function ($q) {
+                            $q->whereNotIn('iso2', Film::HIDDEN_COUNTRIES);
+                        });
+                });
             }
 
             return $query
