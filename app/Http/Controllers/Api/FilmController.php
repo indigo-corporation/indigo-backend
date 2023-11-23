@@ -290,6 +290,8 @@ class FilmController extends Controller
 
     public function getDataForPlayer(string $filmId)
     {
+        $filmId = (int) $filmId;
+
         $data = Cache::remember('film_data_player:' . $filmId, now()->addHour(), function () use ($filmId) {
 
             $film = Film::find((int)$filmId);
