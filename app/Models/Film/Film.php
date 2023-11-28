@@ -264,8 +264,7 @@ class Film extends Model implements TranslatableContract
         ?int $year,
         ?int $countryId
     ): Builder {
-        $query = Film::with(['translations', 'countries'])
-            ->where('films.is_hidden', '=', false);
+        $query = Film::with(['translations', 'countries']);
 
         if ($category) {
             $query = $query->where('films.category', $category);

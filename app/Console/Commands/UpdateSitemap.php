@@ -79,7 +79,6 @@ class UpdateSitemap extends Command
 
         foreach (Film::CATEGORIES as $category) {
             $genreSlugs = Genre::where('is_anime', $category === Film::CATEGORY_ANIME)
-                ->where('is_hidden', false)
                 ->pluck('slug')
                 ->toArray();
 
@@ -126,7 +125,6 @@ class UpdateSitemap extends Command
         fwrite($fp, $data);
 
         $filmIds = Film::orderBy('id', 'desc')
-            ->where('is_hidden', false)
             ->offset(self::PER_FILE * ($number - 1))
             ->limit(self::PER_FILE)
             ->pluck('id');
@@ -136,7 +134,6 @@ class UpdateSitemap extends Command
         Film::with(['translations'])
             ->where('id', '>=', $filmIds->last())
             ->where('id', '<=', $filmIds->first())
-            ->where('is_hidden', false)
             ->orderBy('id', 'desc')
             ->chunk($chunkSize, function (Collection $films) use (&$fp, &$i, $chunkSize) {
                 $data = '';

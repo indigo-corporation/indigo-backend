@@ -86,9 +86,7 @@ class Genre extends Model implements TranslatableContract
         $key = 'genre-list:' . ($is_anime ? 'anime' : 'not_anime');
 
         return Cache::remember($key, now()->addHours(6), function () use ($is_anime) {
-            return Genre::where('is_anime', $is_anime)
-                ->where('is_hidden', false)
-                ->get();
+            return Genre::where('is_anime', $is_anime)->get();
         });
     }
 }

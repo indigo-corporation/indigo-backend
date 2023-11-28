@@ -26,7 +26,6 @@ class FilmController extends Controller
         $response = Cache::remember('main', now()->addMinutes(15), function () {
             foreach (Film::CATEGORIES as $category) {
                 $query = Film::with(['translations'])
-                    ->where('is_hidden', false)
                     ->where('category', $category)
                     ->where('year', date('Y'));
 
@@ -158,7 +157,6 @@ class FilmController extends Controller
 
         $film = Cache::remember($key, now()->addHour(), function () use ($filmId) {
             return Film::find((int)$filmId);
-//            return Film::where('is_hidden', false)->find((int)$filmId);
         });
 
         if (!$film) {
@@ -244,8 +242,7 @@ class FilmController extends Controller
             if ($film) {
                 $query = Film::with(['translations'])
                     ->where('id', '<>', $film->id)
-                    ->where('category', $film->category)
-                    ->where('is_hidden', false);
+                    ->where('category', $film->category);
 
                 if ($film->genres->isNotEmpty()) {
                     $genre = $film->genres->first();
