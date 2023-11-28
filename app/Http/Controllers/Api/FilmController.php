@@ -157,11 +157,19 @@ class FilmController extends Controller
         $key = 'film:' . $filmId;
 
         $film = Cache::remember($key, now()->addHour(), function () use ($filmId) {
-            return Film::where('is_hidden', false)->find((int)$filmId);
+            return Film::find((int)$filmId);
+//            return Film::where('is_hidden', false)->find((int)$filmId);
         });
 
         if (!$film) {
             abort(404);
+        }
+
+        $location = Location::get(\request()->ip());
+        $countryCode = $location ? $location->countryCode : '';
+
+        if ($film->is_hidden && $countryCode !== 'RU') {
+            $film->is_hidden = false;
         }
 
         return response()->success(new FilmResource($film));

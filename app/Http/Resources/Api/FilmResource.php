@@ -36,7 +36,8 @@ class FilmResource extends JsonResource
             'stars' => $this->stars()->avg('count'),
             'slug' => $this->slug,
             'category' => $this->category,
-            'has_player' => $this->has_player
+            'has_player' => $this->has_player,
+            'is_hidden' => $this->is_hidden
         ];
     }
 }
