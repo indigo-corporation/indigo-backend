@@ -159,7 +159,7 @@ class User extends Authenticatable
         )->orderBy('favorite_films.updated_at', 'desc');
     }
 
-    public function chats(): ?BelongsToMany
+    public function chats(): BelongsToMany
     {
         return $this->belongsToMany(Chat::class)->orderBy('updated_at', 'desc');
     }

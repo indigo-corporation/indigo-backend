@@ -58,7 +58,7 @@ class Country extends Model
         ];
     }
 
-    public function films(): ?BelongsToMany
+    public function films(): BelongsToMany
     {
         return $this->belongsToMany(Film::class);
     }

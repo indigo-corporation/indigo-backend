@@ -4,6 +4,7 @@ namespace App\Models\Film;
 
 use App\Http\Traits\CustomTranslatableTrait;
 use App\Models\Comment;
+use App\Models\Compilation\Compilation;
 use App\Models\Country;
 use App\Models\FavoriteFilm;
 use App\Models\FilmStar;
@@ -150,13 +151,13 @@ class Film extends Model implements TranslatableContract
 
     public const HIDDEN_COUNTRIES = ['IN', 'TR'];
 
-    public function genres(): ?BelongsToMany
+    public function genres(): BelongsToMany
     {
         return $this->belongsToMany(Genre::class)
             ->with('translations');
     }
 
-    public function countries(): ?BelongsToMany
+    public function countries(): BelongsToMany
     {
         return $this->belongsToMany(Country::class);
     }
@@ -166,14 +167,20 @@ class Film extends Model implements TranslatableContract
         return $this->hasMany(Comment::class)->where('type', '=', Comment::COMMENT_TYPE_FILM);
     }
 
-    public function favorite_films(): ?hasMany
+    public function favorite_films(): hasMany
     {
         return $this->hasMany(FavoriteFilm::class);
     }
 
-    public function stars(): ?hasMany
+    public function stars(): hasMany
     {
         return $this->hasMany(FilmStar::class);
+    }
+
+    public function compilations()
+    {
+        return $this->belongsToMany(Compilation::class)
+            ->with('translations');
     }
 
     protected function posterSmall(): Attribute

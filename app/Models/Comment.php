@@ -48,22 +48,22 @@ class Comment extends Model
         'parent_comment_id'
     ];
 
-    public function films(): ?BelongsTo
+    public function films(): BelongsTo
     {
         return $this->belongsTo(Film::class);
     }
 
-    public function user(): ?BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function parent_comments(): ?HasMany
+    public function parent_comments(): HasMany
     {
         return $this->hasMany(Comment::class, 'parent_comment_id');
     }
 
-    public function likes(): ?HasMany
+    public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
     }

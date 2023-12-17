@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\UserContactRequestController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorldController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CompilationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,3 +125,5 @@ Route::prefix('world')->group(function () {
     Route::get('countries-for-select', [WorldController::class, 'countriesForSelect']);
     Route::get('cities-for-select', [WorldController::class, 'citiesForSelect']);
 });
+
+Route::resource('compilations', CompilationController::class);
