@@ -68,7 +68,7 @@ use Illuminate\Support\Facades\Storage;
  * @method static Builder|Film whereTranslationLike(string $translationField, $value, ?string $locale = null)
  * @method static Builder|Film whereTranslationNotIlike($key, $value, $locale = null)
  * @method static Builder|Film withTranslation()
- *
+ * @property-read \Illuminate\Database\Eloquent\Collection|Compilation[] $compilations
  * @mixin \Eloquent
  */
 class Film extends Model implements TranslatableContract
