@@ -82,15 +82,15 @@ class FilmController extends Controller
         $page = $request->get('page', 1);
 
         $key = 'films-list:' . implode('_', [
-                $category,
-                $genreId,
-                $year,
-                $countryId,
-                $sortField,
-                $sortDirection,
-                $perPage,
-                $page
-            ]);
+            $category,
+            $genreId,
+            $year,
+            $countryId,
+            $sortField,
+            $sortDirection,
+            $perPage,
+            $page
+        ]);
 
         $films = Cache::remember($key, now()->addMinutes(15), function () use (
             $category,

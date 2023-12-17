@@ -48,9 +48,9 @@ use Illuminate\Support\Facades\Cache;
  */
 class Genre extends Model implements TranslatableContract
 {
-    use Translatable;
-    use Sluggable;
     use CustomTranslatableTrait;
+    use Sluggable;
+    use Translatable;
 
     protected $fillable = [
         'id',

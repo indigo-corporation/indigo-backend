@@ -11,9 +11,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $compilation_id
  * @property string $locale
  * @property string $title
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|CompilationTranslation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompilationTranslation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompilationTranslation query()
+ *
  * @mixin \Eloquent
  */
 class CompilationTranslation extends Model

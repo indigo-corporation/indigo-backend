@@ -66,10 +66,10 @@ use Nnjeim\World\Models\City;
  */
 class User extends Authenticatable
 {
+    use CanResetPassword;
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
-    use CanResetPassword;
 
     /**
      * The attributes that are mass assignable.

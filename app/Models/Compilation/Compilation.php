@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \Illuminate\Database\Eloquent\Collection|Film[] $films
  * @property-read \App\Models\Compilation\CompilationTranslation|null $translation
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Compilation\CompilationTranslation[] $translations
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Compilation findSimilarSlugs(string $attribute, array $config, string $slug)
  * @method static \Illuminate\Database\Eloquent\Builder|Compilation listsTranslations(string $translationField)
  * @method static \Illuminate\Database\Eloquent\Builder|Compilation newModelQuery()
@@ -40,13 +41,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Compilation whereTranslationNotIlike($key, $value, $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Compilation withTranslation()
  * @method static \Illuminate\Database\Eloquent\Builder|Compilation withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
+ *
  * @mixin \Eloquent
  */
 class Compilation extends Model implements TranslatableContract
 {
-    use Translatable;
     use CustomTranslatableTrait;
     use Sluggable;
+    use Translatable;
 
     protected $fillable = [
         'name',

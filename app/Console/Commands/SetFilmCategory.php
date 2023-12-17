@@ -2,10 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Country;
 use App\Models\Film\Film;
-use App\Models\Genre\Genre;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 

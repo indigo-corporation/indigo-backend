@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\FavoriteFilmsRequest;
 use App\Http\Resources\Api\CompilationResource;
-use App\Http\Resources\Api\FilmShortResource;
 use App\Http\Resources\Api\PaginatedCollection;
 use App\Models\Compilation\Compilation;
-use App\Models\FavoriteFilm;
-use Illuminate\Support\Facades\Auth;
 
 class CompilationController extends Controller
 {

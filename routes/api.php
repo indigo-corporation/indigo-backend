@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BannedUserController;
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\CompilationController;
 use App\Http\Controllers\Api\FavoriteFilmController;
 use App\Http\Controllers\Api\FilmController;
 use App\Http\Controllers\Api\FilmStarController;
@@ -14,7 +15,6 @@ use App\Http\Controllers\Api\UserContactRequestController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorldController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\CompilationController;
 
 /*
 |--------------------------------------------------------------------------
