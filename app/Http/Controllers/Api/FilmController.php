@@ -27,7 +27,7 @@ class FilmController extends Controller
             foreach (Film::CATEGORIES as $category) {
                 $query = Film::with(['translations'])
                     ->where('category', $category)
-                    ->where('year', date('Y'));
+                    ->whereIn('year', [2023, 2024]);
 
                 if ($category === Film::CATEGORY_ANIME) {
                     $query = $query->whereNotNull('shiki_rating')
