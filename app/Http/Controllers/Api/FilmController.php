@@ -11,6 +11,7 @@ use App\Http\Resources\Api\PaginatedCollection;
 use App\Managers\FilmSearchManager;
 use App\Models\Film\Film;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Stevebauman\Location\Facades\Location;
@@ -27,7 +28,8 @@ class FilmController extends Controller
             foreach (Film::CATEGORIES as $category) {
                 $query = Film::with(['translations'])
                     ->where('category', $category)
-                    ->whereIn('year', [2023, 2024]);
+                    ->whereIn('year', [2023, 2024])
+                    ->where('created_at', '>=', Carbon::now()->subMonths(2));
 
                 if ($category === Film::CATEGORY_ANIME) {
                     $query = $query->whereNotNull('shiki_rating')
