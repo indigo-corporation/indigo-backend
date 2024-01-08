@@ -51,8 +51,19 @@ class UpdateDescriptionJob implements ShouldQueue
 
         dump($this->film->imdb_id);
 
+        if ($this->film->translate('ru')) {
+            $this->film->update([
+                'ru' => [
+                    'overview' => $tmdbFilm->overview
+                ]
+            ]);
+
+            return;
+        }
+
         $this->film->update([
             'ru' => [
+                'title' => $tmdbFilm->title,
                 'overview' => $tmdbFilm->overview
             ]
         ]);
