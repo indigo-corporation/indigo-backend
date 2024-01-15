@@ -13,19 +13,26 @@ class FilmObserver
     public function created(Film $film): void
     {
         if ((bool)env('ES_ON')) {
-            (new ElasticService())->getClient()->index(
-                [
-                    'body' => [
-                        'original_title' => $film->original_title,
-                        'translations' => [
-                            'title' => $film->title
-                        ]
-                    ],
-                    'index' => 'films',
-                    'type' => $film->category,
-                    'id' => $film->id
-                ]
-            );
+            try {
+                (new ElasticService())->getClient()->index(
+                    [
+                        'body' => [
+                            'original_title' => $film->original_title,
+                            'translations' => [
+                                'title' => $film->title
+                            ]
+                        ],
+                        'index' => 'films',
+                        'type' => $film->category,
+                        'id' => $film->id
+                    ]
+                );
+            } catch (\Throwable $e) {
+                \Log::error('Film created ElasticService', [
+                    'filmId' => $film->id,
+                    'message' => $e->getMessage()
+                ]);
+            }
         }
     }
 
@@ -42,11 +49,18 @@ class FilmObserver
      */
     public function deleted(Film $film): void
     {
-        if ((bool)env('ES_ON')) {
-            (new ElasticService())->getClient()->delete([
-                'index' => 'films',
-                'type' => $film->category,
-                'id' => $film->id
+        try {
+            if ((bool)env('ES_ON')) {
+                (new ElasticService())->getClient()->delete([
+                    'index' => 'films',
+                    'type' => $film->category,
+                    'id' => $film->id
+                ]);
+            }
+        } catch (\Throwable $e) {
+            \Log::error('Film deleted ElasticService', [
+                'filmId' => $film->id,
+                'message' => $e->getMessage()
             ]);
         }
     }

@@ -24,7 +24,7 @@ class FilmSearchManager
         $this->isElastic = (bool)env('ES_ON', false);
     }
 
-    public function getQuery()
+    public function getQuery(): Builder
     {
         $query = Film::getListQuery(
             $this->category,
@@ -33,11 +33,17 @@ class FilmSearchManager
             $this->countryId
         );
 
-        $query = $this->isElastic
-            ? $this->getElasticQuery($query)
-            : $this->getDbSearchQuery($query);
+        if ($this->isElastic) {
+            try {
+                return $this->getElasticQuery($query);
+            } catch (\Throwable $e) {
+                \Log::error('getElasticQuery', [
+                    'message' => $e->getMessage()
+                ]);
+            }
+        }
 
-        return $query;
+        return $this->getDbSearchQuery($query);
     }
 
     private function getDbSearchQuery(Builder $query): Builder
