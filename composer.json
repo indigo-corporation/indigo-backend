@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8.2",
         "ext-gd": "*",
         "ext-curl": "*",
         "arcanedev/log-viewer": "^10.0",
