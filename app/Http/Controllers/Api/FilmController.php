@@ -338,7 +338,7 @@ class FilmController extends Controller
             sort($seasonFolders);
             foreach ($seasonFolders as $k => $seasonFolder) {
                 $season = last(explode('/', $seasonFolder));
-                $studio = in_array($filmId, [16805, 83536]) ? 'SmileDub' : 'IndigoFilms';
+                $studio = in_array($filmId, [16805, 83536]) ? 'Braindead Project' : 'IndigoFilms';
 
                 $data[$k] = [
                     'title' => 'Сезон ' . $season . ' (' . $studio . ')',
