@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('store-films serial')->hourly();
         $schedule->command('store-films anime')->hourly();
 
+        $schedule->command('store-posters')->hourly();
+
         $schedule->command('store-films film 1 2')->daily()->at('00:40');
         $schedule->command('store-films serial 1 2')->daily()->at('00:45');
         $schedule->command('store-films anime 1 2')->daily()->at('00:50');

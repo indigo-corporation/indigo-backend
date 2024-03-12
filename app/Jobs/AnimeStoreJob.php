@@ -10,6 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
@@ -30,6 +31,15 @@ class AnimeStoreJob implements ShouldQueue
     {
         $this->shikiId = $shikiId;
         $this->getService = new GetFromUrlService();
+    }
+
+    public function middleware(): array
+    {
+        return [
+            (new WithoutOverlapping($this->shikiId))
+                ->releaseAfter(20)
+                ->expireAfter(60)
+        ];
     }
 
     public function handle()
